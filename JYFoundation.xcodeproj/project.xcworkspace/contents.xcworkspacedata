@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:AaruFoundation.xcodeproj">
+      location = "group:../README.md">
+   </FileRef>
+   <FileRef
+      location = "group:../JYFoundation.podspec">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>
