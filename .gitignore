@@ -16,7 +16,6 @@ DerivedData
 *.ipa
 *.xcuserstate
 .DS_Store
-*/.DS_Store
 *.orig
 Pods/
 Podfile.lock
