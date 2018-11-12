@@ -34,11 +34,6 @@
 		1D00E4F320970B7000450247 /* CollectionOvalSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4F220970B7000450247 /* CollectionOvalSpinnerView.swift */; };
 		1D00E4F7209715B500450247 /* CollectionCircinalSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4F6209715B500450247 /* CollectionCircinalSpinnerView.swift */; };
 		1D00E4F9209715BF00450247 /* CollectionCircinalSpinnerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D00E4F8209715BF00450247 /* CollectionCircinalSpinnerView.xib */; };
-		1D1B235620EDB72000E0F8DB /* RongCloudSystemMessageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1B235520EDB72000E0F8DB /* RongCloudSystemMessageSession.swift */; };
-		1D38017020A94B75001EEAF0 /* RongCloudMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38016C20A94B75001EEAF0 /* RongCloudMessage.swift */; };
-		1D38017120A94B75001EEAF0 /* RongCloudChatRoomSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38016D20A94B75001EEAF0 /* RongCloudChatRoomSession.swift */; };
-		1D38017220A94B75001EEAF0 /* RongCloudService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38016E20A94B75001EEAF0 /* RongCloudService.swift */; };
-		1D38017320A94B75001EEAF0 /* RongCloudPrivateSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38016F20A94B75001EEAF0 /* RongCloudPrivateSession.swift */; };
 		1D3891F5208AF6370005C175 /* AlbumAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F1208AF6360005C175 /* AlbumAuthService.swift */; };
 		1D3891F6208AF6370005C175 /* AuthServiceBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F2208AF6360005C175 /* AuthServiceBase.swift */; };
 		1D3891F7208AF6370005C175 /* CameraAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F3208AF6360005C175 /* CameraAuthService.swift */; };
@@ -79,23 +74,10 @@
 		1D389271208B54E50005C175 /* JYOvalActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38926E208B54E50005C175 /* JYOvalActivityIndicator.swift */; };
 		1D389272208B54E50005C175 /* IActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38926F208B54E50005C175 /* IActivityIndicator.swift */; };
 		1D389273208B54E50005C175 /* JYCircinalActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389270208B54E50005C175 /* JYCircinalActivityIndicator.swift */; };
-		1D38927A208B577D0005C175 /* WeiboService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389278208B577D0005C175 /* WeiboService.swift */; };
-		1D38927B208B577D0005C175 /* WechatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389279208B577D0005C175 /* WechatService.swift */; };
-		1D389284208B70A80005C175 /* JYBackgroundMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389283208B70A80005C175 /* JYBackgroundMusic.swift */; };
-		1D389286208B70AE0005C175 /* JYPollManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389285208B70AE0005C175 /* JYPollManager.swift */; };
 		1D477775211C3A7F0068FCD0 /* Dictionary+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */; };
-		1D477777211C96450068FCD0 /* JYIMChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D477776211C96450068FCD0 /* JYIMChatRoom.swift */; };
-		1D5B97D520DF98620010B7CE /* JYIMDataProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5B97D420DF98620010B7CE /* JYIMDataProviderDelegate.swift */; };
-		1D5B97D720DF98E80010B7CE /* JYIMGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5B97D620DF98E80010B7CE /* JYIMGroup.swift */; };
 		1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */; };
-		1D756306212E47F0001AFED2 /* JYIMPushNotificationProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D756305212E47F0001AFED2 /* JYIMPushNotificationProviderDelegate.swift */; };
-		1D89F18820CD690A001B7CF9 /* JYIMUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D89F18720CD690A001B7CF9 /* JYIMUser.swift */; };
-		1D8B85A52084B7D2003EDE8A /* JYIMEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8B85A02084B7D2003EDE8A /* JYIMEnums.swift */; };
-		1D8B85A62084B7D2003EDE8A /* JYIMBases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8B85A12084B7D2003EDE8A /* JYIMBases.swift */; };
 		1DAD556120F0610800067507 /* SpinnerCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD556020F0610800067507 /* SpinnerCellViewModel.swift */; };
-		1DB0399620ADAB67008FD924 /* RCEventMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB0399520ADAB67008FD924 /* RCEventMessage.swift */; };
 		1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */; };
-		1DCBAFCC20B913CF0050F247 /* RongCloudGroupSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCBAFCB20B913CF0050F247 /* RongCloudGroupSession.swift */; };
 		44DF82A946554B0AC7FAA2BF /* Pods_Aaru_AaruFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECB5611E44C86D9743A85658 /* Pods_Aaru_AaruFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -127,11 +109,6 @@
 		1D00E4F220970B7000450247 /* CollectionOvalSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionOvalSpinnerView.swift; sourceTree = "<group>"; };
 		1D00E4F6209715B500450247 /* CollectionCircinalSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCircinalSpinnerView.swift; sourceTree = "<group>"; };
 		1D00E4F8209715BF00450247 /* CollectionCircinalSpinnerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionCircinalSpinnerView.xib; sourceTree = "<group>"; };
-		1D1B235520EDB72000E0F8DB /* RongCloudSystemMessageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RongCloudSystemMessageSession.swift; sourceTree = "<group>"; };
-		1D38016C20A94B75001EEAF0 /* RongCloudMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RongCloudMessage.swift; sourceTree = "<group>"; };
-		1D38016D20A94B75001EEAF0 /* RongCloudChatRoomSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RongCloudChatRoomSession.swift; sourceTree = "<group>"; };
-		1D38016E20A94B75001EEAF0 /* RongCloudService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RongCloudService.swift; sourceTree = "<group>"; };
-		1D38016F20A94B75001EEAF0 /* RongCloudPrivateSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RongCloudPrivateSession.swift; sourceTree = "<group>"; };
 		1D3891F0208AC8950005C175 /* JYFoundation-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JYFoundation-Bridging-Header.h"; sourceTree = "<group>"; };
 		1D3891F1208AF6360005C175 /* AlbumAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumAuthService.swift; sourceTree = "<group>"; };
 		1D3891F2208AF6360005C175 /* AuthServiceBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthServiceBase.swift; sourceTree = "<group>"; };
@@ -173,25 +150,12 @@
 		1D38926E208B54E50005C175 /* JYOvalActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYOvalActivityIndicator.swift; sourceTree = "<group>"; };
 		1D38926F208B54E50005C175 /* IActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IActivityIndicator.swift; sourceTree = "<group>"; };
 		1D389270208B54E50005C175 /* JYCircinalActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYCircinalActivityIndicator.swift; sourceTree = "<group>"; };
-		1D389278208B577D0005C175 /* WeiboService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeiboService.swift; sourceTree = "<group>"; };
-		1D389279208B577D0005C175 /* WechatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WechatService.swift; sourceTree = "<group>"; };
-		1D389283208B70A80005C175 /* JYBackgroundMusic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYBackgroundMusic.swift; sourceTree = "<group>"; };
-		1D389285208B70AE0005C175 /* JYPollManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYPollManager.swift; sourceTree = "<group>"; };
 		1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JY.swift"; sourceTree = "<group>"; };
-		1D477776211C96450068FCD0 /* JYIMChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYIMChatRoom.swift; sourceTree = "<group>"; };
-		1D5B97D420DF98620010B7CE /* JYIMDataProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYIMDataProviderDelegate.swift; sourceTree = "<group>"; };
-		1D5B97D620DF98E80010B7CE /* JYIMGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYIMGroup.swift; sourceTree = "<group>"; };
 		1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAuthService.swift; sourceTree = "<group>"; };
 		1D61E9E420849AA800525E3F /* AaruFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AaruFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D61E9E820849AA800525E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1D756305212E47F0001AFED2 /* JYIMPushNotificationProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYIMPushNotificationProviderDelegate.swift; sourceTree = "<group>"; };
-		1D89F18720CD690A001B7CF9 /* JYIMUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYIMUser.swift; sourceTree = "<group>"; };
-		1D8B85A02084B7D2003EDE8A /* JYIMEnums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYIMEnums.swift; sourceTree = "<group>"; };
-		1D8B85A12084B7D2003EDE8A /* JYIMBases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYIMBases.swift; sourceTree = "<group>"; };
 		1DAD556020F0610800067507 /* SpinnerCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerCellViewModel.swift; sourceTree = "<group>"; };
-		1DB0399520ADAB67008FD924 /* RCEventMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCEventMessage.swift; sourceTree = "<group>"; };
 		1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYPostBodyEncoder.swift; sourceTree = "<group>"; };
-		1DCBAFCB20B913CF0050F247 /* RongCloudGroupSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RongCloudGroupSession.swift; sourceTree = "<group>"; };
 		24AB0666406B1DF81537C58C /* Pods-AaruFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AaruFoundation.release.xcconfig"; path = "../Pods/Target Support Files/Pods-AaruFoundation/Pods-AaruFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		9037539F26BEC13B759D2C47 /* Pods-AaruFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AaruFoundation.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-AaruFoundation/Pods-AaruFoundation.debug.xcconfig"; sourceTree = "<group>"; };
 		D2688161C2AE3D3DB6DEDD77 /* Pods-Aaru-AaruFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aaru-AaruFoundation.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Aaru-AaruFoundation/Pods-Aaru-AaruFoundation.release.xcconfig"; sourceTree = "<group>"; };
@@ -300,20 +264,6 @@
 			path = CellViewModel;
 			sourceTree = "<group>";
 		};
-		1D38016B20A94B46001EEAF0 /* RongCloud */ = {
-			isa = PBXGroup;
-			children = (
-				1D38016C20A94B75001EEAF0 /* RongCloudMessage.swift */,
-				1D38016D20A94B75001EEAF0 /* RongCloudChatRoomSession.swift */,
-				1D38016F20A94B75001EEAF0 /* RongCloudPrivateSession.swift */,
-				1DCBAFCB20B913CF0050F247 /* RongCloudGroupSession.swift */,
-				1D1B235520EDB72000E0F8DB /* RongCloudSystemMessageSession.swift */,
-				1D38016E20A94B75001EEAF0 /* RongCloudService.swift */,
-				1DB0399520ADAB67008FD924 /* RCEventMessage.swift */,
-			);
-			path = RongCloud;
-			sourceTree = "<group>";
-		};
 		1D3891F9208AF9960005C175 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -343,8 +293,6 @@
 		1D389220208B01760005C175 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				1D389282208B70950005C175 /* BackgroundMusic */,
-				1D389281208B703F0005C175 /* Polling */,
 				1D389221208B01890005C175 /* JYError.swift */,
 			);
 			path = Common;
@@ -392,22 +340,6 @@
 			path = JYActivityIndicator;
 			sourceTree = "<group>";
 		};
-		1D389281208B703F0005C175 /* Polling */ = {
-			isa = PBXGroup;
-			children = (
-				1D389285208B70AE0005C175 /* JYPollManager.swift */,
-			);
-			path = Polling;
-			sourceTree = "<group>";
-		};
-		1D389282208B70950005C175 /* BackgroundMusic */ = {
-			isa = PBXGroup;
-			children = (
-				1D389283208B70A80005C175 /* JYBackgroundMusic.swift */,
-			);
-			path = BackgroundMusic;
-			sourceTree = "<group>";
-		};
 		1D61E9DA20849AA800525E3F = {
 			isa = PBXGroup;
 			children = (
@@ -443,28 +375,10 @@
 		1D8B859D2084B7B6003EDE8A /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				1D389279208B577D0005C175 /* WechatService.swift */,
-				1D389278208B577D0005C175 /* WeiboService.swift */,
 				1D389239208B094E0005C175 /* Networking */,
 				1D8B85A92084B7DD003EDE8A /* AuthorizationService */,
-				1D8B859E2084B7BF003EDE8A /* IMService */,
 			);
 			path = Service;
-			sourceTree = "<group>";
-		};
-		1D8B859E2084B7BF003EDE8A /* IMService */ = {
-			isa = PBXGroup;
-			children = (
-				1D38016B20A94B46001EEAF0 /* RongCloud */,
-				1D8B85A12084B7D2003EDE8A /* JYIMBases.swift */,
-				1D8B85A02084B7D2003EDE8A /* JYIMEnums.swift */,
-				1D89F18720CD690A001B7CF9 /* JYIMUser.swift */,
-				1D5B97D620DF98E80010B7CE /* JYIMGroup.swift */,
-				1D477776211C96450068FCD0 /* JYIMChatRoom.swift */,
-				1D5B97D420DF98620010B7CE /* JYIMDataProviderDelegate.swift */,
-				1D756305212E47F0001AFED2 /* JYIMPushNotificationProviderDelegate.swift */,
-			);
-			path = IMService;
 			sourceTree = "<group>";
 		};
 		1D8B85A92084B7DD003EDE8A /* AuthorizationService */ = {
@@ -639,7 +553,6 @@
 			files = (
 				1D389211208AF9B40005C175 /* String+Regex.swift in Sources */,
 				1D00E4E02096BBE900450247 /* EmptyCellViewModel.swift in Sources */,
-				1D38927A208B577D0005C175 /* WeiboService.swift in Sources */,
 				1D00E4C82096BBB400450247 /* JYTableViewController.swift in Sources */,
 				1D00E4D62096BBE300450247 /* SeparatorCell.swift in Sources */,
 				1D00E4E92096CA1C00450247 /* ICellViewModel.swift in Sources */,
@@ -649,27 +562,19 @@
 				1D389215208AF9B40005C175 /* Date+JY.swift in Sources */,
 				1D00E4D82096BBE300450247 /* TableCircinalSpinnerCell.swift in Sources */,
 				1D389218208AF9B40005C175 /* Data+JY.swift in Sources */,
-				1D389286208B70AE0005C175 /* JYPollManager.swift in Sources */,
-				1D38927B208B577D0005C175 /* WechatService.swift in Sources */,
 				1D38920F208AF9B40005C175 /* UIImageView+Promise.swift in Sources */,
 				1D00E4DE2096BBE900450247 /* SeparatorCellViewModel.swift in Sources */,
-				1D8B85A62084B7D2003EDE8A /* JYIMBases.swift in Sources */,
-				1D756306212E47F0001AFED2 /* JYIMPushNotificationProviderDelegate.swift in Sources */,
 				1D389222208B01890005C175 /* JYError.swift in Sources */,
 				1D389212208AF9B40005C175 /* UIButton+JY.swift in Sources */,
 				1D00E4D72096BBE300450247 /* EmptyCell.swift in Sources */,
-				1D38017120A94B75001EEAF0 /* RongCloudChatRoomSession.swift in Sources */,
 				1D38921B208AF9B40005C175 /* CharacterSet+JY.swift in Sources */,
 				1D389210208AF9B40005C175 /* Sequence+JY.swift in Sources */,
-				1D5B97D720DF98E80010B7CE /* JYIMGroup.swift in Sources */,
 				1D00E4F7209715B500450247 /* CollectionCircinalSpinnerView.swift in Sources */,
 				1D389216208AF9B40005C175 /* DispatchQueue+JY.swift in Sources */,
 				1D00E4B220931D5900450247 /* JYHttpParameter.swift in Sources */,
 				1D00E4ED2097018B00450247 /* JYCollectionViewController.swift in Sources */,
 				1D38926B208B542A0005C175 /* JYProgressHUD.swift in Sources */,
-				1D477777211C96450068FCD0 /* JYIMChatRoom.swift in Sources */,
 				1D38921A208AF9B40005C175 /* UIResponder+JY.swift in Sources */,
-				1D89F18820CD690A001B7CF9 /* JYIMUser.swift in Sources */,
 				1D38921E208AF9B40005C175 /* UIColor+JY.swift in Sources */,
 				1D00E4E32096C09700450247 /* JYCollectionView.swift in Sources */,
 				1D00E4E62096C0F800450247 /* JYCollectionViewCell.swift in Sources */,
@@ -678,17 +583,12 @@
 				1D389271208B54E50005C175 /* JYOvalActivityIndicator.swift in Sources */,
 				1D38920D208AF9B40005C175 /* UIImage+JY.swift in Sources */,
 				1D00E4F320970B7000450247 /* CollectionOvalSpinnerView.swift in Sources */,
-				1D389284208B70A80005C175 /* JYBackgroundMusic.swift in Sources */,
-				1D5B97D520DF98620010B7CE /* JYIMDataProviderDelegate.swift in Sources */,
-				1D38017020A94B75001EEAF0 /* RongCloudMessage.swift in Sources */,
 				1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */,
 				1D389213208AF9B40005C175 /* String+JY.swift in Sources */,
 				1D00E4B420931E6100450247 /* JYHttpHeader.swift in Sources */,
 				1D00E4D52096BBE300450247 /* TableOvalSpinnerCell.swift in Sources */,
 				1D389272208B54E50005C175 /* IActivityIndicator.swift in Sources */,
-				1D38017220A94B75001EEAF0 /* RongCloudService.swift in Sources */,
 				1D00E4D32096BBE300450247 /* JYTableViewCell.swift in Sources */,
-				1D8B85A52084B7D2003EDE8A /* JYIMEnums.swift in Sources */,
 				1D00E4B620932A8700450247 /* JYHttpModel.swift in Sources */,
 				1D389273208B54E50005C175 /* JYCircinalActivityIndicator.swift in Sources */,
 				1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */,
@@ -696,16 +596,12 @@
 				1D3891F5208AF6370005C175 /* AlbumAuthService.swift in Sources */,
 				1D38921D208AF9B40005C175 /* TimeInterval+JY.swift in Sources */,
 				1D00E4C92096BBB400450247 /* JYTableView.swift in Sources */,
-				1DCBAFCC20B913CF0050F247 /* RongCloudGroupSession.swift in Sources */,
 				1D389217208AF9B40005C175 /* UISearchBar+JY.swift in Sources */,
-				1D1B235620EDB72000E0F8DB /* RongCloudSystemMessageSession.swift in Sources */,
 				1D00E4EB2096E8A400450247 /* CollectionCellViewModel.swift in Sources */,
 				1D3891F7208AF6370005C175 /* CameraAuthService.swift in Sources */,
 				1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */,
 				1D3891F6208AF6370005C175 /* AuthServiceBase.swift in Sources */,
 				1D389219208AF9B40005C175 /* NSObject+JY.swift in Sources */,
-				1DB0399620ADAB67008FD924 /* RCEventMessage.swift in Sources */,
-				1D38017320A94B75001EEAF0 /* RongCloudPrivateSession.swift in Sources */,
 				1D38920E208AF9B40005C175 /* UIFont+JY.swift in Sources */,
 				1D00E4E12096BBE900450247 /* TableCellViewModel.swift in Sources */,
 				1D38921F208AF9B40005C175 /* UIView+JY.swift in Sources */,
