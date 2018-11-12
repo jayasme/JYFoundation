@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JYFoundation"
-  s.version      = "0.0.1"
-  s.summary      = "A private foundation."
+  s.version      = "0.0.2"
+  s.summary      = "A private foundation only for jayasme."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -130,10 +130,7 @@ A private foundation only for myself, DO NOT use it, I don't assume any conseque
   s.dependency "Alamofire", "~>4.7"
   s.dependency "PromiseKit/CorePromise", "~>6.2"
   s.dependency "SDWebImage", "~>4.3"
-  s.dependency "RongCloudIM/IMLib", "~>2.9"
   s.dependency "HandyJSON", "~>4.1"
-  s.dependency "WechatOpenSDK", "~>1.8"
-  s.dependency "Weibo_SDK", "~>3.1"
 
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }

@@ -75,6 +75,9 @@
 		1D389272208B54E50005C175 /* IActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38926F208B54E50005C175 /* IActivityIndicator.swift */; };
 		1D389273208B54E50005C175 /* JYCircinalActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389270208B54E50005C175 /* JYCircinalActivityIndicator.swift */; };
 		1D477775211C3A7F0068FCD0 /* Dictionary+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */; };
+		1D4D877B219987DB00D7B457 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8778219987DB00D7B457 /* README.md */; };
+		1D4D877C219987DB00D7B457 /* JYFoundation.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8779219987DB00D7B457 /* JYFoundation.podspec */; };
+		1D4D877D219987DB00D7B457 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D877A219987DB00D7B457 /* LICENSE */; };
 		1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */; };
 		1DAD556120F0610800067507 /* SpinnerCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD556020F0610800067507 /* SpinnerCellViewModel.swift */; };
 		1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */; };
@@ -151,6 +154,9 @@
 		1D38926F208B54E50005C175 /* IActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IActivityIndicator.swift; sourceTree = "<group>"; };
 		1D389270208B54E50005C175 /* JYCircinalActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYCircinalActivityIndicator.swift; sourceTree = "<group>"; };
 		1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JY.swift"; sourceTree = "<group>"; };
+		1D4D8778219987DB00D7B457 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1D4D8779219987DB00D7B457 /* JYFoundation.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JYFoundation.podspec; sourceTree = "<group>"; };
+		1D4D877A219987DB00D7B457 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAuthService.swift; sourceTree = "<group>"; };
 		1D61E9E420849AA800525E3F /* AaruFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AaruFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D61E9E820849AA800525E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -343,6 +349,9 @@
 		1D61E9DA20849AA800525E3F = {
 			isa = PBXGroup;
 			children = (
+				1D4D8779219987DB00D7B457 /* JYFoundation.podspec */,
+				1D4D877A219987DB00D7B457 /* LICENSE */,
+				1D4D8778219987DB00D7B457 /* README.md */,
 				1D61E9E620849AA800525E3F /* JYFoundation */,
 				1D61E9E520849AA800525E3F /* Products */,
 				BCAE9119A427210613F35911 /* Pods */,
@@ -496,8 +505,11 @@
 			files = (
 				1D00E4D92096BBE300450247 /* TableCircinalSpinnerCell.xib in Resources */,
 				1D00E4F120970AF200450247 /* CollectionOvalSpinnerView.xib in Resources */,
+				1D4D877C219987DB00D7B457 /* JYFoundation.podspec in Resources */,
 				1D00E4F9209715BF00450247 /* CollectionCircinalSpinnerView.xib in Resources */,
+				1D4D877B219987DB00D7B457 /* README.md in Resources */,
 				1D00E4D42096BBE300450247 /* TableOvalSpinnerCell.xib in Resources */,
+				1D4D877D219987DB00D7B457 /* LICENSE in Resources */,
 				1D00E4C12096B8FF00450247 /* Assets.xcassets in Resources */,
 				1D38926C208B542A0005C175 /* JYProgressHUD.xib in Resources */,
 			);
