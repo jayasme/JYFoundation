@@ -6,9 +6,4 @@
 //  Copyright © 2018年 jayasme All rights reserved.
 //
 
-#import "WXApi.h"
-#import "WXApiObject.h"
-#import "WeiboSDK.h"
-#import <RongIMLib/RongIMLib.h>
-
 #import <CommonCrypto/CommonHMAC.h>
