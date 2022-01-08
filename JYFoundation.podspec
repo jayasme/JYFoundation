@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
     s.summary = 'A multi usages foundation library for iOS Swift.'
     s.homepage = 'https://github.com/jayasme/JYFoundation'
     # s.social_media_url = ''
-    s.authors = { 'jayasme' => 'sunshine121981@hotmail.com' }
+    s.authors = { 'jayasme' => 'sunshine121981@126.com' }
     s.source = { :git => "https://github.com/jayasme/JYFoundation.git", :tag => s.version }
     # s.documentation_url = ''
 
