@@ -6,11 +6,11 @@
 //  Copyright © 2018年 jayasme All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 open class JYCollectionViewCell : UICollectionViewCell {
     
-    private(set) open var viewModel: CollectionCellViewModel! {
+    private(set) open var viewModel: JYCollectionCellViewModel! {
         didSet {
             // update signalBlock
             viewModel.signalBlock = signal
@@ -28,7 +28,7 @@ open class JYCollectionViewCell : UICollectionViewCell {
         commonInit()
     }
     
-    open func updateViewModel(viewModel: CollectionCellViewModel) {
+    open func updateViewModel(viewModel: JYCollectionCellViewModel) {
         self.viewModel = viewModel
     }
     

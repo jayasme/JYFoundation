@@ -15,25 +15,13 @@
 		1D00E4C82096BBB400450247 /* JYTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4C52096BBB400450247 /* JYTableViewController.swift */; };
 		1D00E4C92096BBB400450247 /* JYTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4C62096BBB400450247 /* JYTableView.swift */; };
 		1D00E4D32096BBE300450247 /* JYTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4CC2096BBE300450247 /* JYTableViewCell.swift */; };
-		1D00E4D42096BBE300450247 /* TableOvalSpinnerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D00E4CD2096BBE300450247 /* TableOvalSpinnerCell.xib */; };
-		1D00E4D52096BBE300450247 /* TableOvalSpinnerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4CE2096BBE300450247 /* TableOvalSpinnerCell.swift */; };
-		1D00E4D62096BBE300450247 /* SeparatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4CF2096BBE300450247 /* SeparatorCell.swift */; };
-		1D00E4D72096BBE300450247 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4D02096BBE300450247 /* EmptyCell.swift */; };
-		1D00E4D82096BBE300450247 /* TableCircinalSpinnerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4D12096BBE300450247 /* TableCircinalSpinnerCell.swift */; };
-		1D00E4D92096BBE300450247 /* TableCircinalSpinnerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D00E4D22096BBE300450247 /* TableCircinalSpinnerCell.xib */; };
-		1D00E4DE2096BBE900450247 /* SeparatorCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4DA2096BBE900450247 /* SeparatorCellViewModel.swift */; };
-		1D00E4E02096BBE900450247 /* EmptyCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4DC2096BBE900450247 /* EmptyCellViewModel.swift */; };
-		1D00E4E12096BBE900450247 /* TableCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4DD2096BBE900450247 /* TableCellViewModel.swift */; };
+		1D00E4E12096BBE900450247 /* JYTableCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4DD2096BBE900450247 /* JYTableCellViewModel.swift */; };
 		1D00E4E32096C09700450247 /* JYCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4E22096C09700450247 /* JYCollectionView.swift */; };
 		1D00E4E62096C0F800450247 /* JYCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4E52096C0F800450247 /* JYCollectionViewCell.swift */; };
 		1D00E4E92096CA1C00450247 /* ICellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4E82096CA1C00450247 /* ICellViewModel.swift */; };
-		1D00E4EB2096E8A400450247 /* CollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4EA2096E8A400450247 /* CollectionCellViewModel.swift */; };
+		1D00E4EB2096E8A400450247 /* JYCollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4EA2096E8A400450247 /* JYCollectionCellViewModel.swift */; };
 		1D00E4ED2097018B00450247 /* JYCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4EC2097018B00450247 /* JYCollectionViewController.swift */; };
 		1D00E4EF2097019A00450247 /* JYPaginationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4EE2097019A00450247 /* JYPaginationCollectionViewController.swift */; };
-		1D00E4F120970AF200450247 /* CollectionOvalSpinnerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D00E4F020970AF200450247 /* CollectionOvalSpinnerView.xib */; };
-		1D00E4F320970B7000450247 /* CollectionOvalSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4F220970B7000450247 /* CollectionOvalSpinnerView.swift */; };
-		1D00E4F7209715B500450247 /* CollectionCircinalSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4F6209715B500450247 /* CollectionCircinalSpinnerView.swift */; };
-		1D00E4F9209715BF00450247 /* CollectionCircinalSpinnerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D00E4F8209715BF00450247 /* CollectionCircinalSpinnerView.xib */; };
 		1D3891F5208AF6370005C175 /* AlbumAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F1208AF6360005C175 /* AlbumAuthService.swift */; };
 		1D3891F6208AF6370005C175 /* AuthServiceBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F2208AF6360005C175 /* AuthServiceBase.swift */; };
 		1D3891F7208AF6370005C175 /* CameraAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F3208AF6360005C175 /* CameraAuthService.swift */; };
@@ -69,21 +57,19 @@
 		1D389236208B02CE0005C175 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D389235208B02CE0005C175 /* QuartzCore.framework */; };
 		1D389238208B02DF0005C175 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D389237208B02DF0005C175 /* ImageIO.framework */; };
 		1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38923A208B09650005C175 /* JYHttpClient.swift */; };
-		1D38926B208B542A0005C175 /* JYProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389269208B542A0005C175 /* JYProgressHUD.swift */; };
-		1D38926C208B542A0005C175 /* JYProgressHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D38926A208B542A0005C175 /* JYProgressHUD.xib */; };
-		1D389271208B54E50005C175 /* JYOvalActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38926E208B54E50005C175 /* JYOvalActivityIndicator.swift */; };
-		1D389272208B54E50005C175 /* IActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38926F208B54E50005C175 /* IActivityIndicator.swift */; };
-		1D389273208B54E50005C175 /* JYCircinalActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389270208B54E50005C175 /* JYCircinalActivityIndicator.swift */; };
 		1D477775211C3A7F0068FCD0 /* Dictionary+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */; };
 		1D4D877B219987DB00D7B457 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8778219987DB00D7B457 /* README.md */; };
 		1D4D877C219987DB00D7B457 /* JYFoundation.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8779219987DB00D7B457 /* JYFoundation.podspec */; };
 		1D4D877D219987DB00D7B457 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D877A219987DB00D7B457 /* LICENSE */; };
 		1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */; };
-		1DAD556120F0610800067507 /* SpinnerCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD556020F0610800067507 /* SpinnerCellViewModel.swift */; };
 		1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */; };
+		67583FAB4AD52C2B7040E5A0 /* Pods_JYFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2724B990F489D46F31E5EBF /* Pods_JYFoundation.framework */; };
+		B967BA0D277EA85100926B9C /* JYBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B967BA0C277EA85100926B9C /* JYBlurView.swift */; };
+		B967BA62277FE64F00926B9C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B967BA61277FE64F00926B9C /* Podfile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1486E714915A587CDE11C238 /* Pods-JYFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.release.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		1D00E4B120931D5900450247 /* JYHttpParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpParameter.swift; sourceTree = "<group>"; };
 		1D00E4B320931E6100450247 /* JYHttpHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpHeader.swift; sourceTree = "<group>"; };
 		1D00E4B520932A8700450247 /* JYHttpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpModel.swift; sourceTree = "<group>"; };
@@ -92,25 +78,13 @@
 		1D00E4C52096BBB400450247 /* JYTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYTableViewController.swift; sourceTree = "<group>"; };
 		1D00E4C62096BBB400450247 /* JYTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYTableView.swift; sourceTree = "<group>"; };
 		1D00E4CC2096BBE300450247 /* JYTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYTableViewCell.swift; sourceTree = "<group>"; };
-		1D00E4CD2096BBE300450247 /* TableOvalSpinnerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableOvalSpinnerCell.xib; sourceTree = "<group>"; };
-		1D00E4CE2096BBE300450247 /* TableOvalSpinnerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableOvalSpinnerCell.swift; sourceTree = "<group>"; };
-		1D00E4CF2096BBE300450247 /* SeparatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorCell.swift; sourceTree = "<group>"; };
-		1D00E4D02096BBE300450247 /* EmptyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
-		1D00E4D12096BBE300450247 /* TableCircinalSpinnerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCircinalSpinnerCell.swift; sourceTree = "<group>"; };
-		1D00E4D22096BBE300450247 /* TableCircinalSpinnerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableCircinalSpinnerCell.xib; sourceTree = "<group>"; };
-		1D00E4DA2096BBE900450247 /* SeparatorCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorCellViewModel.swift; sourceTree = "<group>"; };
-		1D00E4DC2096BBE900450247 /* EmptyCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyCellViewModel.swift; sourceTree = "<group>"; };
-		1D00E4DD2096BBE900450247 /* TableCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellViewModel.swift; sourceTree = "<group>"; };
+		1D00E4DD2096BBE900450247 /* JYTableCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYTableCellViewModel.swift; sourceTree = "<group>"; };
 		1D00E4E22096C09700450247 /* JYCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYCollectionView.swift; sourceTree = "<group>"; };
 		1D00E4E52096C0F800450247 /* JYCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYCollectionViewCell.swift; sourceTree = "<group>"; };
 		1D00E4E82096CA1C00450247 /* ICellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICellViewModel.swift; sourceTree = "<group>"; };
-		1D00E4EA2096E8A400450247 /* CollectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCellViewModel.swift; sourceTree = "<group>"; };
+		1D00E4EA2096E8A400450247 /* JYCollectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYCollectionCellViewModel.swift; sourceTree = "<group>"; };
 		1D00E4EC2097018B00450247 /* JYCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYCollectionViewController.swift; sourceTree = "<group>"; };
 		1D00E4EE2097019A00450247 /* JYPaginationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYPaginationCollectionViewController.swift; sourceTree = "<group>"; };
-		1D00E4F020970AF200450247 /* CollectionOvalSpinnerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionOvalSpinnerView.xib; sourceTree = "<group>"; };
-		1D00E4F220970B7000450247 /* CollectionOvalSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionOvalSpinnerView.swift; sourceTree = "<group>"; };
-		1D00E4F6209715B500450247 /* CollectionCircinalSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCircinalSpinnerView.swift; sourceTree = "<group>"; };
-		1D00E4F8209715BF00450247 /* CollectionCircinalSpinnerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionCircinalSpinnerView.xib; sourceTree = "<group>"; };
 		1D3891F0208AC8950005C175 /* JYFoundation-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JYFoundation-Bridging-Header.h"; sourceTree = "<group>"; };
 		1D3891F1208AF6360005C175 /* AlbumAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumAuthService.swift; sourceTree = "<group>"; };
 		1D3891F2208AF6360005C175 /* AuthServiceBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthServiceBase.swift; sourceTree = "<group>"; };
@@ -147,11 +121,6 @@
 		1D389235208B02CE0005C175 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1D389237208B02DF0005C175 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		1D38923A208B09650005C175 /* JYHttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHttpClient.swift; sourceTree = "<group>"; };
-		1D389269208B542A0005C175 /* JYProgressHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYProgressHUD.swift; sourceTree = "<group>"; };
-		1D38926A208B542A0005C175 /* JYProgressHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JYProgressHUD.xib; sourceTree = "<group>"; };
-		1D38926E208B54E50005C175 /* JYOvalActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYOvalActivityIndicator.swift; sourceTree = "<group>"; };
-		1D38926F208B54E50005C175 /* IActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IActivityIndicator.swift; sourceTree = "<group>"; };
-		1D389270208B54E50005C175 /* JYCircinalActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYCircinalActivityIndicator.swift; sourceTree = "<group>"; };
 		1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JY.swift"; sourceTree = "<group>"; };
 		1D4D8778219987DB00D7B457 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1D4D8779219987DB00D7B457 /* JYFoundation.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JYFoundation.podspec; sourceTree = "<group>"; };
@@ -159,8 +128,11 @@
 		1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAuthService.swift; sourceTree = "<group>"; };
 		1D61E9E420849AA800525E3F /* JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D61E9E820849AA800525E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1DAD556020F0610800067507 /* SpinnerCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerCellViewModel.swift; sourceTree = "<group>"; };
 		1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYPostBodyEncoder.swift; sourceTree = "<group>"; };
+		5B2FB16F99C794341E614C6B /* Pods-JYFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.debug.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.debug.xcconfig"; sourceTree = "<group>"; };
+		B967BA0C277EA85100926B9C /* JYBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYBlurView.swift; sourceTree = "<group>"; };
+		B967BA61277FE64F00926B9C /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		F2724B990F489D46F31E5EBF /* Pods_JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +151,7 @@
 				1D389228208B020E0005C175 /* Security.framework in Frameworks */,
 				1D389226208B02090005C175 /* libsqlite3.tbd in Frameworks */,
 				1D389224208B02010005C175 /* Photos.framework in Frameworks */,
+				67583FAB4AD52C2B7040E5A0 /* Pods_JYFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,8 +169,8 @@
 		1D00E4C22096BB6C00450247 /* TableViewController */ = {
 			isa = PBXGroup;
 			children = (
-				1D00E4CB2096BBC000450247 /* CellViewModel */,
-				1D00E4CA2096BBBC00450247 /* Cell */,
+				1D00E4CC2096BBE300450247 /* JYTableViewCell.swift */,
+				1D00E4DD2096BBE900450247 /* JYTableCellViewModel.swift */,
 				1D00E4C62096BBB400450247 /* JYTableView.swift */,
 				1D00E4C52096BBB400450247 /* JYTableViewController.swift */,
 				1D00E4C42096BBB400450247 /* JYPaginationTableViewController.swift */,
@@ -208,59 +181,13 @@
 		1D00E4C32096BB7400450247 /* CollectionViewController */ = {
 			isa = PBXGroup;
 			children = (
-				1D00E4E82096CA1C00450247 /* ICellViewModel.swift */,
-				1D00E4E72096C99700450247 /* CellViewModel */,
-				1D00E4E42096C0E100450247 /* Cell */,
+				1D00E4E52096C0F800450247 /* JYCollectionViewCell.swift */,
+				1D00E4EA2096E8A400450247 /* JYCollectionCellViewModel.swift */,
 				1D00E4E22096C09700450247 /* JYCollectionView.swift */,
 				1D00E4EC2097018B00450247 /* JYCollectionViewController.swift */,
 				1D00E4EE2097019A00450247 /* JYPaginationCollectionViewController.swift */,
 			);
 			path = CollectionViewController;
-			sourceTree = "<group>";
-		};
-		1D00E4CA2096BBBC00450247 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				1D00E4CC2096BBE300450247 /* JYTableViewCell.swift */,
-				1D00E4D12096BBE300450247 /* TableCircinalSpinnerCell.swift */,
-				1D00E4D22096BBE300450247 /* TableCircinalSpinnerCell.xib */,
-				1D00E4CE2096BBE300450247 /* TableOvalSpinnerCell.swift */,
-				1D00E4CD2096BBE300450247 /* TableOvalSpinnerCell.xib */,
-				1D00E4D02096BBE300450247 /* EmptyCell.swift */,
-				1D00E4CF2096BBE300450247 /* SeparatorCell.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
-		1D00E4CB2096BBC000450247 /* CellViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				1DAD556020F0610800067507 /* SpinnerCellViewModel.swift */,
-				1D00E4DD2096BBE900450247 /* TableCellViewModel.swift */,
-				1D00E4DC2096BBE900450247 /* EmptyCellViewModel.swift */,
-				1D00E4DA2096BBE900450247 /* SeparatorCellViewModel.swift */,
-			);
-			path = CellViewModel;
-			sourceTree = "<group>";
-		};
-		1D00E4E42096C0E100450247 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				1D00E4E52096C0F800450247 /* JYCollectionViewCell.swift */,
-				1D00E4F020970AF200450247 /* CollectionOvalSpinnerView.xib */,
-				1D00E4F220970B7000450247 /* CollectionOvalSpinnerView.swift */,
-				1D00E4F8209715BF00450247 /* CollectionCircinalSpinnerView.xib */,
-				1D00E4F6209715B500450247 /* CollectionCircinalSpinnerView.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
-		1D00E4E72096C99700450247 /* CellViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				1D00E4EA2096E8A400450247 /* CollectionCellViewModel.swift */,
-			);
-			path = CellViewModel;
 			sourceTree = "<group>";
 		};
 		1D3891F9208AF9960005C175 /* Extensions */ = {
@@ -312,42 +239,25 @@
 		1D389267208B53DB0005C175 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				1D00E4E82096CA1C00450247 /* ICellViewModel.swift */,
 				1D00E4C32096BB7400450247 /* CollectionViewController */,
 				1D00E4C22096BB6C00450247 /* TableViewController */,
-				1D38926D208B546D0005C175 /* JYActivityIndicator */,
-				1D389268208B53F00005C175 /* JYProgressHUD */,
+				B967BA0C277EA85100926B9C /* JYBlurView.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		1D389268208B53F00005C175 /* JYProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				1D389269208B542A0005C175 /* JYProgressHUD.swift */,
-				1D38926A208B542A0005C175 /* JYProgressHUD.xib */,
-			);
-			path = JYProgressHUD;
-			sourceTree = "<group>";
-		};
-		1D38926D208B546D0005C175 /* JYActivityIndicator */ = {
-			isa = PBXGroup;
-			children = (
-				1D38926F208B54E50005C175 /* IActivityIndicator.swift */,
-				1D389270208B54E50005C175 /* JYCircinalActivityIndicator.swift */,
-				1D38926E208B54E50005C175 /* JYOvalActivityIndicator.swift */,
-			);
-			path = JYActivityIndicator;
 			sourceTree = "<group>";
 		};
 		1D61E9DA20849AA800525E3F = {
 			isa = PBXGroup;
 			children = (
+				B967BA61277FE64F00926B9C /* Podfile */,
 				1D4D8779219987DB00D7B457 /* JYFoundation.podspec */,
 				1D4D877A219987DB00D7B457 /* LICENSE */,
 				1D4D8778219987DB00D7B457 /* README.md */,
 				1D61E9E620849AA800525E3F /* JYFoundation */,
 				1D61E9E520849AA800525E3F /* Products */,
 				A5EF2A538D23D9F770EA7AB7 /* Frameworks */,
+				4BF4AE267683209EB022E4D2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -394,6 +304,15 @@
 			path = AuthorizationService;
 			sourceTree = "<group>";
 		};
+		4BF4AE267683209EB022E4D2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5B2FB16F99C794341E614C6B /* Pods-JYFoundation.debug.xcconfig */,
+				1486E714915A587CDE11C238 /* Pods-JYFoundation.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		A5EF2A538D23D9F770EA7AB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,6 +327,7 @@
 				1D389227208B020E0005C175 /* Security.framework */,
 				1D389225208B02090005C175 /* libsqlite3.tbd */,
 				1D389223208B02010005C175 /* Photos.framework */,
+				F2724B990F489D46F31E5EBF /* Pods_JYFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -429,6 +349,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D61E9EC20849AA800525E3F /* Build configuration list for PBXNativeTarget "JYFoundation" */;
 			buildPhases = (
+				5F28AEEAFA44F95297AF9E35 /* [CP] Check Pods Manifest.lock */,
 				1D61E9DF20849AA800525E3F /* Sources */,
 				1D61E9E020849AA800525E3F /* Frameworks */,
 				1D61E9E120849AA800525E3F /* Headers */,
@@ -481,19 +402,40 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1D00E4D92096BBE300450247 /* TableCircinalSpinnerCell.xib in Resources */,
-				1D00E4F120970AF200450247 /* CollectionOvalSpinnerView.xib in Resources */,
+				B967BA62277FE64F00926B9C /* Podfile in Resources */,
 				1D4D877C219987DB00D7B457 /* JYFoundation.podspec in Resources */,
-				1D00E4F9209715BF00450247 /* CollectionCircinalSpinnerView.xib in Resources */,
 				1D4D877B219987DB00D7B457 /* README.md in Resources */,
-				1D00E4D42096BBE300450247 /* TableOvalSpinnerCell.xib in Resources */,
 				1D4D877D219987DB00D7B457 /* LICENSE in Resources */,
 				1D00E4C12096B8FF00450247 /* Assets.xcassets in Resources */,
-				1D38926C208B542A0005C175 /* JYProgressHUD.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5F28AEEAFA44F95297AF9E35 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JYFoundation-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1D61E9DF20849AA800525E3F /* Sources */ = {
@@ -501,58 +443,46 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D389211208AF9B40005C175 /* String+Regex.swift in Sources */,
-				1D00E4E02096BBE900450247 /* EmptyCellViewModel.swift in Sources */,
+				B967BA0D277EA85100926B9C /* JYBlurView.swift in Sources */,
 				1D00E4C82096BBB400450247 /* JYTableViewController.swift in Sources */,
-				1D00E4D62096BBE300450247 /* SeparatorCell.swift in Sources */,
 				1D00E4E92096CA1C00450247 /* ICellViewModel.swift in Sources */,
 				1D00E4C72096BBB400450247 /* JYPaginationTableViewController.swift in Sources */,
 				1D3891F8208AF6370005C175 /* MicrophoneAuthService.swift in Sources */,
-				1DAD556120F0610800067507 /* SpinnerCellViewModel.swift in Sources */,
 				1D389215208AF9B40005C175 /* Date+JY.swift in Sources */,
-				1D00E4D82096BBE300450247 /* TableCircinalSpinnerCell.swift in Sources */,
 				1D389218208AF9B40005C175 /* Data+JY.swift in Sources */,
 				1D38920F208AF9B40005C175 /* UIImageView+Promise.swift in Sources */,
-				1D00E4DE2096BBE900450247 /* SeparatorCellViewModel.swift in Sources */,
 				1D389222208B01890005C175 /* JYError.swift in Sources */,
 				1D389212208AF9B40005C175 /* UIButton+JY.swift in Sources */,
-				1D00E4D72096BBE300450247 /* EmptyCell.swift in Sources */,
 				1D38921B208AF9B40005C175 /* CharacterSet+JY.swift in Sources */,
 				1D389210208AF9B40005C175 /* Sequence+JY.swift in Sources */,
-				1D00E4F7209715B500450247 /* CollectionCircinalSpinnerView.swift in Sources */,
 				1D389216208AF9B40005C175 /* DispatchQueue+JY.swift in Sources */,
 				1D00E4B220931D5900450247 /* JYHttpParameter.swift in Sources */,
 				1D00E4ED2097018B00450247 /* JYCollectionViewController.swift in Sources */,
-				1D38926B208B542A0005C175 /* JYProgressHUD.swift in Sources */,
 				1D38921A208AF9B40005C175 /* UIResponder+JY.swift in Sources */,
 				1D38921E208AF9B40005C175 /* UIColor+JY.swift in Sources */,
 				1D00E4E32096C09700450247 /* JYCollectionView.swift in Sources */,
 				1D00E4E62096C0F800450247 /* JYCollectionViewCell.swift in Sources */,
 				1D477775211C3A7F0068FCD0 /* Dictionary+JY.swift in Sources */,
 				1D00E4EF2097019A00450247 /* JYPaginationCollectionViewController.swift in Sources */,
-				1D389271208B54E50005C175 /* JYOvalActivityIndicator.swift in Sources */,
 				1D38920D208AF9B40005C175 /* UIImage+JY.swift in Sources */,
-				1D00E4F320970B7000450247 /* CollectionOvalSpinnerView.swift in Sources */,
 				1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */,
 				1D389213208AF9B40005C175 /* String+JY.swift in Sources */,
 				1D00E4B420931E6100450247 /* JYHttpHeader.swift in Sources */,
-				1D00E4D52096BBE300450247 /* TableOvalSpinnerCell.swift in Sources */,
-				1D389272208B54E50005C175 /* IActivityIndicator.swift in Sources */,
 				1D00E4D32096BBE300450247 /* JYTableViewCell.swift in Sources */,
 				1D00E4B620932A8700450247 /* JYHttpModel.swift in Sources */,
-				1D389273208B54E50005C175 /* JYCircinalActivityIndicator.swift in Sources */,
 				1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */,
 				1D38921C208AF9B40005C175 /* Calendar+JY.swift in Sources */,
 				1D3891F5208AF6370005C175 /* AlbumAuthService.swift in Sources */,
 				1D38921D208AF9B40005C175 /* TimeInterval+JY.swift in Sources */,
 				1D00E4C92096BBB400450247 /* JYTableView.swift in Sources */,
 				1D389217208AF9B40005C175 /* UISearchBar+JY.swift in Sources */,
-				1D00E4EB2096E8A400450247 /* CollectionCellViewModel.swift in Sources */,
+				1D00E4EB2096E8A400450247 /* JYCollectionCellViewModel.swift in Sources */,
 				1D3891F7208AF6370005C175 /* CameraAuthService.swift in Sources */,
 				1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */,
 				1D3891F6208AF6370005C175 /* AuthServiceBase.swift in Sources */,
 				1D389219208AF9B40005C175 /* NSObject+JY.swift in Sources */,
 				1D38920E208AF9B40005C175 /* UIFont+JY.swift in Sources */,
-				1D00E4E12096BBE900450247 /* TableCellViewModel.swift in Sources */,
+				1D00E4E12096BBE900450247 /* JYTableCellViewModel.swift in Sources */,
 				1D38921F208AF9B40005C175 /* UIView+JY.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -679,6 +609,7 @@
 		};
 		1D61E9ED20849AA800525E3F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B2FB16F99C794341E614C6B /* Pods-JYFoundation.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -690,20 +621,22 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = JYFoundation/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jayasme.foundation;
+				MARKETING_VERSION = 0.0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jy.foundation;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "./JYFoundation/JYFoundation-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 1;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		1D61E9EE20849AA800525E3F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1486E714915A587CDE11C238 /* Pods-JYFoundation.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -715,14 +648,15 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = JYFoundation/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jayasme.foundation;
+				MARKETING_VERSION = 0.0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jy.foundation;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "./JYFoundation/JYFoundation-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 1;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

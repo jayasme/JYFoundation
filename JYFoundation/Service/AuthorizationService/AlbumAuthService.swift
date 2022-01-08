@@ -20,12 +20,16 @@ public class AlbumAuthService: AuthServiceBase {
             switch (state) {
             case .notDetermined:
                 seal.fulfill(AuthState.notDetermined)
+            case .limited:
+                fallthrough
             case .restricted:
                 fallthrough
             case .denied:
                 seal.fulfill(AuthState.denined)
             case .authorized:
                 seal.fulfill(AuthState.allowed)
+            @unknown default:
+                fatalError()
             }
         }
     }

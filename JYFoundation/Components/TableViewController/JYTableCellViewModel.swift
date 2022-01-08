@@ -1,5 +1,5 @@
 //
-//  CellViewModel.swift
+//  JYCellViewModel.swift
 //  JYFoundation
 //
 //  Created by Scott Rong on 2017/3/7.
@@ -11,10 +11,10 @@ import UIKit
 public class JYTableViewCellAction {
     var key: String
     var title: String
-    var style: UITableViewRowActionStyle
+    var style: UITableViewRowAction.Style
     var userInfo: Any?
     
-    public init(key: String, title: String, style: UITableViewRowActionStyle, userInfo: Any? = nil) {
+    public init(key: String, title: String, style: UITableViewRowAction.Style, userInfo: Any? = nil) {
         self.key = key
         self.title = title
         self.style = style
@@ -22,7 +22,7 @@ public class JYTableViewCellAction {
     }
 }
 
-open class TableCellViewModel: NSObject, ICellViewModel {
+open class JYTableCellViewModel: NSObject, ICellViewModel {
     private(set) public var model: Any? = nil
     
     public init(_ model: Any?) {
@@ -34,7 +34,7 @@ open class TableCellViewModel: NSObject, ICellViewModel {
     }
     
     public var signalBlock: (()->())? = nil
-    public var notificationBlock: ((TableCellViewModel, String, Any?) -> Void)? = nil
+    public var notificationBlock: ((JYTableCellViewModel, String, Any?) -> Void)? = nil
     
     open func height() -> CGFloat {
         return 0

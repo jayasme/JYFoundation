@@ -20,7 +20,7 @@ open class JYCollectionViewController: UICollectionViewController, JYCollectionV
         
         let frame = collectionView.frame
         let layout = collectionView.collectionViewLayout
-        self.collectionView = JYCollectionView(frame: frame, collectionViewLayout: layout, type: .static)
+        self.collectionView = JYCollectionView(frame: frame, collectionViewLayout: layout)
         self.collectionView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         (self.collectionView as! JYCollectionView).jyDataSource = self
         (self.collectionView as! JYCollectionView).jyDelegate = self
@@ -28,17 +28,17 @@ open class JYCollectionViewController: UICollectionViewController, JYCollectionV
     
     // MARK: JYCollectionViewStaticDataSource
     
-    open func prepare(_: CollectionCellViewModel, for cell: JYCollectionViewCell) {
+    open func prepare(_: JYCollectionCellViewModel, for cell: JYCollectionViewCell) {
         // do nothing
     }
     
-    open func retrieveData(_ collectionView: JYCollectionView) -> [CollectionCellViewModel] {
+    open func retrieveData(_ collectionView: JYCollectionView) -> [JYCollectionCellViewModel] {
         return []
     }
     
     // MARK: JYCollectionViewDelegate
     
-    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: CollectionCellViewModel) {
+    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: JYCollectionCellViewModel) {
         // do nothing
     }
 }

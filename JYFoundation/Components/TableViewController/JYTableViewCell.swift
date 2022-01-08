@@ -10,7 +10,7 @@ import UIKit
 
 open class JYTableViewCell : UITableViewCell {
     
-    private(set) open var viewModel: TableCellViewModel! {
+    private(set) open var viewModel: JYTableCellViewModel! {
         didSet {
             // update signalBlock
             viewModel.signalBlock = signal
@@ -18,7 +18,7 @@ open class JYTableViewCell : UITableViewCell {
     }
     private(set) var isDisplayed: Bool = false
     
-    override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         commonInit()
     }
@@ -28,7 +28,7 @@ open class JYTableViewCell : UITableViewCell {
         commonInit()
     }
     
-    open func updateViewModel(viewModel: TableCellViewModel) {
+    open func updateViewModel(viewModel: JYTableCellViewModel) {
         self.viewModel = viewModel
     }
     

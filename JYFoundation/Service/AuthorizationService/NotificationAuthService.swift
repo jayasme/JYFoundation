@@ -19,6 +19,10 @@ public class NotificationAuthService: AuthServiceBase {
             UNUserNotificationCenter.current().getNotificationSettings { (settings) in
                 switch(settings.authorizationStatus) {
                 case .authorized:
+                    fallthrough
+                case .provisional:
+                    fallthrough
+                case .ephemeral:
                     seal.fulfill(AuthState.allowed)
                     break
                 case .denied:
@@ -27,6 +31,8 @@ public class NotificationAuthService: AuthServiceBase {
                 case .notDetermined:
                     seal.fulfill(AuthState.notDetermined)
                     break
+                @unknown default:
+                    fatalError()
                 }
             }
         }

@@ -56,7 +56,7 @@ public class JYHttpClient: NSObject {
                 print("[Fallback data] ")
                 print(String(data: data, encoding: String.Encoding.utf8) ?? "")
                 
-                throw ONError.error(code: .HTTPClientCode, description: "Data deserialization error.", url: urlString)
+                throw JYError("Data deserialization error.", userInfo: ["url": urlString])
             }
             
             return result
@@ -69,7 +69,7 @@ public class JYHttpClient: NSObject {
         
         return Promise<Data> { seal in
             guard let url = try? urlString.asURL() else {
-                seal.reject(ONError.error(code: .HTTPClientCode, description: "Invalid url" + urlString))
+                seal.reject(JYError("Invalid url", userInfo: ["url": urlString]))
                 return
             }
             
@@ -88,13 +88,16 @@ public class JYHttpClient: NSObject {
                 }
                 
                 guard let statusCode = response.response?.statusCode else {
-                    seal.reject(ONError.error(code: .HTTPClientCode, description: "No data fetched.", url: urlString))
+                    seal.reject(JYError("No data fetched.", userInfo: ["url" : urlString]))
                     return
                 }
                 
                 guard statusCode >= 200 && statusCode < 300 else {
-                    let error = ONError.error(code: .HTTPClientCode, description: "Error code " + String(statusCode))
-                    print(String(format: "Fetching %@ failed:\n %@", urlString, error))
+                    let error = JYError("Received incorrect status code", userInfo: [
+                        "url" : urlString,
+                        "statusCode": String(statusCode)
+                    ])
+                    print(String(format: "Fetching %@ failed:\n %@", urlString, error.message))
                     if let data = response.data, let string = String(data: data, encoding: String.Encoding.utf8) {
                         print("Error response: " + string)
                     }
@@ -103,7 +106,7 @@ public class JYHttpClient: NSObject {
                 }
                 
                 guard let data = response.data else {
-                    seal.reject(ONError.error(code: .HTTPClientCode, description: "No data fetched.", url: urlString))
+                    seal.reject(JYError("No data fetched.", userInfo: ["url" : urlString]))
                     return
                 }
                 
@@ -117,7 +120,7 @@ public class JYHttpClient: NSObject {
         return self.fetchData(urlString, method: method, header: header, parameter: parameter)
         .map { data in
             guard let image = UIImage.init(data: data) else {
-                throw ONError.error(code: .HTTPClientCode, description: "Image deserialization error.", url: urlString)
+                throw JYError("Image deserialization error.", userInfo: ["url" : urlString])
             }
             
             return image
@@ -129,7 +132,7 @@ public class JYHttpClient: NSObject {
         return self.fetchData(urlString, method: method, header: header, parameter: parameter)
             .map { data in
                 guard let image = UIImage.init(data: data) else {
-                    throw ONError.error(code: .HTTPClientCode, description: "Image deserialization error.", url: urlString)
+                    throw JYError("Image deserialization error.", userInfo: ["url" : urlString])
                 }
                 
                 return image
@@ -140,7 +143,7 @@ public class JYHttpClient: NSObject {
     public func uploadImageData(_ urlString: String, method: HTTPMethod, header: [String: String]? = nil, parameter: JYHttpParameter? = nil, images: [UIImage]? = nil) -> Promise<Data> {
         return Promise<Data> { seal in
             guard let url = try? urlString.asURL() else {
-                seal.reject(ONError.error(code: .HTTPClientCode, description: "Invalid url" + urlString))
+                seal.reject(JYError("Invalid url" + urlString))
                 return
             }
             
@@ -168,7 +171,7 @@ public class JYHttpClient: NSObject {
                     formatter.dateFormat = "yyyyMMddHHmmss"
                     let str = formatter.string(from: Date())
                     let fileName = str+"\(index)"+".jpg"
-                    if let imageData = UIImageJPEGRepresentation(value, 0.5) {
+                    if let imageData = value.jpegData(compressionQuality: 0.5) {
                         multipartFormData.append(imageData, withName: "fileupload", fileName: fileName, mimeType: "image/jpeg")
                     }
                     // 以文件流格式上传
@@ -189,13 +192,13 @@ public class JYHttpClient: NSObject {
                         }
                         
                         guard let statusCode = response.response?.statusCode else {
-                            seal.reject(ONError.error(code: .HTTPClientCode, description: "No data uploadImage.", url: urlString))
+                            seal.reject(JYError("No data uploadImage.", userInfo: ["url" : urlString]))
                             return
                         }
                         
                         guard statusCode >= 200 && statusCode < 300 else {
-                            let error = ONError.error(code: .HTTPClientCode, description: "Error code " + String(statusCode))
-                            print(String(format: "uploadImage %@ failed:\n %@", urlString, error))
+                            let error = JYError("Error code " + String(statusCode))
+                            print(String(format: "uploadImage %@ failed:\n %@", urlString, error.message))
                             if let data = response.data, let string = String(data: data, encoding: String.Encoding.utf8) {
                                 print("Error response: " + string)
                             }
@@ -204,7 +207,7 @@ public class JYHttpClient: NSObject {
                         }
                         
                         guard let data = response.data else {
-                            seal.reject(ONError.error(code: .HTTPClientCode, description: "No data uploadImage.", url: urlString))
+                            seal.reject(JYError("No data uploadImage.", userInfo: ["url" : urlString]))
                             return
                         }
                         
@@ -226,7 +229,7 @@ public class JYHttpClient: NSObject {
                 print("[Fallback data] ")
                 print(String(data: data, encoding: String.Encoding.utf8) ?? "")
                 
-                throw ONError.error(code: .HTTPClientCode, description: "Data deserialization error.", url: urlString)
+                throw JYError("Data deserialization error.", userInfo: ["url" : urlString])
             }
            
             return result

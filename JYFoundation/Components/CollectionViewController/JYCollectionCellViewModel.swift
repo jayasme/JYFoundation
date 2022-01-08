@@ -1,5 +1,5 @@
 //
-//  CollectionCellViewModel.swift
+//  JYCollectionCellViewModel.swift
 //  JYFoundation
 //
 //  Created by Scott Rong on 2018/4/30.
@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import UIKit
 
-open class CollectionCellViewModel: NSObject, ICellViewModel {
+open class JYCollectionCellViewModel: NSObject, ICellViewModel {
     private(set) public var model: Any? = nil
     
     public init(_ model: Any?) {
@@ -20,7 +21,7 @@ open class CollectionCellViewModel: NSObject, ICellViewModel {
     }
     
     public var signalBlock: (()->())? = nil
-    public var notificationBlock: ((CollectionCellViewModel, String, Any?) -> Void)? = nil
+    public var notificationBlock: ((JYCollectionCellViewModel, String, Any?) -> Void)? = nil
     
     open func size() -> CGSize {
         return CGSize(width: 50, height: 50)

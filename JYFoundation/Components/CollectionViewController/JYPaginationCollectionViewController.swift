@@ -20,7 +20,7 @@ open class JYPaginationCollectionViewController: UICollectionViewController, JYC
         
         let frame = collectionView.frame
         let layout = collectionView.collectionViewLayout
-        self.collectionView = JYCollectionView(frame: frame, collectionViewLayout: layout, type: .static)
+        self.collectionView = JYCollectionView(frame: frame, collectionViewLayout: layout)
         self.collectionView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         (self.collectionView as! JYCollectionView).jyDataSource = self
         (self.collectionView as! JYCollectionView).jyDelegate = self
@@ -28,17 +28,25 @@ open class JYPaginationCollectionViewController: UICollectionViewController, JYC
     
     // MARK: JYCollectionViewStaticDataSource
     
-    open func prepare(_: CollectionCellViewModel, for cell: JYCollectionViewCell) {
+    open func prepare(_: JYCollectionCellViewModel, for cell: JYCollectionViewCell) {
         // do nothing
     }
     
-    open func retrieveData(_ collectionView: JYCollectionView, index: Int, itemsPerPage: Int) -> Promise<([CollectionCellViewModel], Bool)> {
+    open func retrieveData(_ collectionView: JYCollectionView, index: Int, itemsPerPage: Int) -> Promise<([JYCollectionCellViewModel], Bool)> {
         return Promise.value(([], true))
+    }
+    
+    public func spinnerCellViewModel(_ collectionView: JYCollectionView) -> JYCollectionCellViewModel? {
+        self.spinnerCellViewModel(self)
+    }
+    
+    open func spinnerCellViewModel(_ controller: JYPaginationCollectionViewController) -> JYCollectionCellViewModel? {
+        fatalError("Need to impletment spinnerCellViewModel(_ tableView: JYCollectionView)")
     }
     
     // MARK: JYCollectionViewDelegate
     
-    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: CollectionCellViewModel) {
+    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: JYCollectionCellViewModel) {
         // do nothing
     }
 }

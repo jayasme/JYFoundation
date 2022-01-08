@@ -30,10 +30,14 @@ extension UIImageView {
     }
     
     @discardableResult
-    func jy_cacheImage(with url: String) -> Promise<UIImage> {
+    func jy_cacheImage(with url: String, placeholderImage: UIImage?) -> Promise<UIImage> {
         return Promise { seal in
             let url = URL(string: url)
-            sd_setImage(with: url, placeholderImage: nil, options: .cacheMemoryOnly, completed: { (image, error, cacheType, url) in
+            sd_setImage(
+                with: url,
+                placeholderImage: placeholderImage,
+                options: [],
+                completed: { (image, error, cacheType, url) in
                 guard let image = image, error == nil else {
                     seal.reject(error!)
                     return
@@ -45,6 +49,18 @@ extension UIImageView {
     }
     
     static func jy_removeCache(for url: String) {
-        SDImageCache.shared().removeImage(forKey: url)
+        SDImageCache.shared.removeImage(forKey: url)
+    }
+    
+    static func jy_clearAllCache() -> Promise<Void> {
+        return Promise { seal in
+            SDImageCache.shared.clear(with: .all) {
+                seal.fulfill_()
+            }
+        }
+    }
+    
+    static func jy_getCacheSize() -> UInt {
+        SDImageCache.shared.totalDiskSize()
     }
 }

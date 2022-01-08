@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ICellViewModel: class {
+public protocol ICellViewModel: AnyObject {
     
     var model: Any? {
         get

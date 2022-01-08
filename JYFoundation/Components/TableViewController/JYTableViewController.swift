@@ -16,25 +16,25 @@ open class JYTableViewController: UITableViewController, JYTableViewStaticDataSo
         
         let frame = tableView.frame
         let style = tableView.style
-        tableView = JYTableView(frame: frame, style: style, type: .static)
+        tableView = JYTableView(frame: frame, style: style)
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         (tableView as! JYTableView).jyDataSource = self
         (tableView as! JYTableView).jyDelegate = self
     }
     
-    // MARK: ONTableViewFixedDataSource
+    // MARK: JYTableViewFixedDataSource
     
-    open func prepare(_: TableCellViewModel, for cell: JYTableViewCell) {
+    open func prepare(_: JYTableCellViewModel, for cell: JYTableViewCell) {
         // do nothing
     }
     
-    open func retrieveData(_ tableView: JYTableView) -> [TableCellViewModel] {
+    open func retrieveData(_ tableView: JYTableView) -> [JYTableCellViewModel] {
         return []
     }
     
-    // MARK: ONTableViewDelegate
+    // MARK: JYTableViewDelegate
     
-    open func tableView(_ tableView: JYTableView, didSelect cellViewModel: TableCellViewModel) {
+    open func tableView(_ tableView: JYTableView, didSelect cellViewModel: JYTableCellViewModel) {
         // do nothing
     }
 }

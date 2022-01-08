@@ -9,24 +9,25 @@
 import UIKit
 import PromiseKit
 
-@objc public protocol JYTableViewDataSource: class {
-    @objc optional func prepare(_ : TableCellViewModel, for cell: JYTableViewCell)
+@objc public protocol JYTableViewDataSource: AnyObject {
+    @objc optional func prepare(_ : JYTableCellViewModel, for cell: JYTableViewCell)
 }
 
 public protocol JYTableViewStaticDataSource: JYTableViewDataSource {
-    func retrieveData(_ tableView: JYTableView) -> [TableCellViewModel]
+    func retrieveData(_ tableView: JYTableView) -> [JYTableCellViewModel]
 }
 
 public protocol JYTableViewDynamicalDataSource: JYTableViewDataSource {
-    func retrieveData(_ tableView: JYTableView, index: Int, itemsPerPage: Int) -> Promise<([TableCellViewModel], Bool)>
+    func retrieveData(_ tableView: JYTableView, index: Int, itemsPerPage: Int) -> Promise<([JYTableCellViewModel], Bool)>
+    func spinnerCellViewModel(_ tableView: JYTableView) -> JYTableCellViewModel?
 }
 
 @objc public protocol JYTableViewDelegate: UIScrollViewDelegate {
     @objc optional func tableView(_ tableView: JYTableView, willRetrieveDataWith index: Int)
-    @objc optional func tableView(_ tableView: JYTableView, didRetrieve data: [TableCellViewModel], with index: Int)
-    @objc optional func tableView(_ tableView: JYTableView, didSelect cellViewModel: TableCellViewModel)
-    @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: TableCellViewModel, with identifier: String, userInfo: Any?)
-    @objc optional func tableView(_ tableView: JYTableView, didTapActionButton cellViewModel: TableCellViewModel, with key: String, userInfo: Any?)
+    @objc optional func tableView(_ tableView: JYTableView, didRetrieve data: [JYTableCellViewModel], with index: Int)
+    @objc optional func tableView(_ tableView: JYTableView, didSelect cellViewModel: JYTableCellViewModel)
+    @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: JYTableCellViewModel, with identifier: String, userInfo: Any?)
+    @objc optional func tableView(_ tableView: JYTableView, didTapActionButton cellViewModel: JYTableCellViewModel, with key: String, userInfo: Any?)
 }
 
 public enum JYTableViewPaginationDirection: Int {
@@ -40,7 +41,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     
     private var _registeredCellTypes : [JYTableViewCell.Type] = []
     
-    private var _viewModels : [TableCellViewModel] = []
+    private var _viewModels : [JYTableCellViewModel] = []
     
     private var _refreshControl: UIRefreshControl?
     
@@ -60,34 +61,29 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     private(set) var status : JYViewStatus = .initialLoad
-    
-    public var type: JYViewDataSourceType = .unknwon {
-        didSet {
-            if type == .dynamical {
-                // Register the spinners
-                register(TableOvalSpinnerCell.defaultNib(), forCellReuseIdentifier: TableOvalSpinnerCell.defaultIdentifier())
-                register(TableCircinalSpinnerCell.defaultNib(), forCellReuseIdentifier: TableCircinalSpinnerCell.defaultIdentifier())
-            }
+  
+    public var type: JYViewDataSourceType {
+      get {
+        if self.jyDataSource is JYTableViewStaticDataSource {
+          return JYViewDataSourceType.static
         }
+        if self.jyDataSource is JYTableViewDynamicalDataSource {
+          return JYViewDataSourceType.dynamical
+        }
+        return JYViewDataSourceType.unknwon
+      }
     }
     
     public weak var jyDataSource: JYTableViewDataSource? = nil {
         didSet {
-            // judge the type if type is unknwon
-            if type == .unknwon {
-                if jyDataSource is JYTableViewStaticDataSource {
-                    type = .static
-                    status = .fixed
-                    reloadViewModels(clearPreviousData: true)
-                } else if jyDataSource is JYTableViewDynamicalDataSource {
-                    type = .dynamical
-                    // Initialize the loading view
-                    let spinnerViewModel = SpinnerCellViewModel.cellViewModel(with: bounds.height, style: .circinal)
-                    self._viewModels.append(spinnerViewModel)
-                }
-            }
+          if let dataSource = self.jyDelegate as? JYTableViewDynamicalDataSource, let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
+            self._viewModels.append(spinnerViewModel)
+          } else if self.jyDataSource is JYTableViewStaticDataSource {
+            status = .fixed
+            reloadViewModels(clearPreviousData: true)
+          }
             
-            checkRefreshControl()
+          checkRefreshControl()
         }
     }
     
@@ -124,14 +120,8 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     
     // MARK: Initializers
     
-    override public init(frame: CGRect, style: UITableViewStyle) {
+    override public init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        commonInitializer()
-    }
-    
-    public init(frame: CGRect, style: UITableViewStyle, type: JYViewDataSourceType) {
-        super.init(frame: frame, style: style)
-        self.type = type
         commonInitializer()
     }
     
@@ -147,9 +137,9 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     
     // MARK: Privates
     
-    private func checkRegistred(viewModel: TableCellViewModel) {
+    private func checkRegistred(viewModel: JYTableCellViewModel) {
         let cellType = viewModel.cellType()
-        if _registeredCellTypes.index(where: { $0 == cellType }) == nil {
+        if _registeredCellTypes.firstIndex(where: { $0 == cellType }) == nil {
             _registeredCellTypes.append(cellType)
             if let nib = cellType.defaultNib() {
                 register(nib, forCellReuseIdentifier: cellType.defaultIdentifier())
@@ -178,7 +168,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     @discardableResult
-    private func retrieveData(index: Int, itemsPerPage: Int) -> Promise<([TableCellViewModel], Bool)> {
+    private func retrieveData(index: Int, itemsPerPage: Int) -> Promise<([JYTableCellViewModel], Bool)> {
         if let retrivePromise = (self.jyDataSource as? JYTableViewDynamicalDataSource)?.retrieveData(self, index: index, itemsPerPage: itemsPerPage) {
             return retrivePromise
         } else {
@@ -187,9 +177,9 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     @discardableResult
-    private func retrieveDataPromise() -> Promise<[TableCellViewModel]> {
+    private func retrieveDataPromise() -> Promise<[JYTableCellViewModel]> {
         jyDelegate?.tableView?(self, willRetrieveDataWith: -1)
-        return Promise<[TableCellViewModel]> { seal in
+        return Promise<[JYTableCellViewModel]> { seal in
             JYTableView.tableViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
                 guard let viewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else { return }
@@ -211,7 +201,9 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             guard let strongSelf = self else { return }
             
             // remove the spinner cell
-            if strongSelf._viewModels.last is SpinnerCellViewModel {
+            if let dataSource = strongSelf.jyDataSource as? JYTableViewDynamicalDataSource,
+               let spinnerCellViewModel = dataSource.spinnerCellViewModel(strongSelf),
+               strongSelf._viewModels.last == spinnerCellViewModel {
                 strongSelf._viewModels.removeLast()
             }
 
@@ -235,15 +227,17 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             if strongSelf.paginationDirection == .up {
                 cellViewModels.reversed().forEach{ strongSelf._viewModels.insert($0, at: 0) }
                 // Add spinner
-                if strongSelf.status == .loaded {
-                    let spinnerViewModel = SpinnerCellViewModel.cellViewModel(with: 60, style: .oval)
-                    strongSelf._viewModels.insert(spinnerViewModel, at: 0)
+                if strongSelf.status == .loaded,
+                   let dataSource = strongSelf.jyDataSource as? JYTableViewDynamicalDataSource,
+                   let spinnerViewModel = dataSource.spinnerCellViewModel(strongSelf) {
+                   strongSelf._viewModels.insert(spinnerViewModel, at: 0)
                 }
             } else if strongSelf.paginationDirection == .down {
                 strongSelf._viewModels.append(contentsOf: cellViewModels)
                 // Add spinner
-                if strongSelf.status == .loaded {
-                    let spinnerViewModel = SpinnerCellViewModel.cellViewModel(with: 60, style: .oval)
+                if strongSelf.status == .loaded,
+                   let dataSource = strongSelf.jyDataSource as? JYTableViewDynamicalDataSource,
+                   let spinnerViewModel = dataSource.spinnerCellViewModel(strongSelf) {
                     strongSelf._viewModels.append(spinnerViewModel)
                 }
             }
@@ -257,7 +251,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    private func notification(cellViewModel: TableCellViewModel, identifier: String, userInfo: Any?) {
+    private func notification(cellViewModel: JYTableCellViewModel, identifier: String, userInfo: Any?) {
         jyDelegate?.tableView?(self, didNotification: cellViewModel, with: identifier, userInfo: userInfo)
     }
     
@@ -311,8 +305,8 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     
-    public func scrollToCellViewModel(_ cellViewModel: TableCellViewModel, at position: UITableViewScrollPosition, animated: Bool) {
-        if let index = _viewModels.index(of: cellViewModel) {
+    public func scrollToCellViewModel(_ cellViewModel: JYTableCellViewModel, at position: UITableView.ScrollPosition, animated: Bool) {
+        if let index = self.index(of: cellViewModel) {
             scrollToRow(at: IndexPath(item: index, section: 0), at: position, animated: animated)
         }
     }
@@ -323,7 +317,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func cellViewModel(of index: Int) -> TableCellViewModel? {
+    public func cellViewModel(of index: Int) -> JYTableCellViewModel? {
         if index >= 0 && index < _viewModels.count {
             return _viewModels[index]
         } else {
@@ -331,7 +325,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func cellViewModel(besideOf cellViewModel:TableCellViewModel, offset: Int) -> TableCellViewModel? {
+    public func cellViewModel(besideOf cellViewModel:JYTableCellViewModel, offset: Int) -> JYTableCellViewModel? {
         if let index = index(of: cellViewModel) {
             return self.cellViewModel(of: index + offset)
         } else {
@@ -339,15 +333,15 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func cellViewModels() -> [TableCellViewModel] {
+    public func cellViewModels() -> [JYTableCellViewModel] {
         return _viewModels
     }
     
-    public func index(of cellViewModel: TableCellViewModel) -> Int? {
-        return _viewModels.index(of: cellViewModel)
+    public func index(of cellViewModel: JYTableCellViewModel) -> Int? {
+        return _viewModels.firstIndex(of: cellViewModel)
     }
     
-    public func appendCellViewModels(_ cellViewModels: [TableCellViewModel], with animation: UITableViewRowAnimation) {
+    public func appendCellViewModels(_ cellViewModels: [JYTableCellViewModel], with animation: UITableView.RowAnimation) {
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
         var indexPaths: [IndexPath] = []
@@ -367,7 +361,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func insertCellViewModels(_ cellViewModels: [TableCellViewModel], at position: Int, with animation: UITableViewRowAnimation) {
+    public func insertCellViewModels(_ cellViewModels: [JYTableCellViewModel], at position: Int, with animation: UITableView.RowAnimation) {
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
         var indexPaths: [IndexPath] = []
@@ -387,10 +381,10 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func deleteCellViewModels(_ cellViewModels: [TableCellViewModel], with animation: UITableViewRowAnimation) {
+    public func deleteCellViewModels(_ cellViewModels: [JYTableCellViewModel], with animation: UITableView.RowAnimation) {
 
         let indexPaths: [IndexPath] = cellViewModels.compactMap({ (cellViewModel) -> IndexPath? in
-            if let index = _viewModels.index(of: cellViewModel) {
+            if let index = self.index(of: cellViewModel) {
                 return IndexPath(row: index, section: 0)
             } else {
                 return nil
@@ -462,8 +456,11 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             cell.willDisplay()
         }
         
-        if (cell is TableOvalSpinnerCell || cell is TableCircinalSpinnerCell) && type == .dynamical {
-            loadNext()
+        if let jyCell = cell as? JYTableViewCell,
+           let dataSource = self.jyDataSource as? JYTableViewDynamicalDataSource,
+           let spinnerCellViewModel = dataSource.spinnerCellViewModel(self),
+           jyCell.viewModel == spinnerCellViewModel {
+          loadNext()
         }
     }
     

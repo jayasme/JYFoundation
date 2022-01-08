@@ -35,11 +35,11 @@ extension UIButton {
         }
     }
     
-    public func jy_setOriginalImage(_ image: UIImage, state: UIControlState) {
+    public func jy_setOriginalImage(_ image: UIImage, state: UIControl.State) {
         setImage(image.withRenderingMode(.alwaysOriginal), for: state)
     }
     
-    public func jy_setBackgroundColor(color: UIColor, state: UIControlState) {
+    public func jy_setBackgroundColor(color: UIColor, state: UIControl.State) {
         let image = UIImage.jy_imageWithColor(color)
         setBackgroundImage(image, for: state)
     }

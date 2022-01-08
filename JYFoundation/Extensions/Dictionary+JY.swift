@@ -1,5 +1,5 @@
 //
-//  Any+JY.swift
+//  Dictionary+JY.swift
 //  JYFoundation
 //
 //  Created by Scott Rong on 2018/8/9.

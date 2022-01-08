@@ -9,21 +9,22 @@
 import UIKit
 import PromiseKit
 
-@objc public protocol JYCollectionViewDataSource: class {
-    @objc optional func prepare(_ : CollectionCellViewModel, for cell: JYCollectionViewCell)
+@objc public protocol JYCollectionViewDataSource: AnyObject {
+    @objc optional func prepare(_ : JYCollectionCellViewModel, for cell: JYCollectionViewCell)
 }
 
 public protocol JYCollectionViewStaticDataSource: JYCollectionViewDataSource {
-    func retrieveData(_ collectionView: JYCollectionView) -> [CollectionCellViewModel]
+    func retrieveData(_ collectionView: JYCollectionView) -> [JYCollectionCellViewModel]
 }
 
 public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource {
-    func retrieveData(_ collectionView: JYCollectionView, index: Int, itemsPerPage: Int) -> Promise<([CollectionCellViewModel], Bool)>
+    func retrieveData(_ collectionView: JYCollectionView, index: Int, itemsPerPage: Int) -> Promise<([JYCollectionCellViewModel], Bool)>
+    func spinnerCellViewModel(_ collectionView: JYCollectionView) -> JYCollectionCellViewModel?
 }
 
 @objc public protocol JYCollectionViewDelegate: UIScrollViewDelegate {
-    @objc optional func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: CollectionCellViewModel)
-    @objc optional func collectionView(_ collectionView: JYCollectionView, didNotification cellViewModel: CollectionCellViewModel, identifier: String, userInfo: Any?)
+    @objc optional func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: JYCollectionCellViewModel)
+    @objc optional func collectionView(_ collectionView: JYCollectionView, didNotification cellViewModel: JYCollectionCellViewModel, identifier: String, userInfo: Any?)
 }
 
 public enum JYCollectionViewPaginationDirection: Int {
@@ -37,7 +38,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     
     private var _registeredCellTypes : [JYCollectionViewCell.Type] = []
     
-    private var _viewModels : [CollectionCellViewModel] = []
+    private var _viewModels : [JYCollectionCellViewModel] = []
     
     private var _refreshControl: UIRefreshControl?
     
@@ -58,27 +59,25 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     }
     private(set) var status : JYViewStatus = .initialLoad
     
-    public var type: JYViewDataSourceType = .unknwon {
-        didSet {
-            if type == .dynamical {
-                // Register the OverSpinnerFooter
-                register(CollectionOvalSpinnerView.defaultNib(), forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionOvalSpinnerView.defaultIdentifier())
-                register(CollectionCircinalSpinnerView.defaultNib(), forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionCircinalSpinnerView.defaultIdentifier())
+    public var type: JYViewDataSourceType {
+        get {
+            if self.jyDataSource is JYCollectionViewStaticDataSource {
+                return JYViewDataSourceType.static
             }
+            if self.jyDataSource is JYCollectionViewDynamicalDataSource {
+                return JYViewDataSourceType.dynamical
+            }
+            return JYViewDataSourceType.unknwon
         }
     }
     
     public weak var jyDataSource: JYCollectionViewDataSource? = nil {
         didSet {
-            // judge the type if type is unknwon
-            if type == .unknwon {
-                if jyDataSource is JYCollectionViewStaticDataSource {
-                    type = .static
-                    status = .fixed
-                    reloadViewModels(clearPreviousData: true)
-                } else if jyDataSource is JYCollectionViewDynamicalDataSource {
-                    type = .dynamical
-                }
+            if let dataSource = self.jyDataSource as? JYCollectionViewDynamicalDataSource, let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
+              self._viewModels.append(spinnerViewModel)
+            } else if self.jyDataSource is JYTableViewStaticDataSource {
+              status = .fixed
+              reloadViewModels(clearPreviousData: true)
             }
             self.checkRefreshControl()
         }
@@ -122,12 +121,6 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         commonInitializer()
     }
     
-    public init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout, type: JYViewDataSourceType) {
-        super.init(frame: frame, collectionViewLayout: layout)
-        self.type = type
-        commonInitializer()
-    }
-    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInitializer()
@@ -140,9 +133,9 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     
     // MARK: Privates
     
-    private func checkRegistred(viewModel: CollectionCellViewModel) {
+    private func checkRegistred(viewModel: JYCollectionCellViewModel) {
         let cellType = viewModel.cellType()
-        if _registeredCellTypes.index(where: { $0 == cellType }) == nil {
+        if _registeredCellTypes.firstIndex(where: { $0 == cellType }) == nil {
             _registeredCellTypes.append(cellType)
             if let nib = cellType.defaultNib() {
                 register(nib, forCellWithReuseIdentifier: cellType.defaultIdentifier())
@@ -170,7 +163,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    private func retrieveData(index: Int, itemsPerPage: Int) -> Promise<([CollectionCellViewModel], Bool)> {
+    private func retrieveData(index: Int, itemsPerPage: Int) -> Promise<([JYCollectionCellViewModel], Bool)> {
         if let retrivePromise = (self.jyDataSource as? JYCollectionViewDynamicalDataSource)?.retrieveData(self, index: index, itemsPerPage: itemsPerPage) {
             return retrivePromise
         } else {
@@ -179,8 +172,8 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     }
     
     @discardableResult
-    private func retrieveDataPromise() -> Promise<[CollectionCellViewModel]> {
-        return Promise<[CollectionCellViewModel]> { seal in
+    private func retrieveDataPromise() -> Promise<[JYCollectionCellViewModel]> {
+        return Promise<[JYCollectionCellViewModel]> { seal in
             JYCollectionView.collectionViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
                 guard let viewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self) else { return }
@@ -233,7 +226,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    private func notification(cellViewModel: CollectionCellViewModel, identifier: String, userInfo: Any?) {
+    private func notification(cellViewModel: JYCollectionCellViewModel, identifier: String, userInfo: Any?) {
         jyDelegate?.collectionView?(self, didNotification: cellViewModel, identifier: identifier, userInfo: userInfo)
     }
     
@@ -293,8 +286,8 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     }
     
     
-    public func scrollToCellViewModel(_ cellViewModel: CollectionCellViewModel, at position: UICollectionViewScrollPosition, animated: Bool) {
-        if let index = _viewModels.index(of: cellViewModel) {
+    public func scrollToCellViewModel(_ cellViewModel: JYCollectionCellViewModel, at position: UICollectionView.ScrollPosition, animated: Bool) {
+        if let index = self.index(of: cellViewModel) {
             scrollToItem(at: IndexPath(item: index, section: 0), at: position, animated: animated)
         }
     }
@@ -305,7 +298,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    public func cellViewModel(of index: Int) -> CollectionCellViewModel? {
+    public func cellViewModel(of index: Int) -> JYCollectionCellViewModel? {
         if index >= 0 && index < _viewModels.count {
             return _viewModels[index]
         } else {
@@ -313,7 +306,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    public func cellViewModel(besideOf cellViewModel: CollectionCellViewModel, offset: Int) -> CollectionCellViewModel? {
+    public func cellViewModel(besideOf cellViewModel: JYCollectionCellViewModel, offset: Int) -> JYCollectionCellViewModel? {
         if let index = index(of: cellViewModel) {
             return self.cellViewModel(of: index + offset)
         } else {
@@ -321,17 +314,17 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    public var cellViewModels: [CollectionCellViewModel] {
+    public var cellViewModels: [JYCollectionCellViewModel] {
         get {
             return _viewModels
         }
     }
     
-    public func index(of cellViewModel: CollectionCellViewModel) -> Int? {
-        return _viewModels.index(of: cellViewModel)
+    public func index(of cellViewModel: JYCollectionCellViewModel) -> Int? {
+        return _viewModels.firstIndex(of: cellViewModel)
     }
     
-    public func appendCellViewModels(_ cellViewModels: [CollectionCellViewModel], with animation: Bool) -> Promise<Void> {
+    public func appendCellViewModels(_ cellViewModels: [JYCollectionCellViewModel], with animation: Bool) -> Promise<Void> {
         guard  cellViewModels.count > 0 else {
             return Promise<Void>.value(())
         }
@@ -358,7 +351,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    public func insertCellViewModels(_ cellViewModels: [CollectionCellViewModel], at position: Int, with animation: Bool) -> Promise<Void> {
+    public func insertCellViewModels(_ cellViewModels: [JYCollectionCellViewModel], at position: Int, with animation: Bool) -> Promise<Void> {
         guard  cellViewModels.count > 0 else {
             return Promise<Void>.value(())
         }
@@ -385,13 +378,13 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    public func deleteCellViewModels(_ cellViewModels: [CollectionCellViewModel], with animation: Bool) -> Promise<Void> {
+    public func deleteCellViewModels(_ cellViewModels: [JYCollectionCellViewModel], with animation: Bool) -> Promise<Void> {
         guard  cellViewModels.count > 0 else {
             return Promise<Void>.value(())
         }
         
         let indexPaths: [IndexPath] = cellViewModels.compactMap({ (cellViewModel) -> IndexPath? in
-            if let index = _viewModels.index(of: cellViewModel) {
+            if let index = self.index(of: cellViewModel) {
                 return IndexPath(row: index, section: 0)
             } else {
                 return nil
@@ -448,16 +441,15 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         return cell
     }
     
-    
-    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if (type == .dynamical && kind == UICollectionElementKindSectionFooter && status != .exhausted && status != .failure) {
-            if (_viewModels.count > 0) {
-                return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionOvalSpinnerView.defaultIdentifier(), for: indexPath)
-            }
-            return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionCircinalSpinnerView.defaultIdentifier(), for: indexPath)
-        }
-        return UICollectionReusableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-    }
+//    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        if (type == .dynamical && kind == UICollectionView.elementKindSectionFooter && status != .exhausted && status != .failure) {
+//            if (_viewModels.count > 0) {
+//                return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionOvalSpinnerView.defaultIdentifier(), for: indexPath)
+//            }
+//            return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionCircinalSpinnerView.defaultIdentifier(), for: indexPath)
+//        }
+//        return UICollectionReusableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+//    }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if (type == .dynamical && status != .exhausted && status != .failure) {
@@ -480,32 +472,28 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? JYCollectionViewCell {
-            cell.willDisappear()
-        }
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-        
-        if (type == .dynamical) {
-            if let view = view as? CollectionOvalSpinnerView {
-                view.willDisplay()
-            } else if let view = view as? CollectionCircinalSpinnerView {
-                view.willDisplay()
-            }
-            loadNext()
-        }
-    }
+//    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if let cell = cell as? JYCollectionViewCell {
+//            cell.willDisappear()
+//        }
+//    }
+//
+//    public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+//
+//        if (type == .dynamical) {
+//            if let view = view as? CollectionOvalSpinnerView {
+//                view.willDisplay()
+//            } else if let view = view as? CollectionCircinalSpinnerView {
+//                view.willDisplay()
+//            }
+//            loadNext()
+//        }
+//    }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
         
-        if (type == .dynamical) {
-            if let view = view as? CollectionOvalSpinnerView {
-                view.willDisappear()
-            } else if let view = view as? CollectionCircinalSpinnerView {
-                view.willDisappear()
-            }
+        if let cell = view as? JYCollectionViewCell {
+          cell.willDisappear()
         }
     }
     
