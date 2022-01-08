@@ -5,7 +5,7 @@ workspace ‘JYFoundation’
 
 inhibit_all_warnings!
 
-workspace 'JYFoundation.xcodeporj'
+workspace 'JYFoundation.xcworkspace'
 
 target 'JYFoundation' do
     
