@@ -63,13 +63,12 @@
 		1D4D877D219987DB00D7B457 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D877A219987DB00D7B457 /* LICENSE */; };
 		1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */; };
 		1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */; };
-		67583FAB4AD52C2B7040E5A0 /* Pods_JYFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2724B990F489D46F31E5EBF /* Pods_JYFoundation.framework */; };
+		A48F362C2E5897A8AEABE449 /* Pods_JYFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80028785702266DA96BD35CE /* Pods_JYFoundation.framework */; };
 		B967BA0D277EA85100926B9C /* JYBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B967BA0C277EA85100926B9C /* JYBlurView.swift */; };
 		B967BA62277FE64F00926B9C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B967BA61277FE64F00926B9C /* Podfile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1486E714915A587CDE11C238 /* Pods-JYFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.release.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		1D00E4B120931D5900450247 /* JYHttpParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpParameter.swift; sourceTree = "<group>"; };
 		1D00E4B320931E6100450247 /* JYHttpHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpHeader.swift; sourceTree = "<group>"; };
 		1D00E4B520932A8700450247 /* JYHttpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpModel.swift; sourceTree = "<group>"; };
@@ -129,10 +128,11 @@
 		1D61E9E420849AA800525E3F /* JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D61E9E820849AA800525E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYPostBodyEncoder.swift; sourceTree = "<group>"; };
-		5B2FB16F99C794341E614C6B /* Pods-JYFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.debug.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.debug.xcconfig"; sourceTree = "<group>"; };
+		46287FB5C5FB4155D2FEAC6D /* Pods-JYFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.debug.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.debug.xcconfig"; sourceTree = "<group>"; };
+		661DCF28AEFD74E30B85CBE1 /* Pods-JYFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.release.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.release.xcconfig"; sourceTree = "<group>"; };
+		80028785702266DA96BD35CE /* Pods_JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B967BA0C277EA85100926B9C /* JYBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYBlurView.swift; sourceTree = "<group>"; };
 		B967BA61277FE64F00926B9C /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		F2724B990F489D46F31E5EBF /* Pods_JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,7 +151,7 @@
 				1D389228208B020E0005C175 /* Security.framework in Frameworks */,
 				1D389226208B02090005C175 /* libsqlite3.tbd in Frameworks */,
 				1D389224208B02010005C175 /* Photos.framework in Frameworks */,
-				67583FAB4AD52C2B7040E5A0 /* Pods_JYFoundation.framework in Frameworks */,
+				A48F362C2E5897A8AEABE449 /* Pods_JYFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,8 +307,8 @@
 		4BF4AE267683209EB022E4D2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5B2FB16F99C794341E614C6B /* Pods-JYFoundation.debug.xcconfig */,
-				1486E714915A587CDE11C238 /* Pods-JYFoundation.release.xcconfig */,
+				46287FB5C5FB4155D2FEAC6D /* Pods-JYFoundation.debug.xcconfig */,
+				661DCF28AEFD74E30B85CBE1 /* Pods-JYFoundation.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -327,7 +327,7 @@
 				1D389227208B020E0005C175 /* Security.framework */,
 				1D389225208B02090005C175 /* libsqlite3.tbd */,
 				1D389223208B02010005C175 /* Photos.framework */,
-				F2724B990F489D46F31E5EBF /* Pods_JYFoundation.framework */,
+				80028785702266DA96BD35CE /* Pods_JYFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -349,7 +349,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D61E9EC20849AA800525E3F /* Build configuration list for PBXNativeTarget "JYFoundation" */;
 			buildPhases = (
-				5F28AEEAFA44F95297AF9E35 /* [CP] Check Pods Manifest.lock */,
+				2B8FA999574156495CC9D523 /* [CP] Check Pods Manifest.lock */,
 				1D61E9DF20849AA800525E3F /* Sources */,
 				1D61E9E020849AA800525E3F /* Frameworks */,
 				1D61E9E120849AA800525E3F /* Headers */,
@@ -413,7 +413,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5F28AEEAFA44F95297AF9E35 /* [CP] Check Pods Manifest.lock */ = {
+		2B8FA999574156495CC9D523 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -609,7 +609,7 @@
 		};
 		1D61E9ED20849AA800525E3F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B2FB16F99C794341E614C6B /* Pods-JYFoundation.debug.xcconfig */;
+			baseConfigurationReference = 46287FB5C5FB4155D2FEAC6D /* Pods-JYFoundation.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -636,7 +636,7 @@
 		};
 		1D61E9EE20849AA800525E3F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1486E714915A587CDE11C238 /* Pods-JYFoundation.release.xcconfig */;
+			baseConfigurationReference = 661DCF28AEFD74E30B85CBE1 /* Pods-JYFoundation.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";

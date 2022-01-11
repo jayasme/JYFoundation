@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'JYFoundation'
-    s.version = '0.0.6'
+    s.version = '0.0.7'
     s.license = 'MIT'
     s.summary = 'A multi usages foundation library for iOS Swift.'
     s.homepage = 'https://github.com/jayasme/JYFoundation'
@@ -10,16 +10,14 @@ Pod::Spec.new do |s|
     # s.documentation_url = ''
 
     s.ios.deployment_target = '10.0'
-    s.osx.deployment_target = '10.10'
-    s.watchos.deployment_target = '2.0'
-    s.tvos.deployment_target = '9.0'
 
     s.swift_version = "5.0"
-    s.source_files = 'JYFoundation/**/*.swift'
 
     s.dependency "Alamofire"
     s.dependency "PromiseKit/CorePromise"
     s.dependency "SDWebImage"
     s.dependency "HandyJSON"
+    
+    s.source_files = 'JYFoundation/**/*.{h,m,swift}'
 
 end

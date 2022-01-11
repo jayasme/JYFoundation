@@ -22,27 +22,27 @@ public class JYHttpClient: NSObject {
     
     private(set) var timeoutInterval: TimeInterval {
         didSet {
-            guard let manager = _manager else {
+            guard let session = _session else {
                 return
             }
             
-            manager.session.configuration.timeoutIntervalForRequest = timeoutInterval
-            manager.session.configuration.timeoutIntervalForResource = timeoutInterval
+            session.sessionConfiguration.timeoutIntervalForRequest = timeoutInterval
+            session.sessionConfiguration.timeoutIntervalForResource = timeoutInterval
         }
     }
     
-    private var _manager: SessionManager!
+    private var _session: Session!
     
     private var encoder: ParameterEncoding
     
-    private func manager() -> Alamofire.SessionManager {
-        if _manager == nil {
+    private func session() -> Alamofire.Session {
+        if _session == nil {
             let configuration = URLSessionConfiguration.default
             configuration.timeoutIntervalForRequest = timeoutInterval
             configuration.timeoutIntervalForResource = timeoutInterval
-            _manager = SessionManager(configuration: configuration)
+            _session = Session(configuration: configuration)
         }
-        return _manager
+        return _session
     }
     
     @discardableResult
@@ -74,9 +74,9 @@ public class JYHttpClient: NSObject {
             }
             
             let paramters: [String: Any]? = parameter?.toJSON()
-            let headers = header ?? [:]
+            let headers = HTTPHeaders(header ?? [:])
             
-            manager().request(url,
+            self.session().request(url,
                               method: method,
                               parameters: paramters,
                               encoding: (method == .post ? encoder: URLEncoding.default),
@@ -148,9 +148,10 @@ public class JYHttpClient: NSObject {
             }
             
             let paramters: [String: Any]? = parameter?.toJSON()
-            let headers = header ?? [:]
+            let headers = HTTPHeaders(header ?? [:])
             
-            manager().upload(multipartFormData: { (multipartFormData) in
+            self.session().upload(
+                multipartFormData: { (multipartFormData) in
                 // 添加上传参数
                 if let params = paramters {
                     for (key, value) in params {
@@ -181,41 +182,38 @@ public class JYHttpClient: NSObject {
                     // 批量上传，后台语言为PHP。 注意：此处服务器需要知道，前台传入的是一个图片数组
 //                    multipartFormData.append(imageData!, withName: "fileupload[\(index)]", fileName: fileName, mimeType: "image/jpeg")
                 }
-            }, to: url, method: method, headers: headers, encodingCompletion: { (encodingResult) in
-                switch encodingResult {
-                case .success(let upload, _, _):
-                    upload.responseJSON { response in
-                        print("response = \(response)")
-                        if response.error != nil {
-                            seal.reject(response.error!)
-                            return
-                        }
-                        
-                        guard let statusCode = response.response?.statusCode else {
-                            seal.reject(JYError("No data uploadImage.", userInfo: ["url" : urlString]))
-                            return
-                        }
-                        
-                        guard statusCode >= 200 && statusCode < 300 else {
-                            let error = JYError("Error code " + String(statusCode))
-                            print(String(format: "uploadImage %@ failed:\n %@", urlString, error.message))
-                            if let data = response.data, let string = String(data: data, encoding: String.Encoding.utf8) {
-                                print("Error response: " + string)
-                            }
-                            seal.reject(error)
-                            return
-                        }
-                        
-                        guard let data = response.data else {
-                            seal.reject(JYError("No data uploadImage.", userInfo: ["url" : urlString]))
-                            return
-                        }
-                        
-                        seal.fulfill(data)
-                    }
-                case .failure(let encodingError):
-                    seal.reject(encodingError)
+            },
+                to: url,
+                method: method,
+                headers: headers)
+            .responseJSON(completionHandler: { response in
+
+                if let error = response.error {
+                    seal.reject(error)
+                    return
                 }
+                        
+                guard let statusCode = response.response?.statusCode else {
+                    seal.reject(JYError("No data uploadImage.", userInfo: ["url" : urlString]))
+                    return
+                }
+                
+                guard statusCode >= 200 && statusCode < 300 else {
+                    let error = JYError("Error code " + String(statusCode))
+                    print(String(format: "uploadImage %@ failed:\n %@", urlString, error.message))
+                    if let data = response.data, let string = String(data: data, encoding: String.Encoding.utf8) {
+                        print("Error response: " + string)
+                    }
+                    seal.reject(error)
+                    return
+                }
+                
+                guard let data = response.data else {
+                    seal.reject(JYError("No data uploadImage.", userInfo: ["url" : urlString]))
+                    return
+                }
+                
+                seal.fulfill(data)
             })
         }
     }

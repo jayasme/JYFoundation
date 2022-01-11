@@ -26,7 +26,7 @@ extension NSObject {
         var policy: objc_AssociationPolicy = .OBJC_ASSOCIATION_COPY_NONATOMIC
         if object is NSString || object is NSNumber {
             policy = .OBJC_ASSOCIATION_COPY_NONATOMIC
-        } else if object is AnyObject || object is NSObject {
+        } else if object is NSObject {
             policy = .OBJC_ASSOCIATION_RETAIN_NONATOMIC
         } else {
             policy = .OBJC_ASSOCIATION_ASSIGN
@@ -42,6 +42,6 @@ extension NSObject {
     
     public func jy_removeAssociationObject(key: String) {
         let key: UnsafeRawPointer! = UnsafeRawPointer.init(bitPattern: key.hashValue)
-        objc_removeAssociatedObjects(key)
+        objc_removeAssociatedObjects(key ?? "")
     }
 }

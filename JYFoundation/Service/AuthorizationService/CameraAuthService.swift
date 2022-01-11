@@ -27,6 +27,8 @@ public class CameraAuthService: AuthServiceBase {
                 seal.fulfill(AuthState.denined)
             case .authorized:
                 seal.fulfill(AuthState.allowed)
+            @unknown default:
+                fatalError()
             }
         }
     }
