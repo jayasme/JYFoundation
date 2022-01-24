@@ -75,7 +75,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         didSet {
             if let dataSource = self.jyDataSource as? JYCollectionViewDynamicalDataSource, let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
               self._viewModels.append(spinnerViewModel)
-            } else if self.jyDataSource is JYTableViewStaticDataSource {
+            } else if self.jyDataSource is JYCollectionViewStaticDataSource {
               status = .fixed
               reloadViewModels(clearPreviousData: true)
             }
