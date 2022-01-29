@@ -458,7 +458,11 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
             }
             return self.bounds.size
         }
-        return CGSize(width: 0, height: 0)
+        if let size = (self.collectionViewLayout as? UICollectionViewFlowLayout)?.footerReferenceSize {
+            return size
+        }
+        
+        return .zero
     }
     
     
