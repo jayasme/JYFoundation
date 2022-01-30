@@ -6,7 +6,7 @@
 //  Copyright © 2018年 jayasme All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension String {
     
@@ -45,6 +45,32 @@ extension String {
             }
         }
         return result.hexString()
+    }
+    
+    // operator overrides
+    
+    public static func + (left: String, right: Int) -> String {
+        return left + String(right)
+    }
+    
+    public static func + (left: String, right: CGFloat) -> String {
+        return left + String(format: "%f", right)
+    }
+    
+    public static func + (left: String, right: Double) -> String {
+        return left + String(format: "%lf", right)
+    }
+    
+    public static func += (left: inout String, right: Int) {
+        left += String(right)
+    }
+    
+    public static func += (left: inout String, right: CGFloat) {
+        left += String(format: "%f", right)
+    }
+    
+    public static func += (left: inout String, right: Double) {
+        left += String(format: "%lf", right)
     }
 }
 
