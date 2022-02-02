@@ -29,7 +29,7 @@ extension CGFloat {
     }
     
     public static func + (left: CGFloat, right: String) -> String {
-        return String(format: "%f", left) + right
+        return String(format: "%g", left) + right
     }
     
     public static func - (left: CGFloat, right: Int) -> CGFloat {

@@ -69,17 +69,17 @@ extension Date {
 
     public var weekdayLong: String {
         let calendar = Calendar(identifier: .iso8601)
-        return calendar.standaloneWeekdaySymbols[self.weekday]
+        return calendar.standaloneWeekdaySymbols[self.weekday - 1]
     }
     
     public var weekdayShort: String {
         let calendar = Calendar(identifier: .iso8601)
-        return calendar.shortWeekdaySymbols[self.weekday]
+        return calendar.shortWeekdaySymbols[self.weekday - 1]
     }
     
     public var weekdayVeryShort: String {
         let calendar = Calendar(identifier: .iso8601)
-        return calendar.veryShortStandaloneWeekdaySymbols[self.weekday]
+        return calendar.veryShortStandaloneWeekdaySymbols[self.weekday - 1]
     }
     
     public var hour12: Int {
@@ -123,11 +123,11 @@ extension Date {
     
     public var chineseMonth: Int {
         let calendar = Calendar(identifier: .chinese)
-        return calendar.component(.year, from: self)
+        return calendar.component(.month, from: self)
     }
     
     public var chineseMonthLong: String {
-        let months = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
+        let months = ["正月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
         return months[self.chineseMonth - 1]
     }
     
