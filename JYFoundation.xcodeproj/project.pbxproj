@@ -69,6 +69,7 @@
 		B93DC43B27A58F7E002C6390 /* Double+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93DC43A27A58F7E002C6390 /* Double+JY.swift */; };
 		B967BA0D277EA85100926B9C /* JYBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B967BA0C277EA85100926B9C /* JYBlurView.swift */; };
 		B967BA62277FE64F00926B9C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B967BA61277FE64F00926B9C /* Podfile */; };
+		B9E6B67827AF53EE00C47285 /* UIApplication+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -139,6 +140,7 @@
 		B93DC43A27A58F7E002C6390 /* Double+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+JY.swift"; sourceTree = "<group>"; };
 		B967BA0C277EA85100926B9C /* JYBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYBlurView.swift; sourceTree = "<group>"; };
 		B967BA61277FE64F00926B9C /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+JY.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 				B93DC43627A58E6F002C6390 /* Int+JY.swift */,
 				B93DC43827A58F76002C6390 /* CGFloat+JY.swift */,
 				B93DC43A27A58F7E002C6390 /* Double+JY.swift */,
+				B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -474,6 +477,7 @@
 				1D00E4E62096C0F800450247 /* JYCollectionViewCell.swift in Sources */,
 				1D477775211C3A7F0068FCD0 /* Dictionary+JY.swift in Sources */,
 				1D00E4EF2097019A00450247 /* JYPaginationCollectionViewController.swift in Sources */,
+				B9E6B67827AF53EE00C47285 /* UIApplication+JY.swift in Sources */,
 				B93DC43727A58E6F002C6390 /* Int+JY.swift in Sources */,
 				1D38920D208AF9B40005C175 /* UIImage+JY.swift in Sources */,
 				1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */,
