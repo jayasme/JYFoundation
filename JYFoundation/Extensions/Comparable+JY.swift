@@ -11,6 +11,6 @@ import Foundation
 extension Comparable {
     
     public func clamp(range: ClosedRange<Self>) -> Self {
-        return max(min(self, range.lowerBound), range.upperBound)
+        return min(max(self, range.lowerBound), range.upperBound)
     }
 }

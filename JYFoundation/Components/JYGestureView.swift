@@ -11,8 +11,7 @@ import UIKit
 
 @objc public protocol JYGestureViewDelegate: AnyObject {
     @objc optional func onPanStart(direction: JYGestureView.PanDirection, startLocation: CGPoint)
-    @objc optional func onPanHorizontally(offset: CGFloat)
-    @objc optional func onPanVertically(offset: CGFloat)
+    @objc optional func onPan(direction: JYGestureView.PanDirection, offset: CGFloat)
     @objc optional func onPanEnd(direction: JYGestureView.PanDirection, offset: CGFloat, velocity: CGFloat)
     @objc optional func onTap(location: CGPoint)
     @objc optional func onDoubleTap(location: CGPoint)
@@ -87,9 +86,9 @@ public class JYGestureView: UIView {
             let y = translation.y
             if let panDirection = self.panDirection {
                 if panDirection.horizontal {
-                    self.delegate?.onPanHorizontally?(offset: x)
+                    self.delegate?.onPan?(direction: panDirection, offset: x)
                 } else {
-                    self.delegate?.onPanVertically?(offset: y)
+                    self.delegate?.onPan?(direction: panDirection, offset: y)
                 }
             } else if abs(x) >= 10 || abs(y) >= 10 {
                 self.panDirection = abs(x) > abs(y) ? (x < 0 ? PanDirection.left : PanDirection.right) : (y < 0 ? PanDirection.top : PanDirection.bottom)
