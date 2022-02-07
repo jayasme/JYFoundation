@@ -22,8 +22,18 @@ import UIKit
 public class JYGestureView: UIView {
     
     @objc public enum PanDirection: Int {
-        case horizontal = 0
-        case vertical = 1
+        case left = 0
+        case right = 1
+        case top = 2
+        case bottom = 3
+        
+        var horizontal: Bool {
+            return self == .left || self == .right
+        }
+        
+        var vertical: Bool {
+            return self == .top || self == .bottom
+        }
     }
 
     private var panGesture: UIPanGestureRecognizer!
@@ -76,19 +86,19 @@ public class JYGestureView: UIView {
             let x = translation.x
             let y = translation.y
             if let panDirection = self.panDirection {
-                if panDirection == .horizontal {
+                if panDirection.horizontal {
                     self.delegate?.onPanHorizontally?(offset: x)
                 } else {
                     self.delegate?.onPanVertically?(offset: y)
                 }
             } else if abs(x) >= 10 || abs(y) >= 10 {
-                self.panDirection = abs(x) > abs(y) ? .horizontal : .vertical
+                self.panDirection = abs(x) > abs(y) ? (x < 0 ? PanDirection.left : PanDirection.right) : (y < 0 ? PanDirection.top : PanDirection.bottom)
                 if (!panStartedTriggered) {
                     self.panStartedTriggered = true
-                    if panDirection == .horizontal {
-                        self.delegate?.onPanStart?(direction: .horizontal, startLocation: startLocation)
+                    if self.panDirection!.horizontal {
+                        self.delegate?.onPanStart?(direction: panDirection!, startLocation: startLocation)
                     } else {
-                        self.delegate?.onPanStart?(direction: .vertical, startLocation: startLocation)
+                        self.delegate?.onPanStart?(direction: panDirection!, startLocation: startLocation)
                     }
                 }
             }
@@ -99,10 +109,10 @@ public class JYGestureView: UIView {
             let y = translation.y
             let velocity = sender.velocity(in: self)
             if let panDirection = self.panDirection {
-                if panDirection == .horizontal {
-                    self.delegate?.onPanEnd?(direction: .horizontal, offset: x, velocity: velocity.x)
+                if panDirection.horizontal {
+                    self.delegate?.onPanEnd?(direction: panDirection, offset: x, velocity: velocity.x)
                 } else {
-                    self.delegate?.onPanEnd?(direction: .vertical, offset: y, velocity: velocity.y)
+                    self.delegate?.onPanEnd?(direction: panDirection, offset: y, velocity: velocity.y)
                 }
             }
             self.startLocation = nil
