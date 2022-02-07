@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-@objc protocol JYGestureViewDelegate: AnyObject {
+@objc public protocol JYGestureViewDelegate: AnyObject {
     @objc optional func onPanStart(direction: JYGestureView.PanDirection, startLocation: CGPoint)
     @objc optional func onPanHorizontally(offset: CGFloat)
     @objc optional func onPanVertically(offset: CGFloat)
@@ -19,36 +19,36 @@ import UIKit
     @objc optional func onLongPress(location: CGPoint)
 }
 
-class JYGestureView: UIView {
+public class JYGestureView: UIView {
     
-    @objc enum PanDirection: Int {
+    @objc public enum PanDirection: Int {
         case horizontal = 0
         case vertical = 1
     }
 
-    var panGesture: UIPanGestureRecognizer!
-    var tapGesture: UITapGestureRecognizer!
-    var doubleTapGesture: UITapGestureRecognizer!
-    var longPressGesture: UILongPressGestureRecognizer!
+    private var panGesture: UIPanGestureRecognizer!
+    private var tapGesture: UITapGestureRecognizer!
+    private var doubleTapGesture: UITapGestureRecognizer!
+    private var longPressGesture: UILongPressGestureRecognizer!
     
     private var startLocation: CGPoint? = nil
     
     private var panDirection: PanDirection? = nil
     private var panStartedTriggered: Bool = false
     
-    unowned var delegate: JYGestureViewDelegate? = nil
+    public weak var delegate: JYGestureViewDelegate? = nil
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         self.commonInit()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
     
-    func commonInit() {
+    private func commonInit() {
         self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(sender:)))
         self.addGestureRecognizer(self.panGesture)
         self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(sender:)))

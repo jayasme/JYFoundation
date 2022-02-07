@@ -13,7 +13,7 @@ public class JYBlurView: UIVisualEffectView {
   
     private var aniamtor: UIViewPropertyAnimator!
     
-    convenience init(style: UIBlurEffect.Style) {
+    convenience public init(style: UIBlurEffect.Style) {
         let effect = UIBlurEffect(style: style)
         self.init(effect: effect)
     }
@@ -23,7 +23,7 @@ public class JYBlurView: UIVisualEffectView {
         self.commonInit()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
         self.commonInit()
     }
