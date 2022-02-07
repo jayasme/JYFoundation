@@ -27,11 +27,11 @@ public class JYGestureView: UIView {
         case top = 2
         case bottom = 3
         
-        var horizontal: Bool {
+        public var horizontal: Bool {
             return self == .left || self == .right
         }
         
-        var vertical: Bool {
+        public var vertical: Bool {
             return self == .top || self == .bottom
         }
     }

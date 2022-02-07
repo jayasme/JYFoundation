@@ -10,12 +10,8 @@ import UIKit
 
 extension CGFloat {
     
-    public static func random(max: CGFloat) -> CGFloat {
-        return CGFloat(drand48() * Double(max))
-    }
-    
-    public static func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        return CGFloat(drand48() * Double(max - min)) + min
+    public static func random(range: ClosedRange<CGFloat>) -> CGFloat {
+        return CGFloat(drand48() * Double(range.upperBound - range.lowerBound)) + range.lowerBound
     }
     
     // operator overrides

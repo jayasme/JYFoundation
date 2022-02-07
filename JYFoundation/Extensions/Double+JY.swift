@@ -10,12 +10,8 @@ import UIKit
 
 extension Double {
     
-    public static func random(max: Double) -> Double {
-        return Double(drand48() * Double(max))
-    }
-    
-    public static func random(min: Double, max: Double) -> Double {
-        return drand48() * Double(max - min) + min
+    public static func random(range: ClosedRange<Double>) -> Double {
+        return drand48() * Double(range.upperBound - range.lowerBound) + range.lowerBound
     }
     
     // operator overrides
