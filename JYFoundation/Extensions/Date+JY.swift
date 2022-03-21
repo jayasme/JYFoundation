@@ -144,7 +144,7 @@ extension Date {
     public var chineseDayString: String {
         let days = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]
         let day = self.chineseDay
-        if (day < 10) {
+        if (day <= 10) {
             return "初" + days[day - 1]
         }
         if (day < 20) {

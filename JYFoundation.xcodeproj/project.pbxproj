@@ -69,6 +69,7 @@
 		B93DC43B27A58F7E002C6390 /* Double+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93DC43A27A58F7E002C6390 /* Double+JY.swift */; };
 		B967BA0D277EA85100926B9C /* JYBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B967BA0C277EA85100926B9C /* JYBlurView.swift */; };
 		B967BA62277FE64F00926B9C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B967BA61277FE64F00926B9C /* Podfile */; };
+		B969A8AC27E8B09600F8980B /* JYConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969A8AB27E8B09600F8980B /* JYConfigManager.swift */; };
 		B9E6B67827AF53EE00C47285 /* UIApplication+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */; };
 		B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67927B0FCE800C47285 /* JYGestureView.swift */; };
 		B9E6B67F27B14A9100C47285 /* Comparable+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67E27B14A9100C47285 /* Comparable+JY.swift */; };
@@ -142,6 +143,7 @@
 		B93DC43A27A58F7E002C6390 /* Double+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+JY.swift"; sourceTree = "<group>"; };
 		B967BA0C277EA85100926B9C /* JYBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYBlurView.swift; sourceTree = "<group>"; };
 		B967BA61277FE64F00926B9C /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		B969A8AB27E8B09600F8980B /* JYConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYConfigManager.swift; sourceTree = "<group>"; };
 		B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+JY.swift"; sourceTree = "<group>"; };
 		B9E6B67927B0FCE800C47285 /* JYGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGestureView.swift; sourceTree = "<group>"; };
 		B9E6B67E27B14A9100C47285 /* Comparable+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+JY.swift"; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 			children = (
 				1D389239208B094E0005C175 /* Networking */,
 				1D8B85A92084B7DD003EDE8A /* AuthorizationService */,
+				B969A8AB27E8B09600F8980B /* JYConfigManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -460,6 +463,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B969A8AC27E8B09600F8980B /* JYConfigManager.swift in Sources */,
 				1D389211208AF9B40005C175 /* String+Regex.swift in Sources */,
 				B967BA0D277EA85100926B9C /* JYBlurView.swift in Sources */,
 				1D00E4C82096BBB400450247 /* JYTableViewController.swift in Sources */,

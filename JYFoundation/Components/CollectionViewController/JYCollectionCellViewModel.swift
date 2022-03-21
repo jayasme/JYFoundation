@@ -12,7 +12,7 @@ import UIKit
 open class JYCollectionCellViewModel: NSObject, ICellViewModel {
     private(set) public var model: Any? = nil
     
-    public init(_ model: Any?) {
+    required public init(_ model: Any?) {
         self.model = model
     }
     

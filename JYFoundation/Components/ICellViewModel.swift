@@ -9,10 +9,12 @@
 import Foundation
 
 public protocol ICellViewModel: AnyObject {
+    associatedtype T
     
-    var model: Any? {
+    var model: T? {
         get
     }
+    init(_ model: T?)
     func shouldHighlight() -> Bool
     func didSelect()
 }
