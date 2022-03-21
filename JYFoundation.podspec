@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'JYFoundation'
-    s.version = '0.0.19'
+    s.version = '0.0.20'
     s.license = 'MIT'
     s.summary = 'A multi usages foundation library for iOS Swift.'
     s.homepage = 'https://github.com/jayasme/JYFoundation'
