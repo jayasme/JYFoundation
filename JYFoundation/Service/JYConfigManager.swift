@@ -86,7 +86,9 @@ extension JYConfigManager {
 
 open class JYConfig {
     
-    internal var changePropertyBlock: (() -> Void)? = nil
+    fileprivate var changePropertyBlock: (() -> Void)? = nil
+    
+    public init() { }
     
     public func changeProperty() {
         self.changePropertyBlock?()

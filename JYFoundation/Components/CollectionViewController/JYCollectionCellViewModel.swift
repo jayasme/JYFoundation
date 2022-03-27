@@ -10,9 +10,13 @@ import Foundation
 import UIKit
 
 open class JYCollectionCellViewModel: NSObject, ICellViewModel {
-    private(set) public var model: Any? = nil
+    private(set) public var model: Any? = nil {
+        didSet {
+            self.update()
+        }
+    }
     
-    required public init(_ model: Any?) {
+    public init(_ model: Any?) {
         self.model = model
     }
     

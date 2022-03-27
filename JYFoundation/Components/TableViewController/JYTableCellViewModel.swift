@@ -23,9 +23,13 @@ public class JYTableViewCellAction {
 }
 
 open class JYTableCellViewModel: NSObject, ICellViewModel {
-    private(set) public var model: Any? = nil
+    private(set) public var model: Any? = nil {
+        didSet {
+            self.update()
+        }
+    }
     
-    required public init(_ model: Any?) {
+    public init(_ model: Any?) {
         self.model = model
     }
     
