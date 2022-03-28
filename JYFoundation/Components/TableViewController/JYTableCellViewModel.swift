@@ -26,6 +26,7 @@ open class JYTableCellViewModel: NSObject, ICellViewModel {
     public var model: Any? = nil {
         didSet {
             self.update(self.model)
+            self.signalBlock?()
         }
     }
     
@@ -63,7 +64,7 @@ open class JYTableCellViewModel: NSObject, ICellViewModel {
     }
     
     open func update(_ model: Any?) {
-        self.signalBlock?()
+        // do nothing
     }
     
     // MARK: publics
