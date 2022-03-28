@@ -25,12 +25,14 @@ public class JYTableViewCellAction {
 open class JYTableCellViewModel: NSObject, ICellViewModel {
     private(set) public var model: Any? = nil {
         didSet {
-            self.update()
+            self.update(self.model)
         }
     }
     
     public init(_ model: Any?) {
+        super.init()
         self.model = model
+        self.update(model)
     }
     
     public convenience override init() {
@@ -60,11 +62,11 @@ open class JYTableCellViewModel: NSObject, ICellViewModel {
         // do nothing
     }
     
-    // MARK: publics
-    
-    public func update() {
-        signalBlock?()
+    open func update(_ model: Any?) {
+        self.signalBlock?()
     }
+    
+    // MARK: publics
     
     public func notification(identifier: String, userInfo: Any? = nil) {
         notificationBlock?(self, identifier, userInfo)
