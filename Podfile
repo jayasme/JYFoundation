@@ -12,7 +12,7 @@ target 'JYFoundation' do
     pod 'Alamofire', '~> 5.5'
     pod 'PromiseKit/CorePromise', '~> 6.15'
     pod 'SDWebImage', '~> 5.11'
-    pod 'HandyJSON', '5.0.0-beta'
+    pod 'HandyJSON', '5.0.4-beta'
     
 end
 

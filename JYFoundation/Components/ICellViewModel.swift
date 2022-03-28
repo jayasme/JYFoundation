@@ -9,11 +9,10 @@
 import Foundation
 
 public protocol ICellViewModel: AnyObject {
-    var model: Any? {
-        get
-    }
+    var model: Any? { get set }
     func shouldHighlight() -> Bool
     func didSelect()
+    func update(_ model: Any?)
 }
 
 public enum JYViewStatus: Int {
