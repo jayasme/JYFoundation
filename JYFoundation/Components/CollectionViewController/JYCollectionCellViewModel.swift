@@ -12,15 +12,17 @@ import UIKit
 open class JYCollectionCellViewModel: NSObject, ICellViewModel {
     public var model: Any? = nil {
         didSet {
-            self.update(self.model)
+            self.updateModel(self.model)
             self.signalBlock?()
         }
     }
     
+    public weak var cell: JYCollectionViewCell? = nil
+    
     public init(_ model: Any?) {
         super.init()
         self.model = model
-        self.update(model)
+        self.updateModel(model)
     }
     
     public convenience override init() {
@@ -54,7 +56,7 @@ open class JYCollectionCellViewModel: NSObject, ICellViewModel {
         // do nothing
     }
     
-    open func update(_ model: Any?) {
+    open func updateModel(_ model: Any?) {
         // do nothing
     }
     

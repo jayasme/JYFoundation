@@ -14,6 +14,7 @@ open class JYTableViewCell : UITableViewCell {
         didSet {
             // update signalBlock
             viewModel.signalBlock = signal
+            viewModel.cell = self
         }
     }
     private(set) var isDisplayed: Bool = false

@@ -12,7 +12,7 @@ public protocol ICellViewModel: AnyObject {
     var model: Any? { get set }
     func shouldHighlight() -> Bool
     func didSelect()
-    func update(_ model: Any?)
+    func updateModel(_ model: Any?)
 }
 
 public enum JYViewStatus: Int {
