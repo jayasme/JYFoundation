@@ -45,10 +45,16 @@ open class JYTableCellViewModel: NSObject, ICellViewModel {
     public var signalBlock: (()->())? = nil
     public var notificationBlock: ((JYTableCellViewModel, String, Any?) -> Void)? = nil
     
+    // MARK: Overrides
+    
     open func height() -> CGFloat {
         return 0
     }
     
+    open func isDraggable() -> Bool {
+        return false
+    }
+        
     open func shouldHighlight() -> Bool {
         return true
     }
