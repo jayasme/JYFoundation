@@ -333,8 +333,10 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func cellViewModels() -> [JYTableCellViewModel] {
-        return _viewModels
+    public var cellViewModels: [JYTableCellViewModel] {
+        get {
+            return _viewModels
+        }
     }
     
     public func index(of cellViewModel: JYTableCellViewModel) -> Int? {
@@ -414,7 +416,19 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    public func moveCellViewModel(for viewModel: JYTableCellViewModel, to index: Int) {
+        guard let fromIndex = self.cellViewModels.firstIndex(of: viewModel) else {
+            return
+        }
+        
+        self.moveRow(at: IndexPath(row: fromIndex, section: 0), to: IndexPath(row: index, section: 0))
+        self._viewModels.remove(at: fromIndex)
+        self._viewModels.insert(viewModel, at: index)
+    }
     
+    public func visibleCellViewModels() -> [JYTableCellViewModel] {
+        return self.visibleCells.compactMap { ($0 as? JYTableViewCell)?.viewModel }
+    }
     
     // MARK: UITableViewDataSource
     
