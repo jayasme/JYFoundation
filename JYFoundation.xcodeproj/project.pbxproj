@@ -71,6 +71,7 @@
 		B967BA62277FE64F00926B9C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B967BA61277FE64F00926B9C /* Podfile */; };
 		B969A8AC27E8B09600F8980B /* JYConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969A8AB27E8B09600F8980B /* JYConfigManager.swift */; };
 		B969A8AE27F5C19A00F8980B /* CGPoint+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */; };
+		B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DD4E5628419AF50086CBDA /* JYGradientView.swift */; };
 		B9E6B67827AF53EE00C47285 /* UIApplication+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */; };
 		B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67927B0FCE800C47285 /* JYGestureView.swift */; };
 		B9E6B67F27B14A9100C47285 /* Comparable+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67E27B14A9100C47285 /* Comparable+JY.swift */; };
@@ -146,6 +147,7 @@
 		B967BA61277FE64F00926B9C /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B969A8AB27E8B09600F8980B /* JYConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYConfigManager.swift; sourceTree = "<group>"; };
 		B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+JY.swift"; sourceTree = "<group>"; };
+		B9DD4E5628419AF50086CBDA /* JYGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGradientView.swift; sourceTree = "<group>"; };
 		B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+JY.swift"; sourceTree = "<group>"; };
 		B9E6B67927B0FCE800C47285 /* JYGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGestureView.swift; sourceTree = "<group>"; };
 		B9E6B67E27B14A9100C47285 /* Comparable+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+JY.swift"; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				1D00E4C22096BB6C00450247 /* TableViewController */,
 				B967BA0C277EA85100926B9C /* JYBlurView.swift */,
 				B9E6B67927B0FCE800C47285 /* JYGestureView.swift */,
+				B9DD4E5628419AF50086CBDA /* JYGradientView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				1D38921C208AF9B40005C175 /* Calendar+JY.swift in Sources */,
 				B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */,
 				1D3891F5208AF6370005C175 /* AlbumAuthService.swift in Sources */,
+				B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */,
 				1D38921D208AF9B40005C175 /* TimeInterval+JY.swift in Sources */,
 				B93DC43927A58F76002C6390 /* CGFloat+JY.swift in Sources */,
 				1D00E4C92096BBB400450247 /* JYTableView.swift in Sources */,
