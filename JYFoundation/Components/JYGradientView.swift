@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class GradientView: UIView {
+public class JYGradientView: UIView {
     
     private weak var gradientLayer: CALayer? = nil
     
@@ -70,11 +70,11 @@ public class GradientView: UIView {
 
 private class LinearGradientLayer: CALayer {
     
-    var gradients: [GradientView.GradientPoint]
+    var gradients: [JYGradientView.GradientPoint]
     var startPoint: CGPoint
     var endPoint: CGPoint
     
-    init(gradients: [GradientView.GradientPoint], startPoint: CGPoint, endPoint: CGPoint) {
+    init(gradients: [JYGradientView.GradientPoint], startPoint: CGPoint, endPoint: CGPoint) {
         self.gradients = gradients
         self.startPoint = startPoint
         self.endPoint = endPoint
@@ -112,13 +112,13 @@ private class LinearGradientLayer: CALayer {
 
 private class RadialGradientLayer: CALayer {
     
-    var gradients: [GradientView.GradientPoint]
+    var gradients: [JYGradientView.GradientPoint]
     var centerPoint: CGPoint
     var radiusX: CGFloat
     var radiusY: CGFloat
     var rotation: CGFloat
     
-    init(gradients: [GradientView.GradientPoint], centerPoint: CGPoint, radiusX: CGFloat, radiusY: CGFloat, rotation: CGFloat) {
+    init(gradients: [JYGradientView.GradientPoint], centerPoint: CGPoint, radiusX: CGFloat, radiusY: CGFloat, rotation: CGFloat) {
         self.gradients = gradients
         self.centerPoint = centerPoint
         self.radiusX = radiusX
