@@ -16,6 +16,11 @@ public class JYGradientView: UIView {
     public struct GradientPoint {
         public let location: CGFloat
         public let color: UIColor
+        
+        public init(location: CGFloat, color: UIColor) {
+            self.location = location
+            self.color = color
+        }
     }
     
     public enum Gradient {
