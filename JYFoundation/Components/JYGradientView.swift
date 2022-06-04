@@ -30,11 +30,12 @@ public class JYGradientView: UIView {
         
     public var gradient: Gradient? = nil {
         didSet {
+            if self.gradient != nil {
+                self.gradientLayer?.removeFromSuperlayer()
+                self.gradientLayer = nil
+            }
+            
             guard let gradient = self.gradient else {
-                if let gradientLayer = self.gradientLayer {
-                    gradientLayer.removeFromSuperlayer()
-                    self.gradientLayer = nil
-                }
                 return
             }
             
@@ -75,9 +76,9 @@ public class JYGradientView: UIView {
 
 private class LinearGradientLayer: CALayer {
     
-    var gradients: [JYGradientView.GradientPoint]
-    var startPoint: CGPoint
-    var endPoint: CGPoint
+    var gradients: [JYGradientView.GradientPoint]?
+    var startPoint: CGPoint?
+    var endPoint: CGPoint?
     
     init(gradients: [JYGradientView.GradientPoint], startPoint: CGPoint, endPoint: CGPoint) {
         self.gradients = gradients
@@ -91,7 +92,19 @@ private class LinearGradientLayer: CALayer {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
+    
     override func draw(in ctx: CGContext) {
+        guard
+            let gradients = self.gradients,
+            let startPoint = self.startPoint,
+            let endPoint = self.endPoint
+        else {
+            return
+        }
+        
         ctx.saveGState()
 
         let colorSpace = CGColorSpaceCreateDeviceRGB()
@@ -104,11 +117,11 @@ private class LinearGradientLayer: CALayer {
             return
         }
         
-        let startPoint = CGPoint(x: self.startPoint.x * self.bounds.width, y: self.startPoint.y * self.bounds.height)
-        let endPoint = CGPoint(x: self.endPoint.x * self.bounds.width, y: self.endPoint.y * self.bounds.height)
+        let sp = CGPoint(x: startPoint.x * self.bounds.width, y: startPoint.y * self.bounds.height)
+        let ep = CGPoint(x: endPoint.x * self.bounds.width, y: endPoint.y * self.bounds.height)
         ctx.drawLinearGradient(gradient,
-                               start: startPoint,
-                               end: endPoint,
+                               start: sp,
+                               end: ep,
                                options: .drawsBeforeStartLocation)
         ctx.restoreGState()
     }
@@ -117,11 +130,11 @@ private class LinearGradientLayer: CALayer {
 
 private class RadialGradientLayer: CALayer {
     
-    var gradients: [JYGradientView.GradientPoint]
-    var centerPoint: CGPoint
-    var radiusX: CGFloat
-    var radiusY: CGFloat
-    var rotation: CGFloat
+    var gradients: [JYGradientView.GradientPoint]?
+    var centerPoint: CGPoint?
+    var radiusX: CGFloat?
+    var radiusY: CGFloat?
+    var rotation: CGFloat?
     
     init(gradients: [JYGradientView.GradientPoint], centerPoint: CGPoint, radiusX: CGFloat, radiusY: CGFloat, rotation: CGFloat) {
         self.gradients = gradients
@@ -137,7 +150,22 @@ private class RadialGradientLayer: CALayer {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
+    
     override func draw(in ctx: CGContext) {
+        guard
+            let gradients = gradients,
+            let centerPoint = centerPoint,
+            let radiusX = radiusX,
+            let radiusY = radiusY,
+            let rotation = rotation,
+            radiusX > 0 && radiusY > 0
+        else {
+            return
+        }
+        
         ctx.saveGState()
 
         let colorSpace = CGColorSpaceCreateDeviceRGB()
@@ -145,30 +173,29 @@ private class RadialGradientLayer: CALayer {
         let colors = gradients.map { $0.color.cgColor } as CFArray
         guard let gradient = CGGradient(colorsSpace: colorSpace,
                                         colors: colors,
-                                        locations: locations),
-              self.radiusX > 0 && self.radiusY > 0
+                                        locations: locations)
         else {
             return
         }
         
-        let radiusX = self.radiusX * self.bounds.width
-        let radiusY = self.radiusY * self.bounds.height
-        let centerPoint = CGPoint(x: self.centerPoint.x * self.bounds.width, y: self.centerPoint.y * self.bounds.height)
-        let radius = max(radiusX, radiusY)
+        let rx = radiusX * self.bounds.width
+        let ry = radiusY * self.bounds.height
+        let cp = CGPoint(x: centerPoint.x * self.bounds.width, y: centerPoint.y * self.bounds.height)
+        let r = max(rx, ry)
         
-        if (radiusX > radiusY) {
-            ctx.translateBy(x: centerPoint.x - (centerPoint.x * (radiusX / radiusY)), y: 0)
-            ctx.scaleBy(x: radiusX / radiusY, y: 1)
+        if (rx > ry) {
+            ctx.translateBy(x: cp.x - (cp.x * (rx / ry)), y: 0)
+            ctx.scaleBy(x: rx / ry, y: 1)
         } else {
-            ctx.translateBy(x: 0, y: centerPoint.y - (centerPoint.y * (radiusY / radiusX)))
-            ctx.scaleBy(x: 1, y: radiusY / radiusX)
+            ctx.translateBy(x: 0, y: cp.y - (cp.y * (ry / rx)))
+            ctx.scaleBy(x: 1, y: ry / rx)
         }
         ctx.rotate(by: rotation)
         
         ctx.drawRadialGradient(gradient,
-                               startCenter: centerPoint,
-                               startRadius: radius,
-                               endCenter: centerPoint,
+                               startCenter: cp,
+                               startRadius: r,
+                               endCenter: cp,
                                endRadius: 0,
                                options: .drawsBeforeStartLocation
         )
