@@ -14,3 +14,5 @@ open class JYHttpModel: HandyJSON {
     
     open func mapping(mapper: HelpingMapper) { }
 }
+
+public typealias JYHttpEnum = HandyJSONEnum

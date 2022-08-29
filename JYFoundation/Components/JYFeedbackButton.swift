@@ -13,7 +13,7 @@ public class JYFeedbackButton: UIView {
     
     public enum FeedbackType {
         case none
-        case hightlight(value: UIColor)
+        case highlight(value: UIColor)
         case opacity(value: CGFloat = 0.5)
         case scale(value: CGFloat = 0.9)
     }
@@ -27,7 +27,7 @@ public class JYFeedbackButton: UIView {
         self.feedbackType = feedbackType
         self.isUserInteractionEnabled = true
         
-        if case .hightlight(let color) = feedbackType {
+        if case .highlight(let color) = feedbackType {
             let backView = UIView()
             backView.backgroundColor = color
             backView.frame = frame
@@ -56,6 +56,7 @@ public class JYFeedbackButton: UIView {
     
     // make sure the backView is always fullfilled
     public override func layoutSubviews() {
+        super.layoutSubviews()
         self.backView?.frame = self.bounds
     }
     
@@ -106,7 +107,7 @@ public class JYFeedbackButton: UIView {
                             self.transform = CGAffineTransform(scaleX: value, y: value)
             }, completion: nil)
             break
-        case .hightlight(_):
+        case .highlight(_):
             guard let backView = self.backView else {
                 break
             }
@@ -151,7 +152,7 @@ public class JYFeedbackButton: UIView {
                             self.transform = CGAffineTransform(scaleX: 1, y: 1)
             }, completion: nil)
             break
-        case .hightlight(_):
+        case .highlight(_):
             guard let backView = self.backView else {
                 break
             }
