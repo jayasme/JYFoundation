@@ -42,8 +42,10 @@ public class CameraAuthService: AuthServiceBase {
     }
     
     public override func denyWarning(controller: UIViewController) {
-        let alert = UIAlertController(title: "摄像头权限被关闭", message: "请允许使用您的摄像头以用于发送图片。", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "确定", style: .cancel, handler: nil))
+        guard let denyTitle = self.denyTitle, let denyMessage = self.denyMessage else {
+            return
+        }
+        let alert = UIAlertController(title: denyTitle, message: denyMessage, preferredStyle: .alert)
         controller.present(alert, animated: true, completion: nil)
     }
 }

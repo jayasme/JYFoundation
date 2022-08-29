@@ -33,6 +33,26 @@ extension String {
         return results
     }
     
+    public func jy_toBase64() -> String {
+        return Data(self.utf8).base64EncodedString()
+    }
+    
+    public func jy_fromBase64() -> String? {
+        guard let data = Data(base64Encoded: self) else {
+            return nil
+        }
+        
+        return String(data: data, encoding: .utf8)
+    }
+    
+    public func jy_substring(start: Int, length: Int? = nil) -> String {
+        let startIndex = self.index(self.startIndex, offsetBy: start)
+        if let length = length {
+            let endIndex = self.index(startIndex, offsetBy: length)
+            return String(self[startIndex..<endIndex])
+        }
+        return String(self[startIndex...])
+    }
     
     public func jy_sha1() -> String {
         guard let sourceData = data(using: .utf8) else {

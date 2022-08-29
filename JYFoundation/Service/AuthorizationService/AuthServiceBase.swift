@@ -18,6 +18,9 @@ public enum AuthState: Int {
 
 open class AuthServiceBase {
     
+    public private(set) var denyTitle: String?
+    public private(set) var denyMessage: String?
+    
     open func authState() -> Promise<AuthState> {
         fatalError("Not implemented.")
     }
