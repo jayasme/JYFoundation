@@ -12,12 +12,12 @@ import PromiseKit
 
 extension Notification.Name {
     
-    static let JYHeadingUpdate = Notification.Name("JYHeadingUpdate")
-    static let JYLocationUpdate = Notification.Name("JYLocationUpdate")
-    static let JYAddressUpdate = Notification.Name("JYAddressUpdate")
+    public static let JYHeadingUpdate = Notification.Name("JYHeadingUpdate")
+    public static let JYLocationUpdate = Notification.Name("JYLocationUpdate")
+    public static let JYAddressUpdate = Notification.Name("JYAddressUpdate")
 }
 
-class JYLocationService: NSObject, CLLocationManagerDelegate {
+public class JYLocationService: NSObject, CLLocationManagerDelegate {
     
     public enum AuthState: Int {
         case notDetermined = 0
@@ -34,22 +34,29 @@ class JYLocationService: NSObject, CLLocationManagerDelegate {
     }
     
     public struct Address {
-        var countryISO2: String!
-        var city: String!
-        var address: String!
-        var location: Location?
+        public init(countryISO2: String, city: String, address: String, location: Location?) {
+            self.countryISO2 = countryISO2
+            self.city = city
+            self.address = address
+            self.location = location
+        }
+        
+        public var countryISO2: String!
+        public var city: String!
+        public var address: String!
+        public var location: Location?
     }
     
     public struct Location {
-        var longtitude: Double
-        var latitude: Double
+        public var longtitude: Double
+        public var latitude: Double
         
-        init(geo: CLLocation) {
-            self.longtitude = geo.coordinate.longitude
-            self.latitude = geo.coordinate.latitude
+        public init(coordinate: CLLocationCoordinate2D) {
+            self.longtitude = coordinate.longitude
+            self.latitude = coordinate.latitude
         }
         
-        init(longtitude: Double, latitude: Double) {
+        public init(longtitude: Double, latitude: Double) {
             self.longtitude = longtitude
             self.latitude = latitude
         }
@@ -157,11 +164,11 @@ class JYLocationService: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.requestAuthCallback?()
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         let heading = newHeading.magneticHeading
         self.heading = heading
         NotificationCenter.default.post(
@@ -171,11 +178,11 @@ class JYLocationService: NSObject, CLLocationManagerDelegate {
         )
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let geo = locations.first else {
             return
         }
-        let location = Location(geo: geo)
+        let location = Location(coordinate: geo.coordinate)
         self.location = location
         NotificationCenter.default.post(
             name: NSNotification.Name.JYLocationUpdate,
@@ -239,6 +246,8 @@ class JYLocationService: NSObject, CLLocationManagerDelegate {
     }
     
     open class BaseAddressService {
+        
+        public init() { }
         
         @discardableResult
         open func getAddressByLocation(location: JYLocationService.Location) -> Promise<JYLocationService.Address?> {
