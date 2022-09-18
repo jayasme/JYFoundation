@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class JYFeedbackButton: UIView {
+public class JYFeedbackButton: UIButton {
     
     public enum FeedbackType {
         case none
@@ -20,7 +20,7 @@ public class JYFeedbackButton: UIView {
     
     public private(set) var feedbackType: FeedbackType = .none
     
-    public var duration: TimeInterval = 0.3
+    public var duration: TimeInterval = 0.2
     
     public convenience init(frame: CGRect = .zero, feedbackType: FeedbackType) {
         self.init(frame: frame)
@@ -65,18 +65,17 @@ public class JYFeedbackButton: UIView {
     private var animated: Bool = false
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
         self.animateIn()
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
         self.animateOut()
-        
-        if touches.count == 1, event?.type == .presses {
-            print("press")
-        }
     }
     
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
         self.animateOut()
     }
     
