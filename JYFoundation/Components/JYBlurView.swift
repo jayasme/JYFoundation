@@ -13,41 +13,36 @@ public class JYBlurView: UIVisualEffectView {
   
     private var aniamtor: UIViewPropertyAnimator!
     
-    convenience public init(style: UIBlurEffect.Style) {
-        let effect = UIBlurEffect(style: style)
-        self.init(effect: effect)
-    }
-        
-    private override init(effect: UIVisualEffect?) {
-        super.init(effect: effect)
-        self.commonInit()
-    }
-    
-    required public init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.commonInit()
-    }
-    
-    private func commonInit() {
-        self.aniamtor = UIViewPropertyAnimator(duration: 1, curve: .linear) {
-            self.effect = UIBlurEffect(style: self.style)
+    public init(style: UIBlurEffect.Style) {
+        self.style = style
+        super.init(effect: nil)
+        self.aniamtor = UIViewPropertyAnimator(duration: 1, curve: .linear) {[unowned self] in
+            self.effect = UIBlurEffect(style: style)
             self.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     
-    public var style: UIBlurEffect.Style = .extraLight {
+    required public init?(coder: NSCoder) {
+        fatalError()
+    }
+    
+    private func updateBlurRadius() {
+        self.aniamtor.fractionComplete = max(0, min(1, CGFloat(self.blurRadius) / 100.0))
+    }
+    
+    public var style: UIBlurEffect.Style {
         didSet {
-            self.aniamtor = UIViewPropertyAnimator(duration: 1, curve: .linear) {
+            self.aniamtor = UIViewPropertyAnimator(duration: 1, curve: .linear) {[unowned self] in
                 self.effect = UIBlurEffect(style: self.style)
                 self.translatesAutoresizingMaskIntoConstraints = false
             }
-            self.aniamtor.fractionComplete = max(0, min(100, CGFloat(blurRadius) / 100.0))
+            self.updateBlurRadius()
         }
     }
     
-    public var blurRadius: Int = 100 {
+    public var blurRadius: Int = 8 {
         didSet {
-            self.aniamtor.fractionComplete = max(0, min(100, CGFloat(blurRadius) / 100.0))
+            self.updateBlurRadius()
         }
     }
 }
