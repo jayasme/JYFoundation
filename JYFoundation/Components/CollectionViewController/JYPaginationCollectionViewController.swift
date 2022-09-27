@@ -28,25 +28,25 @@ open class JYPaginationCollectionViewController: UICollectionViewController, JYC
     
     // MARK: JYCollectionViewStaticDataSource
     
-    open func prepare(_: JYCollectionCellViewModel, for cell: JYCollectionViewCell) {
+    open func prepare(_: ICollectionCellViewModel, for cell: JYCollectionViewCell) {
         // do nothing
     }
     
-    open func retrieveData(_ collectionView: JYCollectionView, index: Int, itemsPerPage: Int) -> Promise<([JYCollectionCellViewModel], Bool)> {
+    open func retrieveData(_ collectionView: JYCollectionView, index: Int, itemsPerPage: Int) -> Promise<([ICollectionCellViewModel], Bool)> {
         return Promise.value(([], true))
     }
     
-    public func spinnerCellViewModel(_ collectionView: JYCollectionView) -> JYCollectionCellViewModel? {
+    public func spinnerCellViewModel(_ collectionView: JYCollectionView) -> ICollectionCellViewModel? {
         self.spinnerCellViewModel(self)
     }
     
-    open func spinnerCellViewModel(_ controller: JYPaginationCollectionViewController) -> JYCollectionCellViewModel? {
+    open func spinnerCellViewModel(_ controller: JYPaginationCollectionViewController) -> ICollectionCellViewModel? {
         fatalError("Need to impletment spinnerCellViewModel(_ tableView: JYCollectionView)")
     }
     
     // MARK: JYCollectionViewDelegate
     
-    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: JYCollectionCellViewModel) {
+    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: ICollectionCellViewModel) {
         // do nothing
     }
 }

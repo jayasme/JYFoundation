@@ -10,30 +10,30 @@ import UIKit
 import PromiseKit
 
 @objc public protocol JYTableViewDataSource: AnyObject {
-    @objc optional func prepare(_ : JYTableCellViewModel, for cell: JYTableViewCell)
+    @objc optional func prepare(_ : ITableCellViewModel, for cell: JYTableViewCell)
 }
 
 public protocol JYTableViewStaticDataSource: JYTableViewDataSource {
-    func retrieveData(_ tableView: JYTableView) -> [JYTableCellViewModel]
+    func retrieveData(_ tableView: JYTableView) -> [ITableCellViewModel]
 }
 
 public protocol JYTableViewDynamicalDataSource: JYTableViewDataSource {
-    func retrieveData(_ tableView: JYTableView, index: Int, itemsPerPage: Int) -> Promise<([JYTableCellViewModel], Bool)>
-    func spinnerCellViewModel(_ tableView: JYTableView) -> JYTableCellViewModel?
+    func retrieveData(_ tableView: JYTableView, index: Int, itemsPerPage: Int) -> Promise<([ITableCellViewModel], Bool)>
+    func spinnerCellViewModel(_ tableView: JYTableView) -> ITableCellViewModel?
 }
 
 @objc public protocol JYTableViewDraggingDelegate {
-    @objc func draggingBegan(_ tableView: JYTableView, viewModel: JYTableCellViewModel, draggingView: UIView, point: CGPoint)
-    @objc func draggingSorted(_ tableView: JYTableView, startViewModel: JYTableCellViewModel, pointingViewModel: JYTableCellViewModel)
+    @objc func draggingBegan(_ tableView: JYTableView, viewModel: ITableCellViewModel, draggingView: UIView, point: CGPoint)
+    @objc func draggingSorted(_ tableView: JYTableView, startViewModel: ITableCellViewModel, pointingViewModel: ITableCellViewModel)
     @objc func draggingEnded(_ tableView: JYTableView)
 }
 
 @objc public protocol JYTableViewDelegate: UIScrollViewDelegate {
     @objc optional func tableView(_ tableView: JYTableView, willRetrieveDataWith index: Int)
-    @objc optional func tableView(_ tableView: JYTableView, didRetrieve data: [JYTableCellViewModel], with index: Int)
-    @objc optional func tableView(_ tableView: JYTableView, didSelect cellViewModel: JYTableCellViewModel)
-    @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: JYTableCellViewModel, with identifier: String, userInfo: Any?)
-    @objc optional func tableView(_ tableView: JYTableView, didTapActionButton cellViewModel: JYTableCellViewModel, with key: String, userInfo: Any?)
+    @objc optional func tableView(_ tableView: JYTableView, didRetrieve data: [ITableCellViewModel], with index: Int)
+    @objc optional func tableView(_ tableView: JYTableView, didSelect cellViewModel: ITableCellViewModel)
+    @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: ITableCellViewModel, with identifier: String, userInfo: Any?)
+    @objc optional func tableView(_ tableView: JYTableView, didTapActionButton cellViewModel: ITableCellViewModel, with key: String, userInfo: Any?)
 }
 
 public enum JYTableViewPaginationDirection: Int {
@@ -47,7 +47,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     
     private var _registeredCellTypes : [JYTableViewCell.Type] = []
     
-    private var _viewModels : [JYTableCellViewModel] = []
+    private var _viewModels : [ITableCellViewModel] = []
     
     private var _refreshControl: UIRefreshControl?
     
@@ -145,7 +145,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     
     // MARK: Privates
     
-    private func checkRegistred(viewModel: JYTableCellViewModel) {
+    private func checkRegistred(viewModel: ITableCellViewModel) {
         let cellType = viewModel.cellType()
         if _registeredCellTypes.firstIndex(where: { $0 == cellType }) == nil {
             _registeredCellTypes.append(cellType)
@@ -176,7 +176,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     @discardableResult
-    private func retrieveData(index: Int, itemsPerPage: Int) -> Promise<([JYTableCellViewModel], Bool)> {
+    private func retrieveData(index: Int, itemsPerPage: Int) -> Promise<([ITableCellViewModel], Bool)> {
         if let retrivePromise = (self.jyDataSource as? JYTableViewDynamicalDataSource)?.retrieveData(self, index: index, itemsPerPage: itemsPerPage) {
             return retrivePromise
         } else {
@@ -185,9 +185,9 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     @discardableResult
-    private func retrieveDataPromise() -> Promise<[JYTableCellViewModel]> {
+    private func retrieveDataPromise() -> Promise<[ITableCellViewModel]> {
         jyDelegate?.tableView?(self, willRetrieveDataWith: -1)
-        return Promise<[JYTableCellViewModel]> { seal in
+        return Promise<[ITableCellViewModel]> { seal in
             JYTableView.tableViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
                 guard let viewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else { return }
@@ -211,7 +211,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             // remove the spinner cell
             if let dataSource = strongSelf.jyDataSource as? JYTableViewDynamicalDataSource,
                let spinnerCellViewModel = dataSource.spinnerCellViewModel(strongSelf),
-               strongSelf._viewModels.last == spinnerCellViewModel {
+               strongSelf._viewModels.last === spinnerCellViewModel {
                 strongSelf._viewModels.removeLast()
             }
 
@@ -259,7 +259,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    private func notification(cellViewModel: JYTableCellViewModel, identifier: String, userInfo: Any?) {
+    private func notification(cellViewModel: ITableCellViewModel, identifier: String, userInfo: Any?) {
         jyDelegate?.tableView?(self, didNotification: cellViewModel, with: identifier, userInfo: userInfo)
     }
     
@@ -313,7 +313,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     
-    public func scrollToCellViewModel(_ cellViewModel: JYTableCellViewModel, at position: UITableView.ScrollPosition, animated: Bool) {
+    public func scrollToCellViewModel(_ cellViewModel: ITableCellViewModel, at position: UITableView.ScrollPosition, animated: Bool) {
         if let index = self.index(of: cellViewModel) {
             scrollToRow(at: IndexPath(item: index, section: 0), at: position, animated: animated)
         }
@@ -325,7 +325,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func cellViewModel(of index: Int) -> JYTableCellViewModel? {
+    public func cellViewModel(of index: Int) -> ITableCellViewModel? {
         if index >= 0 && index < _viewModels.count {
             return _viewModels[index]
         } else {
@@ -333,7 +333,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func cellViewModel(besideOf cellViewModel:JYTableCellViewModel, offset: Int) -> JYTableCellViewModel? {
+    public func cellViewModel(besideOf cellViewModel:ITableCellViewModel, offset: Int) -> ITableCellViewModel? {
         if let index = index(of: cellViewModel) {
             return self.cellViewModel(of: index + offset)
         } else {
@@ -341,17 +341,17 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public var cellViewModels: [JYTableCellViewModel] {
+    public var cellViewModels: [ITableCellViewModel] {
         get {
             return _viewModels
         }
     }
     
-    public func index(of cellViewModel: JYTableCellViewModel) -> Int? {
-        return _viewModels.firstIndex(of: cellViewModel)
+    public func index(of cellViewModel: ITableCellViewModel) -> Int? {
+        return _viewModels.firstIndex{ $0 === cellViewModel }
     }
     
-    public func appendCellViewModels(_ cellViewModels: [JYTableCellViewModel], with animation: UITableView.RowAnimation) {
+    public func appendCellViewModels(_ cellViewModels: [ITableCellViewModel], with animation: UITableView.RowAnimation) {
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
         var indexPaths: [IndexPath] = []
@@ -371,7 +371,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func insertCellViewModels(_ cellViewModels: [JYTableCellViewModel], at position: Int, with animation: UITableView.RowAnimation) {
+    public func insertCellViewModels(_ cellViewModels: [ITableCellViewModel], at position: Int, with animation: UITableView.RowAnimation) {
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
         var indexPaths: [IndexPath] = []
@@ -391,7 +391,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func deleteCellViewModels(_ cellViewModels: [JYTableCellViewModel], with animation: UITableView.RowAnimation) {
+    public func deleteCellViewModels(_ cellViewModels: [ITableCellViewModel], with animation: UITableView.RowAnimation) {
 
         let indexPaths: [IndexPath] = cellViewModels.compactMap({ (cellViewModel) -> IndexPath? in
             if let index = self.index(of: cellViewModel) {
@@ -424,8 +424,8 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    public func moveCellViewModel(for viewModel: JYTableCellViewModel, to index: Int) {
-        guard let fromIndex = self.cellViewModels.firstIndex(of: viewModel) else {
+    public func moveCellViewModel(for viewModel: ITableCellViewModel, to index: Int) {
+        guard let fromIndex = self.index(of: viewModel) else {
             return
         }
         
@@ -434,7 +434,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         self._viewModels.insert(viewModel, at: index)
     }
     
-    public func visibleCellViewModels() -> [JYTableCellViewModel] {
+    public func visibleCellViewModels() -> [ITableCellViewModel] {
         return self.visibleCells.compactMap { ($0 as? JYTableViewCell)?.viewModel }
     }
     
@@ -462,7 +462,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
         
         let viewModel = _viewModels[indexPath.item]
-        guard viewModel != self.draggingViewModel else {
+        guard viewModel !== self.draggingViewModel else {
             let cell = UITableViewCell(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: viewModel.height()))
             cell.backgroundColor = .clear
             return cell
@@ -486,7 +486,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         if let jyCell = cell as? JYTableViewCell,
            let dataSource = self.jyDataSource as? JYTableViewDynamicalDataSource,
            let spinnerCellViewModel = dataSource.spinnerCellViewModel(self),
-           jyCell.viewModel == spinnerCellViewModel {
+           jyCell.viewModel === spinnerCellViewModel {
           loadNext()
         }
     }
@@ -567,7 +567,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     
     private var longPressGesture: UILongPressGestureRecognizer?
     private var draggingView: UIView?
-    private var draggingViewModel: JYTableCellViewModel?
+    private var draggingViewModel: ITableCellViewModel?
     private var draggingIndex: Int?
     private var draggingScrolling: Bool = false
     private var draggingAutoScrollDirection: AutoScrollDirection? = nil
@@ -583,7 +583,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         if (gesture.state == .began) {
             
             guard let index = self.indexPathForRow(at: point)?.item,
-                  let cellViewModel = self.cellViewModels[index] as? JYTableCellViewModel,
+                  let cellViewModel = self.cellViewModels[index] as? ITableCellViewModel,
                   cellViewModel.isDraggable(),
                   let cell = cellViewModel.cell as? JYTableViewCell
             else {
@@ -624,7 +624,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             
             guard let draggingViewModel = self.draggingViewModel,
                   let firstVisibleViewModel = self.visibleCellViewModels().first,
-                  let firstVisibleIndex = self.cellViewModels.firstIndex(of: firstVisibleViewModel),
+                  let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForRow(at: draggingView.center)?.item,
                   index != draggingIndex,
                   self.cellViewModels[index].isDraggable()
@@ -721,7 +721,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             
             guard let draggingViewModel = self.draggingViewModel,
                   let firstVisibleViewModel = self.visibleCellViewModels().first,
-                  let firstVisibleIndex = self.cellViewModels.firstIndex(of: firstVisibleViewModel),
+                  let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForRow(at: draggingView.center)?.item,
                   index != draggingIndex,
                   self.cellViewModels[index].isDraggable()

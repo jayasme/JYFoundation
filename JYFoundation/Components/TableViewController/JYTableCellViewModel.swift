@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class JYTableViewCellAction {
+public class JYTableViewCellAction: NSObject {
     var key: String
     var title: String
     var style: UITableViewRowAction.Style
@@ -22,8 +22,22 @@ public class JYTableViewCellAction {
     }
 }
 
-open class JYTableCellViewModel: NSObject, ICellViewModel {
-    public var model: Any? = nil {
+@objc public protocol ITableCellViewModel: AnyObject {
+    func notification(identifier: String, userInfo: Any?)
+    func cellType() -> JYTableViewCell.Type
+    func height() -> CGFloat
+    func isDraggable() -> Bool
+    func shouldHighlight() -> Bool
+    func actionButtons() -> [JYTableViewCellAction]?
+    func didSelect()
+    
+    var signalBlock: (()->())? { get set }
+    var notificationBlock: ((ITableCellViewModel, String, Any?) -> Void)? { get set }
+    var cell: JYTableViewCell? { get set }
+}
+
+open class JYTableCellViewModel<T>: NSObject, ITableCellViewModel {
+    public var model: T {
         didSet {
             self.updateModel(self.model)
             self.signalBlock?()
@@ -32,18 +46,14 @@ open class JYTableCellViewModel: NSObject, ICellViewModel {
     
     public weak var cell: JYTableViewCell? = nil
     
-    public init(_ model: Any?) {
-        super.init()
+    public init(_ model: T) {
         self.model = model
+        super.init()
         self.updateModel(model)
     }
     
-    public convenience override init() {
-        self.init(nil)
-    }
-    
     public var signalBlock: (()->())? = nil
-    public var notificationBlock: ((JYTableCellViewModel, String, Any?) -> Void)? = nil
+    public var notificationBlock: ((ITableCellViewModel, String, Any?) -> Void)? = nil
     
     // MARK: Overrides
     
@@ -71,7 +81,47 @@ open class JYTableCellViewModel: NSObject, ICellViewModel {
         // do nothing
     }
     
-    open func updateModel(_ model: Any?) {
+    open func updateModel(_ model: T) {
+        // do nothing
+    }
+    
+    // MARK: publics
+    
+    public func notification(identifier: String, userInfo: Any? = nil) {
+        notificationBlock?(self, identifier, userInfo)
+    }
+}
+
+
+open class JYSimpleTableCellViewModel: NSObject, ITableCellViewModel {
+    public weak var cell: JYTableViewCell? = nil
+    
+    public var signalBlock: (()->())? = nil
+    public var notificationBlock: ((ITableCellViewModel, String, Any?) -> Void)? = nil
+    
+    // MARK: Overrides
+    
+    open func height() -> CGFloat {
+        return 0
+    }
+    
+    open func isDraggable() -> Bool {
+        return false
+    }
+        
+    open func shouldHighlight() -> Bool {
+        return true
+    }
+    
+    open func cellType() -> JYTableViewCell.Type {
+        return JYTableViewCell.self
+    }
+
+    open func actionButtons() -> [JYTableViewCellAction]? {
+        return nil
+    }
+
+    open func didSelect() {
         // do nothing
     }
     

@@ -9,8 +9,20 @@
 import Foundation
 import UIKit
 
-open class JYCollectionCellViewModel: NSObject, ICellViewModel {
-    public var model: Any? = nil {
+@objc public protocol ICollectionCellViewModel: AnyObject {
+    func notification(identifier: String, userInfo: Any?)
+    func cellType() -> JYCollectionViewCell.Type
+    func size() -> CGSize
+    func shouldHighlight() -> Bool
+    func didSelect()
+    
+    var signalBlock: (()->())? { get set }
+    var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? { get set }
+    var cell: JYCollectionViewCell? { get set }
+}
+
+open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
+    public var model: T {
         didSet {
             self.updateModel(self.model)
             self.signalBlock?()
@@ -19,18 +31,14 @@ open class JYCollectionCellViewModel: NSObject, ICellViewModel {
     
     public weak var cell: JYCollectionViewCell? = nil
     
-    public init(_ model: Any?) {
-        super.init()
+    public init(_ model: T) {
         self.model = model
+        super.init()
         self.updateModel(model)
     }
     
-    public convenience override init() {
-        self.init(nil)
-    }
-    
     public var signalBlock: (()->())? = nil
-    public var notificationBlock: ((JYCollectionCellViewModel, String, Any?) -> Void)? = nil
+    public var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? = nil
     
     open func size() -> CGSize {
         return CGSize(width: 50, height: 50)
@@ -44,19 +52,40 @@ open class JYCollectionCellViewModel: NSObject, ICellViewModel {
         return JYCollectionViewCell.self
     }
     
-    open func deletionTitle() -> String? {
-        return nil
-    }
-    
     open func didSelect() {
         // do nothing
     }
     
-    open func didDelete() {
+    open func updateModel(_ model: T) {
         // do nothing
     }
     
-    open func updateModel(_ model: Any?) {
+    // MARK: publics
+    
+    public func notification(identifier: String, userInfo: Any? = nil) {
+        notificationBlock?(self, identifier, userInfo)
+    }
+}
+
+open class JYSimpleCollectionCellViewModel: NSObject, ICollectionCellViewModel {
+    public weak var cell: JYCollectionViewCell? = nil
+    
+    public var signalBlock: (()->())? = nil
+    public var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? = nil
+    
+    open func size() -> CGSize {
+        return CGSize(width: 50, height: 50)
+    }
+    
+    open func shouldHighlight() -> Bool {
+        return true
+    }
+    
+    open func cellType() -> JYCollectionViewCell.Type {
+        return JYCollectionViewCell.self
+    }
+    
+    open func didSelect() {
         // do nothing
     }
     

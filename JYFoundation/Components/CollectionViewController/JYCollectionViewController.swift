@@ -28,17 +28,17 @@ open class JYCollectionViewController: UICollectionViewController, JYCollectionV
     
     // MARK: JYCollectionViewStaticDataSource
     
-    open func prepare(_: JYCollectionCellViewModel, for cell: JYCollectionViewCell) {
+    open func prepare(_: ICollectionCellViewModel, for cell: JYCollectionViewCell) {
         // do nothing
     }
     
-    open func retrieveData(_ collectionView: JYCollectionView) -> [JYCollectionCellViewModel] {
+    open func retrieveData(_ collectionView: JYCollectionView) -> [ICollectionCellViewModel] {
         return []
     }
     
     // MARK: JYCollectionViewDelegate
     
-    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: JYCollectionCellViewModel) {
+    open func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: ICollectionCellViewModel) {
         // do nothing
     }
 }

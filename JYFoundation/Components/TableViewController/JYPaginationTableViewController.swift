@@ -24,25 +24,25 @@ open class JYPaginationTableViewController: UITableViewController, JYTableViewDy
     
     // MARK: JYTableViewPanigationDataSource
     
-    open func prepare(_: JYTableCellViewModel, for cell: JYTableViewCell) {
+    open func prepare(_: ITableCellViewModel, for cell: JYTableViewCell) {
         // do nothing
     }
     
-    open func retrieveData(_ tableView: JYTableView, index: Int, itemsPerPage: Int) -> Promise<([JYTableCellViewModel], Bool)> {
+    open func retrieveData(_ tableView: JYTableView, index: Int, itemsPerPage: Int) -> Promise<([ITableCellViewModel], Bool)> {
         return Promise.value(([], true))
     }
     
-    public func spinnerCellViewModel(_ tableView: JYTableView) -> JYTableCellViewModel? {
+    public func spinnerCellViewModel(_ tableView: JYTableView) -> ITableCellViewModel? {
         self.spinnerCellViewModel(self)
     }
     
-    open func spinnerCellViewModel(_ controller: JYPaginationTableViewController) -> JYTableCellViewModel? {
+    open func spinnerCellViewModel(_ controller: JYPaginationTableViewController) -> ITableCellViewModel? {
         fatalError("Need to impletment spinnerCellViewModel(_ tableView: JYTableView)")
     }
     
     // MARK: JYTableViewDelegate
     
-    open func tableView(_ tableView: JYTableView, didSelect cellViewModel: JYTableCellViewModel) {
+    open func tableView(_ tableView: JYTableView, didSelect cellViewModel: ITableCellViewModel) {
         // do nothing
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 
 open class JYTableViewCell : UITableViewCell {
     
-    private(set) open var viewModel: JYTableCellViewModel! {
+    private(set) open var viewModel: ITableCellViewModel! {
         didSet {
             // update signalBlock
             viewModel.signalBlock = signal
@@ -29,7 +29,7 @@ open class JYTableViewCell : UITableViewCell {
         commonInit()
     }
     
-    open func updateViewModel(viewModel: JYTableCellViewModel) {
+    open func updateViewModel(viewModel: ITableCellViewModel) {
         self.viewModel = viewModel
     }
     

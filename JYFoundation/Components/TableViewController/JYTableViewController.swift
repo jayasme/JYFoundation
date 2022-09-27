@@ -24,17 +24,17 @@ open class JYTableViewController: UITableViewController, JYTableViewStaticDataSo
     
     // MARK: JYTableViewFixedDataSource
     
-    open func prepare(_: JYTableCellViewModel, for cell: JYTableViewCell) {
+    open func prepare(_: ITableCellViewModel, for cell: JYTableViewCell) {
         // do nothing
     }
     
-    open func retrieveData(_ tableView: JYTableView) -> [JYTableCellViewModel] {
+    open func retrieveData(_ tableView: JYTableView) -> [ITableCellViewModel] {
         return []
     }
     
     // MARK: JYTableViewDelegate
     
-    open func tableView(_ tableView: JYTableView, didSelect cellViewModel: JYTableCellViewModel) {
+    open func tableView(_ tableView: JYTableView, didSelect cellViewModel: ITableCellViewModel) {
         // do nothing
     }
 }

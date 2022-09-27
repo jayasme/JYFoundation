@@ -10,7 +10,7 @@ import UIKit
 
 open class JYCollectionViewCell : UICollectionViewCell {
     
-    private(set) open var viewModel: JYCollectionCellViewModel! {
+    private(set) open var viewModel: ICollectionCellViewModel! {
         didSet {
             // update signalBlock
             viewModel.signalBlock = signal
@@ -29,7 +29,7 @@ open class JYCollectionViewCell : UICollectionViewCell {
         commonInit()
     }
     
-    open func updateViewModel(viewModel: JYCollectionCellViewModel) {
+    open func updateViewModel(viewModel: ICollectionCellViewModel) {
         self.viewModel = viewModel
     }
     
