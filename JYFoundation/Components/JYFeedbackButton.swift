@@ -20,6 +20,8 @@ public class JYFeedbackButton: UIButton {
     
     public private(set) var feedbackType: FeedbackType = .none
     
+    private let animationKey = "JYFeedbackButton"
+    
     public var duration: TimeInterval = 0.2
     
     public convenience init(frame: CGRect = .zero, feedbackType: FeedbackType) {
@@ -62,8 +64,6 @@ public class JYFeedbackButton: UIButton {
     
     private var backView: UIView? = nil
     
-    private var animated: Bool = false
-    
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         self.animateIn()
@@ -79,90 +79,98 @@ public class JYFeedbackButton: UIButton {
         self.animateOut()
     }
     
+    private var animation: CABasicAnimation? = nil
+    
     private func animateIn() {
-        self.animated = true
+        self.stopAnimation()
         
         switch (self.feedbackType) {
         case .none:
             // do nothing
             break
         case let .opacity(value):
-            self.alpha = 1
-            UIView.animate(withDuration: self.duration,
-                           delay: 0,
-                           options: [.beginFromCurrentState, .curveEaseOut],
-                           animations: {
-                            self.alpha = value
-            }, completion: nil)
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = NSNumber(value: 1)
+            animation.toValue = NSNumber(value: value)
+            animation.duration = self.duration
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            self.layer.add(animation, forKey: animationKey)
+            self.animation = animation
             break
         case let .scale(value):
-            self.transform = CGAffineTransform(scaleX: 1, y: 1)
-            UIView.animate(withDuration: self.duration,
-                           delay: 0,
-                           usingSpringWithDamping: 0.8,
-                           initialSpringVelocity: 1,
-                           options: [.beginFromCurrentState, .curveEaseOut],
-                           animations: {
-                            self.transform = CGAffineTransform(scaleX: value, y: value)
-            }, completion: nil)
+            let animation = CABasicAnimation(keyPath: "transform.scale")
+            animation.fromValue = NSNumber(value: 1)
+            animation.toValue = NSNumber(value: value)
+            animation.duration = self.duration
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            self.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            self.layer.add(animation, forKey: animationKey)
+            self.animation = animation
             break
         case .highlight(_):
             guard let backView = self.backView else {
                 break
             }
-            backView.alpha = 0
-            UIView.animate(withDuration: self.duration,
-                           delay: 0,
-                           options: [.beginFromCurrentState, .curveEaseOut],
-                           animations: {
-                            backView.alpha = 1
-            }, completion: nil)
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = NSNumber(value: 0)
+            animation.toValue = NSNumber(value: 1)
+            animation.duration = self.duration
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            backView.layer.add(animation, forKey: animationKey)
+            self.animation = animation
             break
         }
     }
     
     private func animateOut() {
-        guard self.animated else {
-            return
-        }
+        self.stopAnimation()
         
-        self.animated = false
         switch (self.feedbackType) {
         case .none:
             // do nothing
             break
         case let .opacity(value):
-            self.alpha = value
-            UIView.animate(withDuration: self.duration,
-                           delay: 0,
-                           options: [.beginFromCurrentState, .curveEaseOut],
-                           animations: {
-                            self.alpha = 1
-            }, completion: nil)
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = NSNumber(value: value)
+            animation.toValue = NSNumber(value: 1)
+            animation.duration = self.duration
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            self.layer.add(animation, forKey: animationKey)
+            self.animation = animation
             break
         case let .scale(value):
-            self.transform = CGAffineTransform(scaleX: value, y: value)
-            UIView.animate(withDuration: self.duration,
-                           delay: 0,
-                           usingSpringWithDamping: 0.8,
-                           initialSpringVelocity: 1,
-                           options: [.beginFromCurrentState, .curveEaseOut],
-                           animations: {
-                            self.transform = CGAffineTransform(scaleX: 1, y: 1)
-            }, completion: nil)
+            let animation = CABasicAnimation(keyPath: "transform.scale")
+            animation.fromValue = NSNumber(value: value)
+            animation.toValue = NSNumber(value: 1)
+            animation.duration = self.duration
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            self.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            self.layer.add(animation, forKey: animationKey)
+            self.animation = animation
             break
         case .highlight(_):
             guard let backView = self.backView else {
                 break
             }
-            backView.alpha = 1
-            UIView.animate(withDuration: self.duration,
-                           delay: 0,
-                           options: [.beginFromCurrentState, .curveEaseOut],
-                           animations: {
-                            backView.alpha = 0
-            }, completion: nil)
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = NSNumber(value: 1)
+            animation.toValue = NSNumber(value: 0)
+            animation.duration = self.duration
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            backView.layer.add(animation, forKey: animationKey)
+            self.animation = animation
             break
         }
+    }
+    
+    private func stopAnimation() {
+        self.layer.removeAnimation(forKey: animationKey)
+        self.backView?.layer.removeAnimation(forKey: animationKey)
     }
 }

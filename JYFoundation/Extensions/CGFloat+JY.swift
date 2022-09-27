@@ -14,6 +14,10 @@ extension CGFloat {
         return CGFloat(drand48() * Double(range.upperBound - range.lowerBound)) + range.lowerBound
     }
     
+    public func zeroToNil() -> CGFloat? {
+        return self.isZero ? nil : self
+    }
+    
     // operator overrides
     
     public static func + (left: CGFloat, right: Int) -> CGFloat {

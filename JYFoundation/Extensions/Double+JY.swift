@@ -14,6 +14,10 @@ extension Double {
         return drand48() * Double(range.upperBound - range.lowerBound) + range.lowerBound
     }
     
+    public func zeroToNil() -> Double? {
+        return self.isZero ? nil : self
+    }
+    
     // operator overrides
     
     public static func + (left: Double, right: Int) -> Double {

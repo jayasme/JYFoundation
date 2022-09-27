@@ -14,6 +14,10 @@ extension Int {
         return Int(drand48() * Double(range.upperBound - range.lowerBound)) + range.lowerBound
     }
     
+    public func zeroToNil() -> Int? {
+        return self == 0 ? nil : self
+    }
+    
     // operator overrides
     
     public static func + (left: Int, right: CGFloat) -> CGFloat {
