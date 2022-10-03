@@ -66,7 +66,7 @@ open class JYTableCellViewModel<T>: NSObject, ITableCellViewModel {
     }
         
     open func shouldHighlight() -> Bool {
-        return true
+        return false
     }
     
     open func cellType() -> JYTableViewCell.Type {

@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     
-    public static func hexColor(_ hex: UInt64) -> UIColor {
+    public static func hexColor(_ hex: UInt32) -> UIColor {
         var r: UInt8 = 0
         var g: UInt8 = 0
         var b: UInt8 = 0
@@ -27,5 +27,12 @@ extension UIColor {
         b = UInt8(hex & 0xff)
         
         return UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: CGFloat(a) / 255.0)
+    }
+}
+
+extension CGColor {
+    
+    public static func hexColor(_ hex: UInt32) -> CGColor {
+        return UIColor.hexColor(hex).cgColor
     }
 }

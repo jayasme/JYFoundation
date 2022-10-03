@@ -238,7 +238,10 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
                 NotificationCenter.default.post(
                     name: NSNotification.Name.JYAddressUpdate,
                     object: nil,
-                    userInfo: ["address": address]
+                    userInfo: [
+                        "address": address,
+                        "location": location
+                    ]
                 )
             }
         }
