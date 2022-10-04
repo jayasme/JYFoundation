@@ -34,15 +34,17 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     }
     
     public struct Address {
-        public init(countryISO2: String, city: String, address: String, location: Location?) {
-            self.countryISO2 = countryISO2
+        public init(iso2: String, prov: String, city: String, address: String, location: Location?) {
+            self.iso2 = iso2
+            self.prov = prov
             self.city = city
             self.address = address
             self.location = location
         }
         
-        public var countryISO2: String!
+        public var iso2: String!
         public var city: String!
+        public var prov: String!
         public var address: String!
         public var location: Location?
     }

@@ -10,15 +10,15 @@ import UIKit
 
 extension String {
     
-    public func jy_emptyToNil() -> String? {
+    public func emptyToNil() -> String? {
         return self == "" ? nil : self
     }
     
-    public func jy_blankToNil() -> String? {
+    public func blankToNil() -> String? {
         return self.trimmingCharacters(in: .whitespacesAndNewlines) == "" ? nil : self
     }
     
-    public func jy_rangeAll(of string: String) -> [String.Index] {
+    public func rangeAll(of string: String) -> [String.Index] {
         var results: [String.Index] = []
         var index: String.Index? = startIndex
         repeat {
@@ -33,11 +33,11 @@ extension String {
         return results
     }
     
-    public func jy_toBase64() -> String {
+    public func toBase64() -> String {
         return Data(self.utf8).base64EncodedString()
     }
     
-    public func jy_fromBase64() -> String? {
+    public func fromBase64() -> String? {
         guard let data = Data(base64Encoded: self) else {
             return nil
         }
@@ -45,7 +45,7 @@ extension String {
         return String(data: data, encoding: .utf8)
     }
     
-    public func jy_substring(start: Int, length: Int? = nil) -> String {
+    public func substring(start: Int, length: Int? = nil) -> String {
         let startIndex = self.index(self.startIndex, offsetBy: start)
         if let length = length {
             let endIndex = self.index(startIndex, offsetBy: length)
@@ -54,7 +54,7 @@ extension String {
         return String(self[startIndex...])
     }
     
-    public func jy_sha1() -> String {
+    public func sha1() -> String {
         guard let sourceData = data(using: .utf8) else {
             return ""
         }

@@ -10,14 +10,6 @@ import UIKit
 
 extension UIFont {
     
-    public static func jy_lightSystemFont(ofSize size: CGFloat) -> UIFont {
-        if #available(iOS 8.2, *) {
-            return UIFont.systemFont(ofSize: size, weight: .light)
-        } else {
-            return UIFont.systemFont(ofSize: size)
-        }
-    }
-    
     public func with(_ traits: UIFontDescriptor.SymbolicTraits...) -> UIFont {
       guard let descriptor = self.fontDescriptor.withSymbolicTraits(UIFontDescriptor.SymbolicTraits(traits)
                              .union(self.fontDescriptor.symbolicTraits)) else {

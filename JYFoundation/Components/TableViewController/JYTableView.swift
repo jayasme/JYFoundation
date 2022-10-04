@@ -553,6 +553,9 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     public var draggingEnabled: Bool = false {
         didSet {
             if (self.draggingEnabled) {
+                guard self.longPressGesture == nil else {
+                    return
+                }
                 let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
                 self.addGestureRecognizer(gesture)
                 self.longPressGesture = gesture
@@ -582,11 +585,11 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         
         if (gesture.state == .began) {
             
-            guard let index = self.indexPathForRow(at: point)?.item,
-                  let cellViewModel = self.cellViewModels[index] as? ITableCellViewModel,
-                  cellViewModel.isDraggable(),
-                  let cell = cellViewModel.cell as? JYTableViewCell
-            else {
+            guard let index = self.indexPathForRow(at: point)?.item else {
+                return
+            }
+            let cellViewModel = self.cellViewModels[index]
+            guard cellViewModel.isDraggable(), let cell = cellViewModel.cell else {
                 return
             }
             
