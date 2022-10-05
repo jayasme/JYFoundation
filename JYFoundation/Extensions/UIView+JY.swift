@@ -108,4 +108,15 @@ extension UIView {
         }
     }
     
+    public func findSubView(where predicate: (UIView) -> Bool) -> UIView? {
+        if let view = self.subviews.first(where: predicate) {
+            return view
+        }
+        for subView in self.subviews {
+            if let view = subView.findSubView(where: predicate) {
+                return view
+            }
+        }
+        return nil
+    }
 }
