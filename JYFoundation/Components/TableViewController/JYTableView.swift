@@ -631,7 +631,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             guard let draggingView = self.draggingView,
                   let draggingIndex = self.draggingIndex,
                   let draggingViewModel = self.draggingViewModel,
-                  let index = self.indexPathForRow(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y))?.item
+                  let index = self.indexPathForRow(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item
             else {
                 return
             }
@@ -664,7 +664,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             
             guard let firstVisibleViewModel = self.visibleCellViewModels().first,
                   let firstVisibleIndex = self.index(of: firstVisibleViewModel),
-                  let index = self.indexPathForRow(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y))?.item,
+                  let index = self.indexPathForRow(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
                   index != draggingIndex,
                   self.cellViewModels[index].isDraggable()
             else {
@@ -683,8 +683,15 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
                   let draggingIndex = self.draggingIndex,
                   let startDraggingIndex = self.startDraggingIndex,
                   let cell = self.cellForRow(at: IndexPath(item: draggingIndex, section: 0)),
-                  let index = self.indexPathForRow(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y))?.item
+                  let index = self.indexPathForRow(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item
             else {
+                self.reloadData()
+                self.draggingView?.removeFromSuperview()
+                self.draggingView = nil
+                self.draggingIndex = nil
+                self.draggingAutoScrollDirection = nil
+                self.startOrStopAutoScroll()
+                self.isScrollEnabled = true
                 return
             }
             
