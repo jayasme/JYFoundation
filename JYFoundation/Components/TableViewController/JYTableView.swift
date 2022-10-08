@@ -584,6 +584,12 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     private var isDraggingRemove: Bool = false
     private var isDraggingRemoving: Bool = false
     
+    public override var isDragging: Bool {
+        get {
+            return self.draggingViewModel != nil
+        }
+    }
+    
     @objc private func handleLongPress(gesture: UILongPressGestureRecognizer) {
         guard gesture.numberOfTouches == 1 else {
             return
@@ -630,8 +636,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             
             guard let draggingView = self.draggingView,
                   let draggingIndex = self.draggingIndex,
-                  let draggingViewModel = self.draggingViewModel,
-                  let index = self.indexPathForRow(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item
+                  let draggingViewModel = self.draggingViewModel
             else {
                 return
             }
@@ -681,9 +686,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             guard let draggingView = self.draggingView,
                   let draggingViewModel = self.draggingViewModel,
                   let draggingIndex = self.draggingIndex,
-                  let startDraggingIndex = self.startDraggingIndex,
-                  let cell = self.cellForRow(at: IndexPath(item: draggingIndex, section: 0)),
-                  let index = self.indexPathForRow(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item
+                  let startDraggingIndex = self.startDraggingIndex
             else {
                 self.reloadData()
                 self.draggingView?.removeFromSuperview()
@@ -727,7 +730,10 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
                     }
                 )
                 
-            } else {
+            } else if
+                let index = self.indexPathForRow(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
+                let cell = self.cellForRow(at: IndexPath(item: draggingIndex, section: 0)) {
+                
                 self.jyDraggingDelegate?.draggingSorted?(
                     self,
                     draggingViewModel: draggingViewModel,
