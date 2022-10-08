@@ -9,6 +9,7 @@
 import Foundation
 import CoreLocation
 import PromiseKit
+import UIKit
 
 extension Notification.Name {
     
@@ -34,19 +35,21 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     }
     
     public struct Address {
-        public init(iso2: String, prov: String, city: String, address: String, location: Location?) {
+        public init(iso2: String, prov: String, city: String, subLocality: String, address: String, postalCode: String?) {
             self.iso2 = iso2
             self.prov = prov
             self.city = city
+            self.subLocality = subLocality
             self.address = address
-            self.location = location
+            self.postalCode = postalCode
         }
         
-        public var iso2: String!
-        public var city: String!
-        public var prov: String!
-        public var address: String!
-        public var location: Location?
+        public var iso2: String
+        public var prov: String
+        public var city: String
+        public var subLocality: String
+        public var address: String
+        public var postalCode: String?
     }
     
     public struct Location {
@@ -64,38 +67,32 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    public private(set) var location: Location? = nil
+    public private(set) var location: Location? = nil {
+        didSet {
+            self.refreshAddress()
+        }
+    }
     public private(set) var address: Address? = nil
     public private(set) var heading: CGFloat? = nil
     public private(set) var isStarted: Bool = false
     
-    public var addressService: BaseAddressService? = nil
-    
-    public var addressRefreshInterval: TimeInterval = 10.0 {
+    public var addressService: BaseAddressService? = nil {
         didSet {
-            if addressService != nil && isStarted {
-                self.setupTimer()
-            } else {
-                self.killTimer()
-            }
+            self.refreshAddress()
         }
     }
     
     public static let shared: JYLocationService! = JYLocationService()
     
     private var manager: CLLocationManager = CLLocationManager()
-    private var timer: Timer? = nil
-    private var operationQueue: OperationQueue = OperationQueue()
     
     public override init() {
         super.init()
         
         self.manager.delegate = self
-        self.operationQueue.maxConcurrentOperationCount = 1
     }
     
     deinit {
-        self.killTimer()
     }
     
     public func start() {
@@ -108,7 +105,6 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     public func stop() {
         self.manager.stopUpdatingHeading()
         self.manager.stopUpdatingHeading()
-        killTimer()
         self.isStarted = false
     }
     
@@ -191,63 +187,48 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
             object: nil,
             userInfo: ["location": location]
         )
-            
-        self.setupTimer()
     }
     
-    func killTimer() {
-        guard let timer = timer else {
-            return
-        }
-
-        timer.invalidate()
-        self.timer = nil
-    }
+    private var errorAttemps: Int = 0
+    private var addressPromise: Promise<Void>? = nil
     
-    func setupTimer() {
-        self.killTimer()
-        
-        guard self.addressService != nil, self.addressRefreshInterval > 0 else {
-            return
-        }
-        
-        self.timer = Timer.scheduledTimer(
-            timeInterval: self.addressRefreshInterval,
-            target: self,
-            selector: #selector(refreshAddress),
-            userInfo: nil,
-            repeats: true
-        )
-        self.timer?.fire()
-    }
-    
-    @objc func refreshAddress() {
+    func refreshAddress() -> Promise<Void> {
         guard let addressService = self.addressService,
               let location = self.location
         else {
-            return
+            return Promise<Void>.value(())
         }
-        
-        let operation = BlockOperation {[weak self] in
+
+        return firstly {
+            addressService.getAddressByLocation(location: location)
+        }.done {[weak self] address in
             guard let self = self else {
                 return
             }
-            _ = addressService.getAddressByLocation(location: location).done {[weak self] address in
-                guard let self = self, let address = address else {
-                    return
-                }
-                self.address = address
-                NotificationCenter.default.post(
-                    name: NSNotification.Name.JYAddressUpdate,
-                    object: nil,
-                    userInfo: [
-                        "address": address,
-                        "location": location
-                    ]
-                )
+            self.errorAttemps = 0
+            self.address = address
+            NotificationCenter.default.post(
+                name: NSNotification.Name.JYAddressUpdate,
+                object: nil,
+                userInfo: [
+                    "address": address,
+                    "location": location
+                ]
+            )
+        }.recover {[weak self] error -> Promise<Void> in
+            guard let self = self,
+                  location.longtitude == self.location?.longtitude && location.latitude == self.location?.latitude
+            else {
+                return Promise.value(())
+            }
+            self.errorAttemps += 1
+            let time = addressService.getRefreshDelay(errorAttemps: self.errorAttemps, error: error)
+            return firstly {
+                after(seconds: time)
+            }.then {
+                self.refreshAddress()
             }
         }
-        self.operationQueue.addOperation(operation)
     }
     
     open class BaseAddressService {
@@ -255,8 +236,12 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         public init() { }
         
         @discardableResult
-        open func getAddressByLocation(location: JYLocationService.Location) -> Promise<JYLocationService.Address?> {
-            return Promise.value(nil)
+        open func getAddressByLocation(location: JYLocationService.Location) -> Promise<JYLocationService.Address> {
+            fatalError("Needs to be implemented")
+        }
+        
+        open func getRefreshDelay(errorAttemps: Int, error: Error) -> TimeInterval {
+            return min(errorAttemps * 5, 60)
         }
     }
 
