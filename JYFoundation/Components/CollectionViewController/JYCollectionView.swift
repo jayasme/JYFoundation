@@ -251,14 +251,14 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
                 seal.fulfill(())
             }
         } else if type == .static {
-            if clearPreviousData {
-                _viewModels.removeAll()
-            }
-            
             return retrieveDataPromise()
             .then { [weak self] newViewModels -> Promise<Void> in
                 guard let strongSelf = self else {
                     return Promise.value(())
+                }
+                
+                if clearPreviousData {
+                    strongSelf._viewModels.removeAll()
                 }
                 
                 for viewModel in newViewModels {

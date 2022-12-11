@@ -291,14 +291,14 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
                 seal.fulfill(())
             }
         } else if type == .static {
-            if clearPreviousData {
-                _viewModels.removeAll()
-            }
-            
             return retrieveDataPromise()
             .map { [weak self] newViewModels -> Void in
                 guard let strongSelf = self else{
                     return
+                }
+                
+                if clearPreviousData {
+                    strongSelf._viewModels.removeAll()
                 }
                 
                 for viewModel in newViewModels {
