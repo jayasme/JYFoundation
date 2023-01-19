@@ -71,6 +71,7 @@
 		B967BA62277FE64F00926B9C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B967BA61277FE64F00926B9C /* Podfile */; };
 		B969A8AC27E8B09600F8980B /* JYConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969A8AB27E8B09600F8980B /* JYConfigManager.swift */; };
 		B969A8AE27F5C19A00F8980B /* CGPoint+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */; };
+		B9836186297904EF00F26960 /* JYTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836185297904EF00F26960 /* JYTheme.swift */; };
 		B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */; };
 		B9A66FF928BD24EC00B360E1 /* JYLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */; };
 		B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DD4E5628419AF50086CBDA /* JYGradientView.swift */; };
@@ -149,6 +150,7 @@
 		B967BA61277FE64F00926B9C /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B969A8AB27E8B09600F8980B /* JYConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYConfigManager.swift; sourceTree = "<group>"; };
 		B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+JY.swift"; sourceTree = "<group>"; };
+		B9836185297904EF00F26960 /* JYTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYTheme.swift; sourceTree = "<group>"; };
 		B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYFeedbackButton.swift; sourceTree = "<group>"; };
 		B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYLocationService.swift; sourceTree = "<group>"; };
 		B9DD4E5628419AF50086CBDA /* JYGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGradientView.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				B9E6B67927B0FCE800C47285 /* JYGestureView.swift */,
 				B9DD4E5628419AF50086CBDA /* JYGradientView.swift */,
 				B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */,
+				B9836185297904EF00F26960 /* JYTheme.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -525,6 +528,7 @@
 				1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */,
 				1D3891F6208AF6370005C175 /* AuthServiceBase.swift in Sources */,
 				1D389219208AF9B40005C175 /* NSObject+JY.swift in Sources */,
+				B9836186297904EF00F26960 /* JYTheme.swift in Sources */,
 				1D38920E208AF9B40005C175 /* UIFont+JY.swift in Sources */,
 				1D00E4E12096BBE900450247 /* JYTableCellViewModel.swift in Sources */,
 				1D38921F208AF9B40005C175 /* UIView+JY.swift in Sources */,
