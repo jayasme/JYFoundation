@@ -192,6 +192,7 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     private var errorAttemps: Int = 0
     private var addressPromise: Promise<Void>? = nil
     
+    @discardableResult
     func refreshAddress() -> Promise<Void> {
         guard let addressService = self.addressService,
               let location = self.location
