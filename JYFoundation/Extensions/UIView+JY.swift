@@ -25,6 +25,12 @@ extension UIView {
         }
     }
     
+    public var jy: JY {
+        get {
+            return JY(view: self)
+        }
+    }
+    
     /// Get or set visibility of the view.
     public var isVisible: Bool {
         get {
@@ -35,7 +41,7 @@ extension UIView {
         }
     }
     
-    /// Find the view mathces the predicate.
+    /// Find the view mathces the condition.
     public func findSubView(where predicate: (UIView) -> Bool) -> UIView? {
         if let view = self.subviews.first(where: predicate) {
             return view
@@ -48,9 +54,16 @@ extension UIView {
         return nil
     }
     
-    public var jy: JY {
-        get {
-            return JY(view: self)
+    /// Get the root view of the view. if the view is already a root view, returns itself
+    public var rootView: UIView {
+        var rootView: UIView = self
+        while(true) {
+            if let superView = self.superview {
+                rootView = superView
+            } else {
+                break
+            }
         }
+        return rootView
     }
 }

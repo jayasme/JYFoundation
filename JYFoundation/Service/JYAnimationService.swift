@@ -14,7 +14,15 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
     private var animationMap: [String: ((Bool)->Void)] = [:]
     
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        
+        guard let animation = anim as? CABasicAnimation, let keyPath = animation.keyPath else {
+            return
+        }
+        if let callback = animationMap[keyPath] {
+            callback(flag)
+        }
+        if (self.animationMap[keyPath] != nil) {
+            self.animationMap.removeValue(forKey: keyPath)
+        }
     }
     
     private var view: UIView
@@ -23,7 +31,7 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         self.view = view
     }
     
-    public func animate(from: CGFloat, to: CGFloat, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
+    public func animate(from: CGFloat, to: CGFloat, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         
         let animationKey = "JYAnimationService."  + keyPath
         let animation = CABasicAnimation(keyPath: keyPath)
@@ -44,30 +52,33 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         animation.delegate = self
         self.view.layer.add(animation, forKey: animationKey)
         
-        
+        if (self.animationMap[animationKey] != nil) {
+            self.animationMap.removeValue(forKey: animationKey)
+        }
+        self.animationMap[animationKey] = onComplete
     }
     
-    public func popIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
+    public func popIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: 0, to: 1, keyPath: "transform.scale", duration: duration, delay: delay, timingFunction: .easeOutCubic)
     }
     
-    public func popOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
+    public func popOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: 1, to: 0, keyPath: "transform.scale", duration: duration, delay: delay, timingFunction: .easeInCubic)
     }
     
-    public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
+    public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: from, to: to, keyPath: "transform.tranlation.x", duration: duration, delay: delay, timingFunction: .easeOutCubic)
     }
     
-    public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
+    public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: from, to: to, keyPath: "transform.tranlation.y", duration: duration, delay: delay, timingFunction: .easeInCubic)
     }
     
-    public func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
+    public func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: 0, to: 1, keyPath: "opacity", duration: duration, delay: delay)
     }
     
-    public func fadeOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
+    public func fadeOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: 1, to: 0, keyPath: "opacity", duration: duration, delay: delay)
     }
 }
@@ -81,7 +92,7 @@ extension CAMediaTimingFunction {
     public static let easeInOutSine: CAMediaTimingFunction = .init(controlPoints: 0.37, 0, 0.63, 1)
     
     // ease quad
-    public static let  easeInQuad: CAMediaTimingFunction = .init(controlPoints: 0.11, 0, 0.5, 0)
+    public static let easeInQuad: CAMediaTimingFunction = .init(controlPoints: 0.11, 0, 0.5, 0)
     public static let easeOutQuad: CAMediaTimingFunction = .init(controlPoints: 0.5, 1, 0.89, 1)
     public static let easeInOutQuad: CAMediaTimingFunction = .init(controlPoints: 0.45, 0, 0.55, 1)
     
