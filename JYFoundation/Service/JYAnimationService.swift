@@ -9,7 +9,13 @@
 import Foundation
 import UIKit
 
-public class JYAnimationService {
+public class JYAnimationService: NSObject, CAAnimationDelegate {
+    
+    private var animationMap: [String: ((Bool)->Void)] = [:]
+    
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        
+    }
     
     private var view: UIView
     
@@ -17,7 +23,7 @@ public class JYAnimationService {
         self.view = view
     }
     
-    func animate(from: CGFloat, to: CGFloat, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil) {
+    public func animate(from: CGFloat, to: CGFloat, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
         
         let animationKey = "JYAnimationService."  + keyPath
         let animation = CABasicAnimation(keyPath: keyPath)
@@ -35,30 +41,33 @@ public class JYAnimationService {
         animation.fillMode = .forwards
         animation.timingFunction = timingFunction
         animation.isRemovedOnCompletion = false
+        animation.delegate = self
         self.view.layer.add(animation, forKey: animationKey)
+        
+        
     }
     
-    func popIn(duration: TimeInterval, delay: TimeInterval? = nil) {
+    public func popIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
         self.animate(from: 0, to: 1, keyPath: "transform.scale", duration: duration, delay: delay, timingFunction: .easeOutCubic)
     }
     
-    func popOut(duration: TimeInterval, delay: TimeInterval? = nil) {
+    public func popOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
         self.animate(from: 1, to: 0, keyPath: "transform.scale", duration: duration, delay: delay, timingFunction: .easeInCubic)
     }
     
-    func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil) {
+    public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
         self.animate(from: from, to: to, keyPath: "transform.tranlation.x", duration: duration, delay: delay, timingFunction: .easeOutCubic)
     }
     
-    func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil) {
+    public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
         self.animate(from: from, to: to, keyPath: "transform.tranlation.y", duration: duration, delay: delay, timingFunction: .easeInCubic)
     }
     
-    func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil) {
+    public func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
         self.animate(from: 0, to: 1, keyPath: "opacity", duration: duration, delay: delay)
     }
     
-    func fadeOut(duration: TimeInterval, delay: TimeInterval? = nil) {
+    public func fadeOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ finished: Bool) -> Void)? = nil) {
         self.animate(from: 1, to: 0, keyPath: "opacity", duration: duration, delay: delay)
     }
 }

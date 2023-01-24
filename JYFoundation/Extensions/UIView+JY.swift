@@ -18,7 +18,7 @@ extension UIView {
             self.view = view
         }
         
-        var animation: JYAnimationService {
+        public var animation: JYAnimationService {
             get {
                 return JYAnimationService(view: self.view)
             }
