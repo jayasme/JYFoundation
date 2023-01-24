@@ -10,7 +10,7 @@ import UIKit
 import PromiseKit
 
 extension UIView {
-    
+
     public class JY {
         private let view: UIView
         
