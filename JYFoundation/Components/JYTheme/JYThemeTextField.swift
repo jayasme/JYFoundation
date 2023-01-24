@@ -24,8 +24,8 @@ open class JYThemeTextField: UITextField, JYThemeful {
     }
     
     func applyTheme() {
-        self.backgroundColor = self.styleSheet?.background?.style(by: self.themes).first
-        self.textColor = self.styleSheet?.foreground?.style(by: self.themes).first
+        self.backgroundColor = self.styleSheet?.background?.style(by: self.themes).first ?? .clear
+        self.textColor = self.styleSheet?.foreground?.style(by: self.themes).first ?? .clear
         self.font = self.styleSheet?.font?.style(by: self.themes).first
     }
 }

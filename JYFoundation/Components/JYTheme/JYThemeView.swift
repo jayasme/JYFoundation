@@ -24,19 +24,20 @@ open class JYThemeView: UIView, JYThemeful {
     }
     
     func applyTheme() {
-        self.backgroundColor = self.styleSheet?.background?.style(by: self.themes).first
+        self.backgroundColor = self.styleSheet?.background?.style(by: self.themes).first ?? .clear
     }
     
     func passthroughThemes() {
         for subview in self.subviews {
             guard let subview = subview as? JYThemeful else {
-                return
+                break
             }
             subview.themes = self.themes
         }
     }
     
     override open func addSubview(_ view: UIView) {
+        super.addSubview(view)
         guard let view = view as? JYThemeful else {
             return
         }
