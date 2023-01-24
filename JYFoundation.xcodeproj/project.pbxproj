@@ -22,9 +22,9 @@
 		1D00E4EB2096E8A400450247 /* JYCollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4EA2096E8A400450247 /* JYCollectionCellViewModel.swift */; };
 		1D00E4ED2097018B00450247 /* JYCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4EC2097018B00450247 /* JYCollectionViewController.swift */; };
 		1D00E4EF2097019A00450247 /* JYPaginationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4EE2097019A00450247 /* JYPaginationCollectionViewController.swift */; };
-		1D3891F5208AF6370005C175 /* AlbumAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F1208AF6360005C175 /* AlbumAuthService.swift */; };
-		1D3891F6208AF6370005C175 /* AuthServiceBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F2208AF6360005C175 /* AuthServiceBase.swift */; };
-		1D3891F7208AF6370005C175 /* CameraAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F3208AF6360005C175 /* CameraAuthService.swift */; };
+		1D3891F5208AF6370005C175 /* JYAlbumAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F1208AF6360005C175 /* JYAlbumAuthService.swift */; };
+		1D3891F6208AF6370005C175 /* JYAuthServiceBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F2208AF6360005C175 /* JYAuthServiceBase.swift */; };
+		1D3891F7208AF6370005C175 /* JYCameraAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F3208AF6360005C175 /* JYCameraAuthService.swift */; };
 		1D3891F8208AF6370005C175 /* MicrophoneAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F4208AF6370005C175 /* MicrophoneAuthService.swift */; };
 		1D38920D208AF9B40005C175 /* UIImage+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891FA208AF9B30005C175 /* UIImage+JY.swift */; };
 		1D38920E208AF9B40005C175 /* UIFont+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891FB208AF9B30005C175 /* UIFont+JY.swift */; };
@@ -77,6 +77,7 @@
 		B9836197297E7C2B00F26960 /* JYThemeful.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836196297E7C2B00F26960 /* JYThemeful.swift */; };
 		B9836199297E7C5700F26960 /* JYThemeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836198297E7C5700F26960 /* JYThemeTextView.swift */; };
 		B983619B297E7C6900F26960 /* JYThemeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983619A297E7C6900F26960 /* JYThemeTextField.swift */; };
+		B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98361A1297ECDE900F26960 /* JYAnimationService.swift */; };
 		B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */; };
 		B9A66FF928BD24EC00B360E1 /* JYLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */; };
 		B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DD4E5628419AF50086CBDA /* JYGradientView.swift */; };
@@ -102,9 +103,9 @@
 		1D00E4EC2097018B00450247 /* JYCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYCollectionViewController.swift; sourceTree = "<group>"; };
 		1D00E4EE2097019A00450247 /* JYPaginationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYPaginationCollectionViewController.swift; sourceTree = "<group>"; };
 		1D3891F0208AC8950005C175 /* JYFoundation-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JYFoundation-Bridging-Header.h"; sourceTree = "<group>"; };
-		1D3891F1208AF6360005C175 /* AlbumAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumAuthService.swift; sourceTree = "<group>"; };
-		1D3891F2208AF6360005C175 /* AuthServiceBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthServiceBase.swift; sourceTree = "<group>"; };
-		1D3891F3208AF6360005C175 /* CameraAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraAuthService.swift; sourceTree = "<group>"; };
+		1D3891F1208AF6360005C175 /* JYAlbumAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYAlbumAuthService.swift; sourceTree = "<group>"; };
+		1D3891F2208AF6360005C175 /* JYAuthServiceBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYAuthServiceBase.swift; sourceTree = "<group>"; };
+		1D3891F3208AF6360005C175 /* JYCameraAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYCameraAuthService.swift; sourceTree = "<group>"; };
 		1D3891F4208AF6370005C175 /* MicrophoneAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrophoneAuthService.swift; sourceTree = "<group>"; };
 		1D3891FA208AF9B30005C175 /* UIImage+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+JY.swift"; sourceTree = "<group>"; };
 		1D3891FB208AF9B30005C175 /* UIFont+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+JY.swift"; sourceTree = "<group>"; };
@@ -161,6 +162,7 @@
 		B9836196297E7C2B00F26960 /* JYThemeful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeful.swift; sourceTree = "<group>"; };
 		B9836198297E7C5700F26960 /* JYThemeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeTextView.swift; sourceTree = "<group>"; };
 		B983619A297E7C6900F26960 /* JYThemeTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeTextField.swift; sourceTree = "<group>"; };
+		B98361A1297ECDE900F26960 /* JYAnimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYAnimationService.swift; sourceTree = "<group>"; };
 		B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYFeedbackButton.swift; sourceTree = "<group>"; };
 		B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYLocationService.swift; sourceTree = "<group>"; };
 		B9DD4E5628419AF50086CBDA /* JYGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGradientView.swift; sourceTree = "<group>"; };
@@ -264,7 +266,7 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
-		1D389239208B094E0005C175 /* Networking */ = {
+		1D389239208B094E0005C175 /* JYNetworking */ = {
 			isa = PBXGroup;
 			children = (
 				1D38923A208B09650005C175 /* JYHttpClient.swift */,
@@ -273,7 +275,7 @@
 				1D00E4B520932A8700450247 /* JYHttpModel.swift */,
 				1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */,
 			);
-			path = Networking;
+			path = JYNetworking;
 			sourceTree = "<group>";
 		};
 		1D389267208B53DB0005C175 /* Components */ = {
@@ -330,24 +332,25 @@
 		1D8B859D2084B7B6003EDE8A /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				1D8B85A92084B7DD003EDE8A /* AuthorizationService */,
+				1D8B85A92084B7DD003EDE8A /* JYAuthorizationService */,
 				B969A8AB27E8B09600F8980B /* JYConfigManager.swift */,
 				B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */,
-				1D389239208B094E0005C175 /* Networking */,
+				1D389239208B094E0005C175 /* JYNetworking */,
+				B98361A1297ECDE900F26960 /* JYAnimationService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
 		};
-		1D8B85A92084B7DD003EDE8A /* AuthorizationService */ = {
+		1D8B85A92084B7DD003EDE8A /* JYAuthorizationService */ = {
 			isa = PBXGroup;
 			children = (
-				1D3891F1208AF6360005C175 /* AlbumAuthService.swift */,
-				1D3891F2208AF6360005C175 /* AuthServiceBase.swift */,
-				1D3891F3208AF6360005C175 /* CameraAuthService.swift */,
+				1D3891F1208AF6360005C175 /* JYAlbumAuthService.swift */,
+				1D3891F2208AF6360005C175 /* JYAuthServiceBase.swift */,
+				1D3891F3208AF6360005C175 /* JYCameraAuthService.swift */,
 				1D3891F4208AF6370005C175 /* MicrophoneAuthService.swift */,
 				1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */,
 			);
-			path = AuthorizationService;
+			path = JYAuthorizationService;
 			sourceTree = "<group>";
 		};
 		4BF4AE267683209EB022E4D2 /* Pods */ = {
@@ -544,7 +547,8 @@
 				1D38921C208AF9B40005C175 /* Calendar+JY.swift in Sources */,
 				B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */,
 				B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */,
-				1D3891F5208AF6370005C175 /* AlbumAuthService.swift in Sources */,
+				B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */,
+				1D3891F5208AF6370005C175 /* JYAlbumAuthService.swift in Sources */,
 				B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */,
 				B9836191297E79CE00F26960 /* JYThemeView.swift in Sources */,
 				1D38921D208AF9B40005C175 /* TimeInterval+JY.swift in Sources */,
@@ -553,9 +557,9 @@
 				1D389217208AF9B40005C175 /* UISearchBar+JY.swift in Sources */,
 				B969A8AE27F5C19A00F8980B /* CGPoint+JY.swift in Sources */,
 				1D00E4EB2096E8A400450247 /* JYCollectionCellViewModel.swift in Sources */,
-				1D3891F7208AF6370005C175 /* CameraAuthService.swift in Sources */,
+				1D3891F7208AF6370005C175 /* JYCameraAuthService.swift in Sources */,
 				1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */,
-				1D3891F6208AF6370005C175 /* AuthServiceBase.swift in Sources */,
+				1D3891F6208AF6370005C175 /* JYAuthServiceBase.swift in Sources */,
 				1D389219208AF9B40005C175 /* NSObject+JY.swift in Sources */,
 				1D38920E208AF9B40005C175 /* UIFont+JY.swift in Sources */,
 				1D00E4E12096BBE900450247 /* JYTableCellViewModel.swift in Sources */,

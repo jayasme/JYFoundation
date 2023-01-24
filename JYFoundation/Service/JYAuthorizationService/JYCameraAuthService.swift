@@ -1,8 +1,8 @@
 //
-//  MicrophoneAuthService.swift
+//  JYCameraAuthService.swift
 //  JYFoundation
 //
-//  Created by Scott Rong on 2017/4/29.
+//  Created by Scott Rong on 2017/4/30.
 //  Copyright © 2018年 jayasme All rights reserved.
 //
 
@@ -11,32 +11,32 @@ import AVFoundation
 import PromiseKit
 
 
-public class MicrophoneAuthService: AuthServiceBase {
+public class JYCameraAuthService: JYAuthServiceBase {
     
-    public static var shared: MicrophoneAuthService = MicrophoneAuthService()
+    public static var shared: JYCameraAuthService = JYCameraAuthService()
     
-    public override func authState() -> Promise<AuthState> {
-        return Promise<AuthState> { seal in
-            let state = AVCaptureDevice.authorizationStatus(for: .audio)
+    public override func authState() -> Promise<JYAuthState> {
+        return Promise<JYAuthState> { seal in
+            let state = AVCaptureDevice.authorizationStatus(for: .video)
             switch (state) {
             case .notDetermined:
-                seal.fulfill(AuthState.notDetermined)
+                seal.fulfill(JYAuthState.notDetermined)
             case .restricted:
                 fallthrough
             case .denied:
-                seal.fulfill(AuthState.denined)
+                seal.fulfill(JYAuthState.denined)
             case .authorized:
-                seal.fulfill(AuthState.allowed)
+                seal.fulfill(JYAuthState.allowed)
             @unknown default:
                 fatalError()
             }
         }
     }
     
-    public override func requestAuth() -> Promise<AuthState> {
-        return Promise<AuthState> { seal in
-            AVCaptureDevice.requestAccess(for: .audio) { (flag) in
-                seal.fulfill(flag ? AuthState.allowed : AuthState.denined)
+    public override func requestAuth() -> Promise<JYAuthState> {
+        return Promise<JYAuthState> { seal in
+            AVCaptureDevice.requestAccess(for: .video) { (flag) in
+                seal.fulfill(flag ? JYAuthState.allowed : JYAuthState.denined)
             }
         }
     }

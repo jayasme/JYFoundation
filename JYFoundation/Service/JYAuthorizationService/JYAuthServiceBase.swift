@@ -10,22 +10,22 @@ import Foundation
 import PromiseKit
 
 
-public enum AuthState: Int {
+public enum JYAuthState: Int {
     case notDetermined = 0
     case allowed = 1
     case denined = 2
 }
 
-open class AuthServiceBase {
+open class JYAuthServiceBase {
     
     public private(set) var denyTitle: String?
     public private(set) var denyMessage: String?
     
-    open func authState() -> Promise<AuthState> {
+    open func authState() -> Promise<JYAuthState> {
         fatalError("Not implemented.")
     }
     
-    open func requestAuth() -> Promise<AuthState> {
+    open func requestAuth() -> Promise<JYAuthState> {
         fatalError("Not implemented.")
     }
     
@@ -33,13 +33,13 @@ open class AuthServiceBase {
         fatalError("Not implemented.")
     }
     
-    public func request() -> Promise<AuthState> {
+    public func request() -> Promise<JYAuthState> {
         return authState()
-        .then { state -> Promise<AuthState> in
+        .then { state -> Promise<JYAuthState> in
             if (state == .notDetermined) {
                 return self.requestAuth()
             } else {
-                return Promise<AuthState>.value(state)
+                return Promise<JYAuthState>.value(state)
             }
         }
     }

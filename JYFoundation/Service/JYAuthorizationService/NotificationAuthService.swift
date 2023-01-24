@@ -1,5 +1,5 @@
 //
-//  NotificationAuthService.swift
+//  JYNotificationAuthService.swift
 //  JYFoundation
 //
 //  Created by Scott Rong on 2018/8/11.
@@ -10,12 +10,12 @@ import Foundation
 import PromiseKit
 import UserNotifications
 
-public class NotificationAuthService: AuthServiceBase {
+public class JYNotificationAuthService: JYAuthServiceBase {
     
-    public static var shared: NotificationAuthService = NotificationAuthService()
+    public static var shared: JYNotificationAuthService = JYNotificationAuthService()
     
-    public override func authState() -> Promise<AuthState> {
-        return Promise<AuthState> { seal in
+    public override func authState() -> Promise<JYAuthState> {
+        return Promise<JYAuthState> { seal in
             UNUserNotificationCenter.current().getNotificationSettings { (settings) in
                 switch(settings.authorizationStatus) {
                 case .authorized:
@@ -23,13 +23,13 @@ public class NotificationAuthService: AuthServiceBase {
                 case .provisional:
                     fallthrough
                 case .ephemeral:
-                    seal.fulfill(AuthState.allowed)
+                    seal.fulfill(JYAuthState.allowed)
                     break
                 case .denied:
-                    seal.fulfill(AuthState.denined)
+                    seal.fulfill(JYAuthState.denined)
                     break
                 case .notDetermined:
-                    seal.fulfill(AuthState.notDetermined)
+                    seal.fulfill(JYAuthState.notDetermined)
                     break
                 @unknown default:
                     fatalError()
@@ -38,11 +38,11 @@ public class NotificationAuthService: AuthServiceBase {
         }
     }
     
-    public override func requestAuth() -> Promise<AuthState> {
+    public override func requestAuth() -> Promise<JYAuthState> {
         let notificationOptions: UNAuthorizationOptions = [.alert , .badge, .sound]
-        return Promise<AuthState> { seal in
+        return Promise<JYAuthState> { seal in
             UNUserNotificationCenter.current().requestAuthorization(options: notificationOptions) { (granted, error) in
-                seal.fulfill(granted ? AuthState.allowed : AuthState.denined)
+                seal.fulfill(granted ? JYAuthState.allowed : JYAuthState.denined)
             }
         }
     }

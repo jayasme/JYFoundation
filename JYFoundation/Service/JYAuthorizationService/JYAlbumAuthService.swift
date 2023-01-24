@@ -1,5 +1,5 @@
 //
-//  AlbumAuthService.swift
+//  JYAlbumAuthService.swift
 //  JYFoundation
 //
 //  Created by Scott Rong on 2017/4/30.
@@ -10,34 +10,34 @@ import Foundation
 import PromiseKit
 import Photos
 
-public class AlbumAuthService: AuthServiceBase {
+public class JYAlbumAuthService: JYAuthServiceBase {
     
-    public static var shared: AlbumAuthService = AlbumAuthService()
+    public static var shared: JYAlbumAuthService = JYAlbumAuthService()
     
-    public override func authState() -> Promise<AuthState> {
-        return Promise<AuthState> { seal in
+    public override func authState() -> Promise<JYAuthState> {
+        return Promise<JYAuthState> { seal in
             let state = PHPhotoLibrary.authorizationStatus()
             switch (state) {
             case .notDetermined:
-                seal.fulfill(AuthState.notDetermined)
+                seal.fulfill(JYAuthState.notDetermined)
             case .limited:
                 fallthrough
             case .restricted:
                 fallthrough
             case .denied:
-                seal.fulfill(AuthState.denined)
+                seal.fulfill(JYAuthState.denined)
             case .authorized:
-                seal.fulfill(AuthState.allowed)
+                seal.fulfill(JYAuthState.allowed)
             @unknown default:
                 fatalError()
             }
         }
     }
     
-    public override func requestAuth() -> Promise<AuthState> {
-        return Promise<AuthState> { seal in
+    public override func requestAuth() -> Promise<JYAuthState> {
+        return Promise<JYAuthState> { seal in
             PHPhotoLibrary.requestAuthorization({ (state) in
-                seal.fulfill(state == .authorized ? AuthState.allowed : AuthState.denined)
+                seal.fulfill(state == .authorized ? JYAuthState.allowed : JYAuthState.denined)
             })
         }
     }
