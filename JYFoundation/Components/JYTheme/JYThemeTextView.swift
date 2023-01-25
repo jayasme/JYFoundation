@@ -24,8 +24,9 @@ open class JYThemeTextView: UITextView, JYThemeful {
     }
     
     func applyTheme() {
-        self.backgroundColor = self.styleSheet?.background?.style(by: self.themes).first ?? .clear
-        self.textColor = self.styleSheet?.foreground?.style(by: self.themes).first ?? .clear
+        self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
+        self.textColor = self.styleSheet?.foregroundColor?.style(by: self.themes).first ?? .clear
+        self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
         self.font = self.styleSheet?.font?.style(by: self.themes).first
     }
 }

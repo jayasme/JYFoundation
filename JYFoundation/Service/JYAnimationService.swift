@@ -67,11 +67,11 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
     }
     
     public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: from, to: to, keyPath: "transform.tranlation.x", duration: duration, delay: delay, timingFunction: .easeOutCubic)
+        self.animate(from: from, to: to, keyPath: "transform.translation.x", duration: duration, delay: delay, timingFunction: .easeOutCubic)
     }
     
     public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: from, to: to, keyPath: "transform.tranlation.y", duration: duration, delay: delay, timingFunction: .easeInCubic)
+        self.animate(from: from, to: to, keyPath: "transform.translation.y", duration: duration, delay: delay, timingFunction: .easeInCubic)
     }
     
     public func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {

@@ -58,13 +58,18 @@ public class JYTheme: Hashable {
 
 open class JYStyleSheet {
     
-    public var background: JYThemeStyle<UIColor>?
-    public var foreground: JYThemeStyle<UIColor>?
+    public var backgroundColor: JYThemeStyle<UIColor>?
+    public var foregroundColor: JYThemeStyle<UIColor>?
+    public var borderColor: JYThemeStyle<UIColor>?
     public var font: JYThemeStyle<UIFont>?
     
-    public init(background: JYThemeStyle<UIColor>? = nil, foreground: JYThemeStyle<UIColor>? = nil, font: JYThemeStyle<UIFont>? = nil) {
-        self.background = background
-        self.foreground = foreground
+    public init(backgroundColor: JYThemeStyle<UIColor>? = nil,
+                foregroundColor: JYThemeStyle<UIColor>? = nil,
+                borderColor: JYThemeStyle<UIColor>? = nil,
+                font: JYThemeStyle<UIFont>? = nil) {
+        self.backgroundColor = backgroundColor
+        self.foregroundColor = foregroundColor
+        self.borderColor = borderColor
         self.font = font
     }
 }
