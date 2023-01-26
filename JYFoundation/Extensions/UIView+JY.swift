@@ -55,15 +55,17 @@ extension UIView {
     }
     
     /// Get the root view of the view. if the view is already a root view, returns itself
-    public var rootView: UIView {
-        var rootView: UIView = self
+    public func findRootView(where predicate: (UIView) -> Bool) -> UIView? {
+        var current: UIView? = self.superview
+        var array: Array<UIView> = []
         while(true) {
-            if let superView = rootView.superview {
-                rootView = superView
+            if let c = current, predicate(c) {
+                array.append(c)
+                current = c.superview
             } else {
                 break
             }
         }
-        return rootView
+        return array.last
     }
 }

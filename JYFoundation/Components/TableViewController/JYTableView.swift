@@ -474,6 +474,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         cell.updateViewModel(viewModel: viewModel)
         jyDataSource?.prepare?(viewModel, for: cell)
         viewModel.notificationBlock = notification
+        cell.themes = self.themes
         return cell
     }
     
