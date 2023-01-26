@@ -54,7 +54,7 @@ extension UIView {
         return nil
     }
     
-    /// Get the root view of the view. if the view is already a root view, returns itself
+    /// Get the root view matches the condition.
     public func findRootView(where predicate: (UIView) -> Bool) -> UIView? {
         var current: UIView? = self.superview
         var array: Array<UIView> = []

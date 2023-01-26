@@ -19,6 +19,18 @@ open class JYCollectionViewCell : UICollectionViewCell, JYThemeful {
     }
     private(set) var isDisplayed: Bool = false
     
+    private var _contentView: JYThemeView!
+    public override var contentView: JYThemeView {
+        get {
+            super.contentView.removeFromSuperview()
+            if (self._contentView == nil) {
+                self._contentView = JYThemeView(frame: self.bounds)
+                self.addSubview(_contentView)
+            }
+            return self._contentView
+        }
+    }
+    
     override public init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -53,29 +65,41 @@ open class JYCollectionViewCell : UICollectionViewCell, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
+            self.applyThemes()
             self.passthroughThemes()
         }
     }
     
     public var styleSheet: JYStyleSheet? = nil {
         didSet {
-            self.passthroughThemes()
+            self.applyThemes()
         }
+    }
+    
+    private func applyThemes() {
+        self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
+        self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
     }
     
     private func passthroughThemes() {
-        passthroughSubThemes(view: self)
-        for subview in self.contentView.subviews {
-            passthroughSubThemes(view: subview)
+        for subview in self.subviews {
+            guard let subview = subview as? JYThemeful else {
+                break
+            }
+            subview.themes = self.themes
         }
     }
     
-    private func passthroughSubThemes(view: UIView) {
-        if let view = view as? JYThemeful {
-            view.themes = self.themes
+    override open func addSubview(_ view: UIView) {
+        super.addSubview(view)
+        guard let view = view as? JYThemeful else {
+            return
         }
-        for subview in self.subviews {
-            passthroughSubThemes(view: subview)
-        }
+        view.themes = self.themes
+    }
+    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        self.contentView.frame = self.bounds
     }
 }
