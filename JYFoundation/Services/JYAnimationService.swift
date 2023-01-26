@@ -17,11 +17,12 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         guard let animation = anim as? CABasicAnimation, let keyPath = animation.keyPath else {
             return
         }
-        if let callback = animationMap[keyPath] {
+        let animationKey = "JYAnimationService."  + keyPath
+        if let callback = animationMap[animationKey] {
             callback(flag)
         }
-        if (self.animationMap[keyPath] != nil) {
-            self.animationMap.removeValue(forKey: keyPath)
+        if (self.animationMap[animationKey] != nil) {
+            self.animationMap.removeValue(forKey: animationKey)
         }
     }
     
@@ -31,19 +32,19 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         self.view = view
     }
     
-    public func animate(from: CGFloat, to: CGFloat, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func animate(from: NSValue, to: NSValue, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         
         let animationKey = "JYAnimationService."  + keyPath
         let animation = CABasicAnimation(keyPath: keyPath)
         if (self.view.layer.animation(forKey: animationKey) != nil) {
             self.view.layer.removeAnimation(forKey: animationKey)
         }
-        if let fromValue = self.view.layer.presentation()?.value(forKey: keyPath) as? NSNumber {
+        if let fromValue = self.view.layer.presentation()?.value(forKey: keyPath) as? NSValue {
             animation.fromValue = fromValue
         } else {
-            animation.fromValue = NSNumber(value: from)
+            animation.fromValue = from
         }
-        animation.toValue = NSNumber(value: to)
+        animation.toValue = to
         animation.duration = duration
         animation.beginTime = CACurrentMediaTime() + (delay ?? 0)
         animation.fillMode = .forwards
@@ -52,34 +53,76 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         animation.delegate = self
         self.view.layer.add(animation, forKey: animationKey)
         
-        if (self.animationMap[animationKey] != nil) {
-            self.animationMap.removeValue(forKey: animationKey)
+        if (onComplete != nil) {
+            if (self.animationMap[animationKey] != nil) {
+                self.animationMap.removeValue(forKey: animationKey)
+            }
+            self.animationMap[animationKey] = onComplete
         }
-        self.animationMap[animationKey] = onComplete
     }
     
-    public func popIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: 0, to: 1, keyPath: "transform.scale", duration: duration, delay: delay, timingFunction: .easeOutCubic)
+    public func popIn(duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction = .easeOutCubic, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+        self.animate(from: NSNumber(value: 0.0) as NSValue,
+                     to: NSNumber(value: 1.0) as NSValue,
+                     keyPath: "transform.scale",
+                     duration: duration,
+                     delay: delay,
+                     timingFunction: timingFunction,
+                     onComplete: onComplete
+        )
     }
     
-    public func popOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: 1, to: 0, keyPath: "transform.scale", duration: duration, delay: delay, timingFunction: .easeInCubic)
+    public func popOut(duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction = .easeInCubic, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+        self.animate(from: NSNumber(value: 1.0) as NSValue,
+                     to: NSNumber(value: 0.0) as NSValue,
+                     keyPath: "transform.scale",
+                     duration: duration,
+                     delay: delay,
+                     timingFunction: timingFunction,
+                     onComplete: onComplete
+        )
     }
     
-    public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: from, to: to, keyPath: "transform.translation.x", duration: duration, delay: delay, timingFunction: .easeOutCubic)
+    public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+        self.animate(from: NSNumber(value: from) as NSValue,
+                     to: NSNumber(value: to) as NSValue,
+                     keyPath: "transform.translation.x",
+                     duration: duration,
+                     delay: delay,
+                     timingFunction: timingFunction,
+                     onComplete: onComplete
+        )
     }
     
-    public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: from, to: to, keyPath: "transform.translation.y", duration: duration, delay: delay, timingFunction: .easeInCubic)
+    public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+        self.animate(from: NSNumber(value: from) as NSValue,
+                     to: NSNumber(value: to) as NSValue,
+                     keyPath: "transform.translation.y",
+                     duration: duration,
+                     delay: delay,
+                     timingFunction: timingFunction,
+                     onComplete: onComplete
+        )
     }
     
     public func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: 0, to: 1, keyPath: "opacity", duration: duration, delay: delay)
+        self.animate(from: NSNumber(value: 0.0) as NSValue,
+                     to: NSNumber(value: 1.0) as NSValue,
+                     keyPath: "opacity",
+                     duration: duration,
+                     delay: delay,
+                     onComplete: onComplete
+        )
     }
     
     public func fadeOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
-        self.animate(from: 1, to: 0, keyPath: "opacity", duration: duration, delay: delay)
+        self.animate(from: NSNumber(value: 1.0) as NSValue,
+                     to: NSNumber(value: 0.0) as NSValue,
+                     keyPath: "opacity",
+                     duration: duration,
+                     delay: delay,
+                     onComplete: onComplete
+        )
     }
 }
 
