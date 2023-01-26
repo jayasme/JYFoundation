@@ -32,7 +32,7 @@ public enum JYCollectionViewPaginationDirection: Int {
     case down = 2
 }
 
-public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, JYThemeful {
     
     internal static var collectionViewLayoutQueue: DispatchQueue = DispatchQueue(label: "JYCollectionViewLayout")
     
@@ -532,5 +532,33 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         jyDelegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
+    }
+    
+    // MARK: JYThemeful
+    
+    public var themes: [JYTheme] = [] {
+        didSet {
+            self.applyThemes()
+            self.passthroughThemes()
+        }
+    }
+    
+    public var styleSheet: JYStyleSheet? = nil {
+        didSet {
+            self.applyThemes()
+        }
+    }
+    
+    func applyThemes() {
+        self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
+        self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
+    }
+    
+    func passthroughThemes() {
+        for cell in self.visibleCells {
+            if let cell = cell as? JYThemeful {
+                cell.themes = self.themes
+            }
+        }
     }
 }

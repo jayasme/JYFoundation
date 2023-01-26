@@ -322,26 +322,26 @@
 				1D389267208B53DB0005C175 /* Components */,
 				1D389220208B01760005C175 /* Common */,
 				1D3891F9208AF9960005C175 /* Extensions */,
-				1D8B859D2084B7B6003EDE8A /* Service */,
+				1D8B859D2084B7B6003EDE8A /* Services */,
 				1D61E9E820849AA800525E3F /* Info.plist */,
 				1D3891F0208AC8950005C175 /* JYFoundation-Bridging-Header.h */,
 			);
 			path = JYFoundation;
 			sourceTree = "<group>";
 		};
-		1D8B859D2084B7B6003EDE8A /* Service */ = {
+		1D8B859D2084B7B6003EDE8A /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				1D8B85A92084B7DD003EDE8A /* JYAuthorizationService */,
+				1D8B85A92084B7DD003EDE8A /* JYAuthorizationServices */,
 				B969A8AB27E8B09600F8980B /* JYConfigManager.swift */,
 				B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */,
 				1D389239208B094E0005C175 /* JYNetworking */,
 				B98361A1297ECDE900F26960 /* JYAnimationService.swift */,
 			);
-			path = Service;
+			path = Services;
 			sourceTree = "<group>";
 		};
-		1D8B85A92084B7DD003EDE8A /* JYAuthorizationService */ = {
+		1D8B85A92084B7DD003EDE8A /* JYAuthorizationServices */ = {
 			isa = PBXGroup;
 			children = (
 				1D3891F1208AF6360005C175 /* JYAlbumAuthService.swift */,
@@ -350,7 +350,7 @@
 				1D3891F4208AF6370005C175 /* MicrophoneAuthService.swift */,
 				1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */,
 			);
-			path = JYAuthorizationService;
+			path = JYAuthorizationServices;
 			sourceTree = "<group>";
 		};
 		4BF4AE267683209EB022E4D2 /* Pods */ = {

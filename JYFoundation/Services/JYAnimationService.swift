@@ -25,7 +25,7 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         }
     }
     
-    private var view: UIView
+    private unowned var view: UIView
     
     public init(view: UIView) {
         self.view = view

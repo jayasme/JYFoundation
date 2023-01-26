@@ -12,7 +12,7 @@ import PromiseKit
 extension UIView {
 
     public class JY {
-        private let view: UIView
+        private unowned let view: UIView
         
         init(view: UIView) {
             self.view = view
@@ -58,7 +58,7 @@ extension UIView {
     public var rootView: UIView {
         var rootView: UIView = self
         while(true) {
-            if let superView = self.superview {
+            if let superView = rootView.superview {
                 rootView = superView
             } else {
                 break

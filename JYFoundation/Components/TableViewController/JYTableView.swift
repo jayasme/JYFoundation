@@ -44,7 +44,7 @@ public enum JYTableViewPaginationDirection: Int {
     case down = 2
 }
 
-public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate {
+public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate, JYThemeful {
     
     internal static var tableViewLayoutQueue: DispatchQueue = DispatchQueue(label: "JYTableViewLayout")
     
@@ -596,7 +596,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         }
         
         let point = gesture.location(in: self)
-        let translate = gesture
+        // let translate = gesture
         
         if (gesture.state == .began) {
             
@@ -823,6 +823,34 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
             self.moveCellViewModel(for: draggingViewModel, to: toIndex)
             self.draggingIndex = toIndex
+        }
+    }
+    
+    // MARK: JYThemeful
+    
+    public var themes: [JYTheme] = [] {
+        didSet {
+            self.applyThemes()
+            self.passthroughThemes()
+        }
+    }
+    
+    public var styleSheet: JYStyleSheet? = nil {
+        didSet {
+            self.applyThemes()
+        }
+    }
+    
+    func applyThemes() {
+        self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
+        self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
+    }
+    
+    func passthroughThemes() {
+        for cell in self.visibleCells {
+            if let cell = cell as? JYThemeful {
+                cell.themes = self.themes
+            }
         }
     }
 }

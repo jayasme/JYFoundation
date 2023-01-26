@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class JYTableViewCell : UITableViewCell {
+open class JYTableViewCell : UITableViewCell, JYThemeful {
     
     private(set) open var viewModel: ITableCellViewModel! {
         didSet {
@@ -48,4 +48,35 @@ open class JYTableViewCell : UITableViewCell {
     private func signal() {
         updateViewModel(viewModel: self.viewModel)
     }
+    
+    // MARK: JYThemeful
+    
+    public var themes: [JYTheme] = [] {
+        didSet {
+            self.passthroughThemes()
+        }
+    }
+    
+    public var styleSheet: JYStyleSheet? = nil {
+        didSet {
+            self.passthroughThemes()
+        }
+    }
+    
+    private func passthroughThemes() {
+        passthroughSubThemes(view: self)
+        for subview in self.contentView.subviews {
+            passthroughSubThemes(view: subview)
+        }
+    }
+    
+    private func passthroughSubThemes(view: UIView) {
+        if let view = view as? JYThemeful {
+            view.themes = self.themes
+        }
+        for subview in self.subviews {
+            passthroughSubThemes(view: subview)
+        }
+    }
+
 }
