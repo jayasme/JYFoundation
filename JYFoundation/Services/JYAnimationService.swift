@@ -35,11 +35,12 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
     public func animate(from: NSValue, to: NSValue, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         
         let animationKey = "JYAnimationService."  + keyPath
-        let animation = CABasicAnimation(keyPath: keyPath)
         if (self.view.layer.animation(forKey: animationKey) != nil) {
             self.view.layer.removeAnimation(forKey: animationKey)
         }
-        if let fromValue = self.view.layer.presentation()?.value(forKey: keyPath) as? NSValue {
+        
+        let animation = CABasicAnimation(keyPath: keyPath)
+        if let fromValue = self.view.layer.presentation()?.value(forKeyPath: keyPath) as? NSValue {
             animation.fromValue = fromValue
         } else {
             animation.fromValue = from
@@ -67,7 +68,7 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
                      keyPath: "transform.scale",
                      duration: duration,
                      delay: delay,
-                     timingFunction: timingFunction,
+                     timingFunction: nil, // timingFunction,
                      onComplete: onComplete
         )
     }
@@ -78,7 +79,7 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
                      keyPath: "transform.scale",
                      duration: duration,
                      delay: delay,
-                     timingFunction: timingFunction,
+                     timingFunction: nil, // timingFunction,
                      onComplete: onComplete
         )
     }
