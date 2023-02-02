@@ -80,6 +80,7 @@
 		B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98361A1297ECDE900F26960 /* JYAnimationService.swift */; };
 		B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */; };
 		B9A66FF928BD24EC00B360E1 /* JYLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */; };
+		B9BC001A298B6C1100D55AD2 /* JYThemeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */; };
 		B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DD4E5628419AF50086CBDA /* JYGradientView.swift */; };
 		B9E6B67827AF53EE00C47285 /* UIApplication+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */; };
 		B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E6B67927B0FCE800C47285 /* JYGestureView.swift */; };
@@ -165,6 +166,7 @@
 		B98361A1297ECDE900F26960 /* JYAnimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYAnimationService.swift; sourceTree = "<group>"; };
 		B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYFeedbackButton.swift; sourceTree = "<group>"; };
 		B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYLocationService.swift; sourceTree = "<group>"; };
+		B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeImageView.swift; sourceTree = "<group>"; };
 		B9DD4E5628419AF50086CBDA /* JYGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGradientView.swift; sourceTree = "<group>"; };
 		B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+JY.swift"; sourceTree = "<group>"; };
 		B9E6B67927B0FCE800C47285 /* JYGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGestureView.swift; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 				B9836196297E7C2B00F26960 /* JYThemeful.swift */,
 				B9836198297E7C5700F26960 /* JYThemeTextView.swift */,
 				B983619A297E7C6900F26960 /* JYThemeTextField.swift */,
+				B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */,
 			);
 			path = JYTheme;
 			sourceTree = "<group>";
@@ -561,6 +564,7 @@
 				1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */,
 				1D3891F6208AF6370005C175 /* JYAuthServiceBase.swift in Sources */,
 				1D389219208AF9B40005C175 /* NSObject+JY.swift in Sources */,
+				B9BC001A298B6C1100D55AD2 /* JYThemeImageView.swift in Sources */,
 				1D38920E208AF9B40005C175 /* UIFont+JY.swift in Sources */,
 				1D00E4E12096BBE900450247 /* JYTableCellViewModel.swift in Sources */,
 				1D38921F208AF9B40005C175 /* UIView+JY.swift in Sources */,
