@@ -10,14 +10,14 @@ import Foundation
 import UIKit
 
 open class JYThemeView: UIView, JYThemeful {
-    public var themes: [JYTheme] = [] {
+    open var themes: [JYTheme] = [] {
         didSet {
             self.applyTheme()
             self.passthroughThemes()
         }
     }
     
-    public var styleSheet: JYStyleSheet? {
+    open var styleSheet: JYStyleSheet? {
         didSet {
             self.applyTheme()
         }

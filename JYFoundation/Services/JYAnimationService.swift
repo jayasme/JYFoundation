@@ -11,6 +11,11 @@ import UIKit
 
 public class JYAnimationService: NSObject, CAAnimationDelegate {
     
+    public enum FromState {
+        case alwaysFromValue
+        case auto
+    }
+    
     private var animationMap: [String: ((Bool)->Void)] = [:]
     
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
@@ -32,7 +37,7 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         self.view = view
     }
     
-    public func animate(from: NSValue, to: NSValue, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func animate(from: NSValue, to: NSValue, keyPath: String, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, fromState: FromState = .auto, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         
         let animationKey = "JYAnimationService."  + keyPath
         if (self.view.layer.animation(forKey: animationKey) != nil) {
@@ -40,7 +45,7 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         }
         
         let animation = CABasicAnimation(keyPath: keyPath)
-        if let fromValue = self.view.layer.presentation()?.value(forKeyPath: keyPath) as? NSValue {
+        if fromState == .auto, let fromValue = self.view.layer.presentation()?.value(forKeyPath: keyPath) as? NSValue {
             animation.fromValue = fromValue
         } else {
             animation.fromValue = from
@@ -62,66 +67,72 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
         }
     }
     
-    public func popIn(duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction = .easeOutCubic, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func popIn(duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction = .easeOutCubic, fromState: FromState = .auto, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: NSNumber(value: 0.0) as NSValue,
                      to: NSNumber(value: 1.0) as NSValue,
                      keyPath: "transform.scale",
                      duration: duration,
                      delay: delay,
-                     timingFunction: nil, // timingFunction,
+                     timingFunction: timingFunction,
+                     fromState: fromState,
                      onComplete: onComplete
         )
     }
     
-    public func popOut(duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction = .easeInCubic, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func popOut(duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction = .easeInCubic, fromState: FromState = .auto, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: NSNumber(value: 1.0) as NSValue,
                      to: NSNumber(value: 0.0) as NSValue,
                      keyPath: "transform.scale",
                      duration: duration,
                      delay: delay,
-                     timingFunction: nil, // timingFunction,
+                     timingFunction: timingFunction,
+                     fromState: fromState,
                      onComplete: onComplete
         )
     }
     
-    public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func slideX(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, fromState: FromState = .auto, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: NSNumber(value: from) as NSValue,
                      to: NSNumber(value: to) as NSValue,
                      keyPath: "transform.translation.x",
                      duration: duration,
                      delay: delay,
                      timingFunction: timingFunction,
+                     fromState: fromState,
                      onComplete: onComplete
         )
     }
     
-    public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func slideY(from: CGFloat, to: CGFloat, duration: TimeInterval, delay: TimeInterval? = nil, timingFunction: CAMediaTimingFunction? = nil, fromState: FromState = .auto, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: NSNumber(value: from) as NSValue,
                      to: NSNumber(value: to) as NSValue,
                      keyPath: "transform.translation.y",
                      duration: duration,
                      delay: delay,
                      timingFunction: timingFunction,
+                     fromState: fromState,
                      onComplete: onComplete
         )
     }
     
-    public func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func fadeIn(duration: TimeInterval, delay: TimeInterval? = nil, fromState: FromState = .auto, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: NSNumber(value: 0.0) as NSValue,
                      to: NSNumber(value: 1.0) as NSValue,
                      keyPath: "opacity",
                      duration: duration,
                      delay: delay,
+                     fromState: fromState,
                      onComplete: onComplete
         )
     }
     
-    public func fadeOut(duration: TimeInterval, delay: TimeInterval? = nil, onComplete: ((_ flag: Bool) -> Void)? = nil) {
+    public func fadeOut(duration: TimeInterval, delay: TimeInterval? = nil, fromState: FromState = .auto, onComplete: ((_ flag: Bool) -> Void)? = nil) {
         self.animate(from: NSNumber(value: 1.0) as NSValue,
                      to: NSNumber(value: 0.0) as NSValue,
                      keyPath: "opacity",
                      duration: duration,
                      delay: delay,
+                     fromState: fromState,
                      onComplete: onComplete
         )
     }
