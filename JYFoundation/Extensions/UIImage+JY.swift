@@ -30,11 +30,8 @@ extension UIImage {
             newSize = CGSize(width: size.width / size.height * maxSize.width, height: maxSize.height)
         }
         
-        UIGraphicsBeginImageContext(newSize)
-        draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-
-        return image
+        return UIGraphicsImageRenderer(size: newSize).image { _ in
+            self.draw(in: CGRect(origin: .zero, size: newSize))
+        }
     }
 }

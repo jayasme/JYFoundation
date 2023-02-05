@@ -71,6 +71,7 @@
 		B967BA62277FE64F00926B9C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B967BA61277FE64F00926B9C /* Podfile */; };
 		B969A8AC27E8B09600F8980B /* JYConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969A8AB27E8B09600F8980B /* JYConfigManager.swift */; };
 		B969A8AE27F5C19A00F8980B /* CGPoint+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */; };
+		B9727835298F539000BD9928 /* Array+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9727834298F539000BD9928 /* Array+JY.swift */; };
 		B9836191297E79CE00F26960 /* JYThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836190297E79CE00F26960 /* JYThemeView.swift */; };
 		B9836193297E79EC00F26960 /* JYThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836192297E79EC00F26960 /* JYThemeManager.swift */; };
 		B9836195297E7C0800F26960 /* JYThemeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836194297E7C0800F26960 /* JYThemeLabel.swift */; };
@@ -157,6 +158,7 @@
 		B967BA61277FE64F00926B9C /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B969A8AB27E8B09600F8980B /* JYConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYConfigManager.swift; sourceTree = "<group>"; };
 		B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+JY.swift"; sourceTree = "<group>"; };
+		B9727834298F539000BD9928 /* Array+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+JY.swift"; sourceTree = "<group>"; };
 		B9836190297E79CE00F26960 /* JYThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeView.swift; sourceTree = "<group>"; };
 		B9836192297E79EC00F26960 /* JYThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeManager.swift; sourceTree = "<group>"; };
 		B9836194297E7C0800F26960 /* JYThemeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeLabel.swift; sourceTree = "<group>"; };
@@ -231,17 +233,23 @@
 		1D3891F9208AF9960005C175 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */,
 				1D389209208AF9B40005C175 /* Calendar+JY.swift */,
+				B93DC43827A58F76002C6390 /* CGFloat+JY.swift */,
+				B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */,
 				1D389208208AF9B40005C175 /* CharacterSet+JY.swift */,
+				B9E6B67E27B14A9100C47285 /* Comparable+JY.swift */,
 				1D389205208AF9B40005C175 /* Data+JY.swift */,
 				1D389202208AF9B30005C175 /* Date+JY.swift */,
+				1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */,
 				1D389203208AF9B30005C175 /* DispatchQueue+JY.swift */,
+				B93DC43A27A58F7E002C6390 /* Double+JY.swift */,
+				B93DC43627A58E6F002C6390 /* Int+JY.swift */,
 				1D389206208AF9B40005C175 /* NSObject+JY.swift */,
 				1D3891FD208AF9B30005C175 /* Sequence+JY.swift */,
 				1D389200208AF9B30005C175 /* String+JY.swift */,
 				1D3891FE208AF9B30005C175 /* String+Regex.swift */,
 				1D38920A208AF9B40005C175 /* TimeInterval+JY.swift */,
+				B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */,
 				1D3891FF208AF9B30005C175 /* UIButton+JY.swift */,
 				1D38920B208AF9B40005C175 /* UIColor+JY.swift */,
 				1D3891FB208AF9B30005C175 /* UIFont+JY.swift */,
@@ -250,12 +258,7 @@
 				1D389207208AF9B40005C175 /* UIResponder+JY.swift */,
 				1D389204208AF9B40005C175 /* UISearchBar+JY.swift */,
 				1D38920C208AF9B40005C175 /* UIView+JY.swift */,
-				B93DC43627A58E6F002C6390 /* Int+JY.swift */,
-				B93DC43827A58F76002C6390 /* CGFloat+JY.swift */,
-				B93DC43A27A58F7E002C6390 /* Double+JY.swift */,
-				B9E6B67727AF53EE00C47285 /* UIApplication+JY.swift */,
-				B9E6B67E27B14A9100C47285 /* Comparable+JY.swift */,
-				B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */,
+				B9727834298F539000BD9928 /* Array+JY.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -521,6 +524,7 @@
 				B983619B297E7C6900F26960 /* JYThemeTextField.swift in Sources */,
 				1D38920F208AF9B40005C175 /* UIImageView+Promise.swift in Sources */,
 				1D389222208B01890005C175 /* JYError.swift in Sources */,
+				B9727835298F539000BD9928 /* Array+JY.swift in Sources */,
 				1D389212208AF9B40005C175 /* UIButton+JY.swift in Sources */,
 				1D38921B208AF9B40005C175 /* CharacterSet+JY.swift in Sources */,
 				B9836193297E79EC00F26960 /* JYThemeManager.swift in Sources */,
