@@ -79,6 +79,7 @@
 		B9836199297E7C5700F26960 /* JYThemeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836198297E7C5700F26960 /* JYThemeTextView.swift */; };
 		B983619B297E7C6900F26960 /* JYThemeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983619A297E7C6900F26960 /* JYThemeTextField.swift */; };
 		B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98361A1297ECDE900F26960 /* JYAnimationService.swift */; };
+		B994423D2993EBC400BE79A9 /* JYThemeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994423C2993EBC400BE79A9 /* JYThemeScrollView.swift */; };
 		B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */; };
 		B9A66FF928BD24EC00B360E1 /* JYLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */; };
 		B9BC001A298B6C1100D55AD2 /* JYThemeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */; };
@@ -166,6 +167,7 @@
 		B9836198297E7C5700F26960 /* JYThemeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeTextView.swift; sourceTree = "<group>"; };
 		B983619A297E7C6900F26960 /* JYThemeTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeTextField.swift; sourceTree = "<group>"; };
 		B98361A1297ECDE900F26960 /* JYAnimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYAnimationService.swift; sourceTree = "<group>"; };
+		B994423C2993EBC400BE79A9 /* JYThemeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeScrollView.swift; sourceTree = "<group>"; };
 		B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYFeedbackButton.swift; sourceTree = "<group>"; };
 		B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYLocationService.swift; sourceTree = "<group>"; };
 		B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeImageView.swift; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 				B9836198297E7C5700F26960 /* JYThemeTextView.swift */,
 				B983619A297E7C6900F26960 /* JYThemeTextField.swift */,
 				B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */,
+				B994423C2993EBC400BE79A9 /* JYThemeScrollView.swift */,
 			);
 			path = JYTheme;
 			sourceTree = "<group>";
@@ -547,6 +550,7 @@
 				1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */,
 				1D389213208AF9B40005C175 /* String+JY.swift in Sources */,
 				1D00E4B420931E6100450247 /* JYHttpHeader.swift in Sources */,
+				B994423D2993EBC400BE79A9 /* JYThemeScrollView.swift in Sources */,
 				B9E6B67F27B14A9100C47285 /* Comparable+JY.swift in Sources */,
 				1D00E4D32096BBE300450247 /* JYTableViewCell.swift in Sources */,
 				1D00E4B620932A8700450247 /* JYHttpModel.swift in Sources */,

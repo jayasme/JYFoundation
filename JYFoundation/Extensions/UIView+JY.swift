@@ -59,8 +59,10 @@ extension UIView {
         var current: UIView? = self.superview
         var array: Array<UIView> = []
         while(true) {
-            if let c = current, predicate(c) {
-                array.append(c)
+            if let c = current {
+                if predicate(c) {
+                    array.append(c)
+                }
                 current = c.superview
             } else {
                 break
