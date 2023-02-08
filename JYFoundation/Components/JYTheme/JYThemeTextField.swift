@@ -11,13 +11,13 @@ import UIKit
 
 open class JYThemeTextField: UITextField, JYThemeful {
     
-    public var themes: [JYTheme] = [] {
+    open var themes: [JYTheme] = [] {
         didSet {
             self.applyTheme()
         }
     }
     
-    public var styleSheet: JYStyleSheet? {
+    open var styleSheet: JYStyleSheet? {
         didSet {
             self.applyTheme()
         }

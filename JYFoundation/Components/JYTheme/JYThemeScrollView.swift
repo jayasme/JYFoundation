@@ -9,16 +9,16 @@
 import Foundation
 import UIKit
 
-class JYThemeScrollView: UIScrollView, JYThemeful {
+public class JYThemeScrollView: UIScrollView, JYThemeful {
     
-    var themes: [JYTheme] = [] {
+    open var themes: [JYTheme] = [] {
         didSet {
             self.applyTheme()
             self.passthroughThemes()
         }
     }
     
-    var styleSheet: JYStyleSheet? {
+    open var styleSheet: JYStyleSheet? {
         didSet {
             self.applyTheme()
         }
