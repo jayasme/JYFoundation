@@ -18,22 +18,22 @@ public class JYConfigManager<T: JYConfig> {
         }
     }
     
-    public init(path: URL, defaultConfig: T, autoSave: Bool) {
+    public init(path: URL, autoSave: Bool) {
         self.path = path
         self.autoSave = autoSave
+        let decoder = JSONDecoder()
         guard let data = try? Data(contentsOf: path),
-              let config = T.deserialize(data: data) as? T
+              let configItems = try! JSONSerialization.jsonObject(with: data) as? JYConfig.ConfigItems
         else {
-            self.config = defaultConfig
-            try? self.saveIfNeeded()
+            self.config = T()
+            self.config.notifyChange = self.notifyConfigChange
             return
         }
-        self.config = config
-        self.config.changePropertyBlock = self.changeProperty
+        self.config = T(items: configItems)
+        self.config.notifyChange = self.notifyConfigChange
     }
     
     public func saveIfNeeded() throws {
-        self.config.changePropertyBlock = self.changeProperty
         guard autoSave else {
             return
         }
@@ -42,17 +42,17 @@ public class JYConfigManager<T: JYConfig> {
     
     public func save() throws {
         do {
-            guard let data = T.serialize(config: self.config) else {
+            guard let data = try? JSONSerialization.data(withJSONObject: self.config.configItems) else {
                 return
             }
-            try data.write(to: self.path, options: .atomic)
+            try data.write(to: self.path, options: [.atomic])
         } catch {
             throw error
         }
     }
     
     // notification
-    private func changeProperty() {
+    private func notifyConfigChange() {
         self.notifications.forEach({ (key: String, value: ChangeNotification) in
             _ = value.target?.perform(value.selector, with: nil)
         })
@@ -86,19 +86,31 @@ extension JYConfigManager {
 
 open class JYConfig {
     
-    fileprivate var changePropertyBlock: (() -> Void)? = nil
+    public typealias ConfigItems = [String: Any]
     
-    public init() { }
-    
-    public func changeProperty() {
-        self.changePropertyBlock?()
+    fileprivate var notifyChange: (() -> Void)? = nil
+    fileprivate var configItems: ConfigItems {
+        didSet {
+            self.notifyChange?()
+        }
     }
     
-    open class func serialize(config: JYConfig) -> Data? {
-        fatalError("need to be implemented")
+    required public init(items: ConfigItems = [:]) {
+        self.configItems = items
     }
     
-    open class func deserialize(data: Data) -> JYConfig? {
-        fatalError("need to be implemented")
+    public func setValue(for key: String, value: any Codable) throws {
+        self.configItems[key] = value
+    }
+    
+    public func getValue(for key: String) -> Any? {
+        guard self.configItems.keys.contains(where: { $0 == key }) else {
+            return nil
+        }
+        return self.configItems[key]
+    }
+    
+    public func removeItem(by key: String) {
+        self.configItems.removeValue(forKey: key)
     }
 }

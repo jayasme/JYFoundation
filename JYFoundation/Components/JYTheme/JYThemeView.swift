@@ -31,7 +31,7 @@ open class JYThemeView: UIView, JYThemeful {
     func passthroughThemes() {
         for subview in self.subviews {
             guard let subview = subview as? JYThemeful else {
-                break
+                continue
             }
             subview.themes = self.themes
         }

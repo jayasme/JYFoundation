@@ -23,6 +23,18 @@ extension Array {
     public static func += (left: inout Array, right: Array) {
         left.append(contentsOf: right)
     }
+    
+    public static func fill(count: Int, with element: Element) -> Self {
+        var array = Self.init()
+        for _ in 0..<count {
+            array.append(element)
+        }
+        return array
+    }
+    
+    public func emptyToNil() -> Self? {
+        return self.count > 0 ? self : nil
+    }
 }
 
 extension Array where Element: Equatable {

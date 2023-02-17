@@ -14,6 +14,10 @@ extension Int {
         return Int(drand48() * Double(range.upperBound - range.lowerBound)) + range.lowerBound
     }
     
+    public static func random(range: Range<Int>) -> Int {
+        return Int(drand48() * Double(range.upperBound - range.lowerBound)) + range.lowerBound
+    }
+    
     public func zeroToNil() -> Int? {
         return self == 0 ? nil : self
     }

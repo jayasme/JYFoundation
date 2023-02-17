@@ -437,7 +437,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         self._viewModels.insert(viewModel, at: index)
     }
     
-    public func visibleCellViewModels() -> [ITableCellViewModel] {
+    public var visibleCellViewModels: [ITableCellViewModel] {
         return self.visibleCells.compactMap { ($0 as? JYTableViewCell)?.viewModel }
     }
     
@@ -668,7 +668,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             
             self.jyDraggingDelegate?.draggingMoved?(self, viewModel: draggingViewModel, draggingView: draggingView, point: point)
             
-            guard let firstVisibleViewModel = self.visibleCellViewModels().first,
+            guard let firstVisibleViewModel = self.visibleCellViewModels.first,
                   let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForRow(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
                   index != draggingIndex,
@@ -811,7 +811,7 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
             }
             
             guard let draggingViewModel = self.draggingViewModel,
-                  let firstVisibleViewModel = self.visibleCellViewModels().first,
+                  let firstVisibleViewModel = self.visibleCellViewModels.first,
                   let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForRow(at: draggingView.center)?.item,
                   index != draggingIndex,
