@@ -12,11 +12,11 @@ import PromiseKit
 extension DispatchQueue {
 
     @discardableResult
-    public func jy_delay(time: TimeInterval) -> Promise<Void> {
-        return Promise<Void> { seal in
+    public func delay(time: TimeInterval) -> Guarantee<Void> {
+        return Guarantee<Void> { seal in
             let time = DispatchTime.now() + .milliseconds(Int(time * 1000))
             self.asyncAfter(deadline: time, execute: {
-                seal.fulfill(())
+                seal(())
             })
         }
     }

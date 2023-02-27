@@ -188,14 +188,14 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     @discardableResult
-    private func retrieveDataPromise() -> Promise<[ITableCellViewModel]> {
+    private func retrieveDataPromise() -> Guarantee<[ITableCellViewModel]> {
         jyDelegate?.tableView?(self, willRetrieveDataWith: -1)
-        return Promise<[ITableCellViewModel]> { seal in
+        return Guarantee<[ITableCellViewModel]> { seal in
             JYTableView.tableViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
                 guard let viewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else { return }
                 DispatchQueue.main.async {
-                    seal.fulfill(viewModels)
+                    seal(viewModels)
                 }
             }
         }
@@ -281,14 +281,14 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
     }
     
     @discardableResult
-    public func reloadViewModels(clearPreviousData: Bool) -> Promise<Void> {
+    public func reloadViewModels(clearPreviousData: Bool) -> Guarantee<Void> {
         if type == .dynamical {
             if clearPreviousData {
                 _viewModels.removeAll()
             }
-            return Promise<Void> { seal in
+            return Guarantee<Void> { seal in
                 reloadData()
-                seal.fulfill(())
+                seal(())
             }
         } else if type == .static {
             return retrieveDataPromise()

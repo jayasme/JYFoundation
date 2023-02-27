@@ -23,10 +23,16 @@ open class JYThemeView: UIView, JYThemeful {
         }
     }
     
+    open func willApplyTheme() { }
+    
     func applyTheme() {
+        self.willApplyTheme()
         self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
         self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
+        self.didApplyTheme()
     }
+    
+    open func didApplyTheme() { }
     
     func passthroughThemes() {
         for subview in self.subviews {

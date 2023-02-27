@@ -172,13 +172,13 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     }
     
     @discardableResult
-    private func retrieveDataPromise() -> Promise<[ICollectionCellViewModel]> {
-        return Promise<[ICollectionCellViewModel]> { seal in
+    private func retrieveDataPromise() -> Guarantee<[ICollectionCellViewModel]> {
+        return Guarantee<[ICollectionCellViewModel]> { seal in
             JYCollectionView.collectionViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
                 guard let viewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self) else { return }
                 DispatchQueue.main.sync {
-                    seal.fulfill(viewModels)
+                    seal(viewModels)
                 }
             }
         }
@@ -241,20 +241,20 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     }
     
     @discardableResult
-    public func reloadViewModels(clearPreviousData: Bool, animated: Bool = false) -> Promise<Void> {
+    public func reloadViewModels(clearPreviousData: Bool, animated: Bool = false) -> Guarantee<Void> {
         if type == .dynamical {
             if clearPreviousData {
                 _viewModels.removeAll()
             }
-            return Promise<Void> { seal in
+            return Guarantee<Void> { seal in
                 reloadData()
-                seal.fulfill(())
+                seal(())
             }
         } else if type == .static {
             return retrieveDataPromise()
-            .then { [weak self] newViewModels -> Promise<Void> in
+            .then { [weak self] newViewModels -> Guarantee<Void> in
                 guard let strongSelf = self else {
-                    return Promise.value(())
+                    return Guarantee.value(())
                 }
                 
                 if clearPreviousData {
@@ -275,10 +275,10 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
                                       }
                     )
                     // UIView.transition is not reliable, so using the delay function to simulate the finish completion.
-                    return DispatchQueue.main.jy_delay(time: 0.1)
+                    return DispatchQueue.main.delay(time: 0.1)
                 }
                 strongSelf.reloadData()
-                return Promise.value(())
+                return Guarantee.value(())
             }
         } else {
             fatalError("unknown")
@@ -324,9 +324,9 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         return _viewModels.firstIndex{ $0 === cellViewModel }
     }
     
-    public func appendCellViewModels(_ cellViewModels: [ICollectionCellViewModel], with animation: Bool) -> Promise<Void> {
+    public func appendCellViewModels(_ cellViewModels: [ICollectionCellViewModel], with animation: Bool) -> Guarantee<Void> {
         guard  cellViewModels.count > 0 else {
-            return Promise<Void>.value(())
+            return Guarantee<Void>.value(())
         }
         
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
@@ -338,22 +338,22 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         _viewModels.append(contentsOf: cellViewModels)
         
         if animation {
-            return Promise<Void>{ seal in
+            return Guarantee<Void>{ seal in
                 performBatchUpdates({
                     self.insertItems(at: indexPaths)
                 }, completion: { _ in
-                    seal.fulfill(())
+                    seal(())
                 })
             }
         } else {
             self.insertItems(at: indexPaths)
-            return Promise<Void>.value(())
+            return Guarantee<Void>.value(())
         }
     }
     
-    public func insertCellViewModels(_ cellViewModels: [ICollectionCellViewModel], at position: Int, with animation: Bool) -> Promise<Void> {
+    public func insertCellViewModels(_ cellViewModels: [ICollectionCellViewModel], at position: Int, with animation: Bool) -> Guarantee<Void> {
         guard  cellViewModels.count > 0 else {
-            return Promise<Void>.value(())
+            return Guarantee<Void>.value(())
         }
         
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
@@ -365,22 +365,22 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
         
         if animation {
-            return Promise<Void>{ seal in
+            return Guarantee<Void>{ seal in
                 performBatchUpdates({
                     self.insertItems(at: indexPaths)
                 }, completion: { _ in
-                    seal.fulfill(())
+                    seal(())
                 })
             }
         } else {
             self.insertItems(at: indexPaths)
-            return Promise<Void>.value(())
+            return Guarantee<Void>.value(())
         }
     }
     
-    public func deleteCellViewModels(_ cellViewModels: [ICollectionCellViewModel], with animation: Bool) -> Promise<Void> {
+    public func deleteCellViewModels(_ cellViewModels: [ICollectionCellViewModel], with animation: Bool) -> Guarantee<Void> {
         guard  cellViewModels.count > 0 else {
-            return Promise<Void>.value(())
+            return Guarantee<Void>.value(())
         }
         
         let indexPaths: [IndexPath] = cellViewModels.compactMap({ (cellViewModel) -> IndexPath? in
@@ -400,20 +400,20 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         // For some glitches in iOS 8 so must call [collectionview reload]
         guard #available(iOS 9.0, *) else {
             reloadData()
-            return Promise<Void>.value(())
+            return Guarantee<Void>.value(())
         }
         
         if animation {
-            return Promise<Void>{ seal in
+            return Guarantee<Void>{ seal in
                 performBatchUpdates({
                     self.deleteItems(at: indexPaths)
                 }, completion: { _ in
-                    seal.fulfill(())
+                    seal(())
                 })
             }
         } else {
             self.deleteItems(at: indexPaths)
-            return Promise<Void>.value(())
+            return Guarantee<Void>.value(())
         }
     }
     

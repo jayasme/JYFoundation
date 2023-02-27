@@ -72,6 +72,20 @@ open class JYStyleSheet {
         self.borderColor = borderColor
         self.font = font
     }
+    
+    public func toAttributedStringKeys(themes: [JYTheme]) -> [NSAttributedString.Key: Any] {
+        var keys: [NSAttributedString.Key: Any] = [:]
+        if let backgroundColor = self.backgroundColor, let backgroundColorValue = backgroundColor.style(by: themes).first {
+            keys[NSAttributedString.Key.backgroundColor] = backgroundColorValue
+        }
+        if let foregroundColor = self.foregroundColor, let foregroundColorValue = foregroundColor.style(by: themes).first {
+            keys[NSAttributedString.Key.foregroundColor] = foregroundColorValue
+        }
+        if let font = self.font, let fontValue = font.style(by: themes).first {
+            keys[NSAttributedString.Key.font] = fontValue
+        }
+        return keys
+    }
 }
 
 public class JYThemeStyle<T> {

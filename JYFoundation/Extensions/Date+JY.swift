@@ -20,8 +20,16 @@ extension Date {
         self.init(timeIntervalSince1970: date.timeIntervalSince1970)
     }
     
-    public static func now() -> Date {
-        return Date(timeIntervalSinceNow: 0)
+    public static func now(includesTime: Bool = true) -> Date {
+        let now = Date(timeIntervalSinceNow: 0)
+        if (!includesTime) {
+            let calendar = Calendar(identifier: .iso8601)
+            let components = calendar.dateComponents([.year, .month, .day], from: now)
+            if let newNow = calendar.date(from: components) {
+                return newNow
+            }
+        }
+        return now
     }
     
     public func stringValue(with format: String) -> String {

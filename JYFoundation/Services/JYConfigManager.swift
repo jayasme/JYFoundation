@@ -8,6 +8,11 @@
 
 import Foundation
 
+extension Notification.Name {
+    
+    public static let JYConfigChanged = Notification.Name("JYConfigChanged")
+}
+
 public class JYConfigManager<T: JYConfig> {
     
     public private(set) var config: T
@@ -53,21 +58,8 @@ public class JYConfigManager<T: JYConfig> {
     
     // notification
     private func notifyConfigChange() {
-        self.notifications.forEach({ (key: String, value: ChangeNotification) in
-            _ = value.target?.perform(value.selector, with: nil)
-        })
+        NotificationCenter.default.post(name: Notification.Name.JYConfigChanged, object: ["config": self.config])
         try? self.saveIfNeeded()
-    }
-    
-    private var notifications: [String: ChangeNotification] = [:]
-    
-    public func addNotification(name: String, target: AnyObject?, selector: Selector) {
-        let notification = ChangeNotification(target: target, selector: selector)
-        notifications[name] = notification
-    }
-    
-    public func removeNotification(name: String) {
-        notifications.removeValue(forKey: name)
     }
 }
 
