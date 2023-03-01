@@ -23,6 +23,8 @@ public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource 
 }
 
 @objc public protocol JYCollectionViewDelegate: UIScrollViewDelegate {
+    @objc optional func collectionView(_ collectionView: JYCollectionView, willRetrieveDataWith index: Int)
+    @objc optional func collectionView(_ collectionView: JYCollectionView, didRetrieve data: [ICollectionCellViewModel], with index: Int)
     @objc optional func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: ICollectionCellViewModel)
     @objc optional func collectionView(_ collectionView: JYCollectionView, didNotification cellViewModel: ICollectionCellViewModel, identifier: String, userInfo: Any?)
 }
@@ -173,6 +175,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     
     @discardableResult
     private func retrieveDataPromise() -> Guarantee<[ICollectionCellViewModel]> {
+        jyDelegate?.collectionView?(self, willRetrieveDataWith: -1)
         return Guarantee<[ICollectionCellViewModel]> { seal in
             JYCollectionView.collectionViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
@@ -215,6 +218,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
                 } else if strongSelf.paginationDirection == .down {
                     strongSelf._viewModels.append(contentsOf: cellViewModels)
                 }
+                strongSelf.jyDelegate?.collectionView?(strongSelf, didRetrieve: cellViewModels, with: strongSelf.pageIndex)
             }.ensure { [weak self] in
                 guard let strongSelf = self else { return }
                 
@@ -278,6 +282,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
                     return DispatchQueue.main.delay(time: 0.1)
                 }
                 strongSelf.reloadData()
+                strongSelf.jyDelegate?.collectionView?(strongSelf, didRetrieve: newViewModels, with: -1)
                 return Guarantee.value(())
             }
         } else {
@@ -533,6 +538,10 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         jyDelegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
+    }
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        jyDelegate?.scrollViewDidScroll?(scrollView)
     }
     
     // MARK: JYThemeful

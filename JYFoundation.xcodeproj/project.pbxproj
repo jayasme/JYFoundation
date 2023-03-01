@@ -79,6 +79,7 @@
 		B9836199297E7C5700F26960 /* JYThemeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9836198297E7C5700F26960 /* JYThemeTextView.swift */; };
 		B983619B297E7C6900F26960 /* JYThemeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983619A297E7C6900F26960 /* JYThemeTextField.swift */; };
 		B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98361A1297ECDE900F26960 /* JYAnimationService.swift */; };
+		B9857E5D29AF1EC500C14CFC /* CGSize+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9857E5C29AF1EC500C14CFC /* CGSize+JY.swift */; };
 		B994423D2993EBC400BE79A9 /* JYThemeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994423C2993EBC400BE79A9 /* JYThemeScrollView.swift */; };
 		B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */; };
 		B9A66FF928BD24EC00B360E1 /* JYLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */; };
@@ -167,6 +168,7 @@
 		B9836198297E7C5700F26960 /* JYThemeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeTextView.swift; sourceTree = "<group>"; };
 		B983619A297E7C6900F26960 /* JYThemeTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeTextField.swift; sourceTree = "<group>"; };
 		B98361A1297ECDE900F26960 /* JYAnimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYAnimationService.swift; sourceTree = "<group>"; };
+		B9857E5C29AF1EC500C14CFC /* CGSize+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+JY.swift"; sourceTree = "<group>"; };
 		B994423C2993EBC400BE79A9 /* JYThemeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeScrollView.swift; sourceTree = "<group>"; };
 		B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYFeedbackButton.swift; sourceTree = "<group>"; };
 		B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYLocationService.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				1D389204208AF9B40005C175 /* UISearchBar+JY.swift */,
 				1D38920C208AF9B40005C175 /* UIView+JY.swift */,
 				B9727834298F539000BD9928 /* Array+JY.swift */,
+				B9857E5C29AF1EC500C14CFC /* CGSize+JY.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				1D00E4E32096C09700450247 /* JYCollectionView.swift in Sources */,
 				1D00E4E62096C0F800450247 /* JYCollectionViewCell.swift in Sources */,
 				B9A66FF928BD24EC00B360E1 /* JYLocationService.swift in Sources */,
+				B9857E5D29AF1EC500C14CFC /* CGSize+JY.swift in Sources */,
 				1D477775211C3A7F0068FCD0 /* Dictionary+JY.swift in Sources */,
 				1D00E4EF2097019A00450247 /* JYPaginationCollectionViewController.swift in Sources */,
 				B9E6B67827AF53EE00C47285 /* UIApplication+JY.swift in Sources */,

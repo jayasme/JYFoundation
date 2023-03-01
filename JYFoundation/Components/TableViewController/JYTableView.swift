@@ -537,6 +537,10 @@ public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelega
         jyDelegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
     }
     
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        jyDelegate?.scrollViewDidScroll?(scrollView)
+    }
+    
     // MARK: Dragging
     
     public var draggingAutoScrollInsets: UIEdgeInsets = .init(top: 40, left: 0, bottom: 40, right: 0)
