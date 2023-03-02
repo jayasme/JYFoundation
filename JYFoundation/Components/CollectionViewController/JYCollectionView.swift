@@ -34,7 +34,7 @@ public enum JYCollectionViewPaginationDirection: Int {
     case down = 2
 }
 
-public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, JYThemeful {
+open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, JYThemeful {
     
     internal static var collectionViewLayoutQueue: DispatchQueue = DispatchQueue(label: "JYCollectionViewLayout")
     

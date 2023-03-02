@@ -44,7 +44,7 @@ public enum JYTableViewPaginationDirection: Int {
     case down = 2
 }
 
-public class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate, JYThemeful {
+open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate, JYThemeful {
     
     internal static var tableViewLayoutQueue: DispatchQueue = DispatchQueue(label: "JYTableViewLayout")
     

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class JYThemeScrollView: UIScrollView, JYThemeful {
+open class JYThemeScrollView: UIScrollView, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
