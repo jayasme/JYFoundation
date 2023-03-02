@@ -559,7 +559,7 @@ public class JYCollectionView : UICollectionView, UICollectionViewDataSource, UI
         }
     }
     
-    func applyThemes() {
+    open func applyThemes() {
         self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
         self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
     }

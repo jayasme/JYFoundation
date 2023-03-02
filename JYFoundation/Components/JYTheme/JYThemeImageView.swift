@@ -12,19 +12,19 @@ import UIKit
 
 open class JYThemeImageView: UIImageView, JYThemeful {
     
-    open var themes: [JYTheme] = [] {
+    public var themes: [JYTheme] = [] {
         didSet {
             self.applyTheme()
         }
     }
     
-    open var styleSheet: JYStyleSheet? {
+    public var styleSheet: JYStyleSheet? {
         didSet {
             self.applyTheme()
         }
     }
     
-    public override var image: UIImage? {
+    open override var image: UIImage? {
         get {
             return super.image
         }

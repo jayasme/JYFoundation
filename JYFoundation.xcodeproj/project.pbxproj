@@ -40,7 +40,6 @@
 		1D389219208AF9B40005C175 /* NSObject+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389206208AF9B40005C175 /* NSObject+JY.swift */; };
 		1D38921A208AF9B40005C175 /* UIResponder+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389207208AF9B40005C175 /* UIResponder+JY.swift */; };
 		1D38921B208AF9B40005C175 /* CharacterSet+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389208208AF9B40005C175 /* CharacterSet+JY.swift */; };
-		1D38921C208AF9B40005C175 /* Calendar+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D389209208AF9B40005C175 /* Calendar+JY.swift */; };
 		1D38921D208AF9B40005C175 /* TimeInterval+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38920A208AF9B40005C175 /* TimeInterval+JY.swift */; };
 		1D38921E208AF9B40005C175 /* UIColor+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38920B208AF9B40005C175 /* UIColor+JY.swift */; };
 		1D38921F208AF9B40005C175 /* UIView+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38920C208AF9B40005C175 /* UIView+JY.swift */; };
@@ -81,7 +80,6 @@
 		B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98361A1297ECDE900F26960 /* JYAnimationService.swift */; };
 		B9857E5D29AF1EC500C14CFC /* CGSize+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9857E5C29AF1EC500C14CFC /* CGSize+JY.swift */; };
 		B994423D2993EBC400BE79A9 /* JYThemeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994423C2993EBC400BE79A9 /* JYThemeScrollView.swift */; };
-		B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */; };
 		B9A66FF928BD24EC00B360E1 /* JYLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */; };
 		B9BC001A298B6C1100D55AD2 /* JYThemeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */; };
 		B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DD4E5628419AF50086CBDA /* JYGradientView.swift */; };
@@ -125,7 +123,6 @@
 		1D389206208AF9B40005C175 /* NSObject+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+JY.swift"; sourceTree = "<group>"; };
 		1D389207208AF9B40005C175 /* UIResponder+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIResponder+JY.swift"; sourceTree = "<group>"; };
 		1D389208208AF9B40005C175 /* CharacterSet+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CharacterSet+JY.swift"; sourceTree = "<group>"; };
-		1D389209208AF9B40005C175 /* Calendar+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Calendar+JY.swift"; sourceTree = "<group>"; };
 		1D38920A208AF9B40005C175 /* TimeInterval+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimeInterval+JY.swift"; sourceTree = "<group>"; };
 		1D38920B208AF9B40005C175 /* UIColor+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+JY.swift"; sourceTree = "<group>"; };
 		1D38920C208AF9B40005C175 /* UIView+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+JY.swift"; sourceTree = "<group>"; };
@@ -170,7 +167,6 @@
 		B98361A1297ECDE900F26960 /* JYAnimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYAnimationService.swift; sourceTree = "<group>"; };
 		B9857E5C29AF1EC500C14CFC /* CGSize+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+JY.swift"; sourceTree = "<group>"; };
 		B994423C2993EBC400BE79A9 /* JYThemeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeScrollView.swift; sourceTree = "<group>"; };
-		B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYFeedbackButton.swift; sourceTree = "<group>"; };
 		B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYLocationService.swift; sourceTree = "<group>"; };
 		B9BC0019298B6C1100D55AD2 /* JYThemeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeImageView.swift; sourceTree = "<group>"; };
 		B9DD4E5628419AF50086CBDA /* JYGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYGradientView.swift; sourceTree = "<group>"; };
@@ -237,7 +233,6 @@
 		1D3891F9208AF9960005C175 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				1D389209208AF9B40005C175 /* Calendar+JY.swift */,
 				B93DC43827A58F76002C6390 /* CGFloat+JY.swift */,
 				B969A8AD27F5C19A00F8980B /* CGPoint+JY.swift */,
 				1D389208208AF9B40005C175 /* CharacterSet+JY.swift */,
@@ -298,7 +293,6 @@
 				B967BA0C277EA85100926B9C /* JYBlurView.swift */,
 				B9E6B67927B0FCE800C47285 /* JYGestureView.swift */,
 				B9DD4E5628419AF50086CBDA /* JYGradientView.swift */,
-				B9A66FF628BD0F5800B360E1 /* JYFeedbackButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -559,8 +553,6 @@
 				1D00E4D32096BBE300450247 /* JYTableViewCell.swift in Sources */,
 				1D00E4B620932A8700450247 /* JYHttpModel.swift in Sources */,
 				1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */,
-				1D38921C208AF9B40005C175 /* Calendar+JY.swift in Sources */,
-				B9A66FF728BD0F5800B360E1 /* JYFeedbackButton.swift in Sources */,
 				B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */,
 				B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */,
 				1D3891F5208AF6370005C175 /* JYAlbumAuthService.swift in Sources */,

@@ -11,19 +11,19 @@ import UIKit
 
 open class JYThemeTextView: UITextView, JYThemeful {
     
-    open var themes: [JYTheme] = [] {
+    public var themes: [JYTheme] = [] {
         didSet {
             self.applyTheme()
         }
     }
     
-    open var styleSheet: JYStyleSheet? {
+    public var styleSheet: JYStyleSheet? {
         didSet {
             self.applyTheme()
         }
     }
     
-    func applyTheme() {
+    open func applyTheme() {
         self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
         self.textColor = self.styleSheet?.foregroundColor?.style(by: self.themes).first ?? .clear
         self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor

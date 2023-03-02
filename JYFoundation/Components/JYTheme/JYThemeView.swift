@@ -10,29 +10,23 @@ import Foundation
 import UIKit
 
 open class JYThemeView: UIView, JYThemeful {
-    open var themes: [JYTheme] = [] {
+    public var themes: [JYTheme] = [] {
         didSet {
             self.applyTheme()
             self.passthroughThemes()
         }
     }
     
-    open var styleSheet: JYStyleSheet? {
+    public var styleSheet: JYStyleSheet? {
         didSet {
             self.applyTheme()
         }
     }
     
-    open func willApplyTheme() { }
-    
-    func applyTheme() {
-        self.willApplyTheme()
+    open func applyTheme() {
         self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
         self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
-        self.didApplyTheme()
     }
-    
-    open func didApplyTheme() { }
     
     func passthroughThemes() {
         for subview in self.subviews {

@@ -11,20 +11,20 @@ import UIKit
 
 public class JYThemeScrollView: UIScrollView, JYThemeful {
     
-    open var themes: [JYTheme] = [] {
+    public var themes: [JYTheme] = [] {
         didSet {
             self.applyTheme()
             self.passthroughThemes()
         }
     }
     
-    open var styleSheet: JYStyleSheet? {
+    public var styleSheet: JYStyleSheet? {
         didSet {
             self.applyTheme()
         }
     }
     
-    func applyTheme() {
+    open func applyTheme() {
         self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
         self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
     }
