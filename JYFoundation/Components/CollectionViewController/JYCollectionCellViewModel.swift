@@ -11,13 +11,12 @@ import UIKit
 
 @objc public protocol ICollectionCellViewModel: AnyObject {
     func notification(identifier: String, userInfo: Any?)
+    func updateCell()
     func cellType() -> JYCollectionViewCell.Type
     func size() -> CGSize
     func shouldHighlight() -> Bool
     func didSelect()
     
-    var signalBlock: (()->())? { get set }
-    var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? { get set }
     var cell: JYCollectionViewCell? { get set }
 }
 
@@ -37,11 +36,11 @@ open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
         self.updateModel(model)
     }
     
-    public var signalBlock: (()->())? = nil
-    public var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? = nil
+    internal var signalBlock: (()->())? = nil
+    internal var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? = nil
     
     open func size() -> CGSize {
-        return CGSize(width: 50, height: 50)
+        return .zero
     }
     
     open func shouldHighlight() -> Bool {
@@ -65,33 +64,8 @@ open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
     public func notification(identifier: String, userInfo: Any? = nil) {
         notificationBlock?(self, identifier, userInfo)
     }
-}
-
-open class JYSimpleCollectionCellViewModel: NSObject, ICollectionCellViewModel {
-    public weak var cell: JYCollectionViewCell? = nil
     
-    public var signalBlock: (()->())? = nil
-    public var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? = nil
-    
-    open func size() -> CGSize {
-        return CGSize(width: 50, height: 50)
-    }
-    
-    open func shouldHighlight() -> Bool {
-        return true
-    }
-    
-    open func cellType() -> JYCollectionViewCell.Type {
-        return JYCollectionViewCell.self
-    }
-    
-    open func didSelect() {
-        // do nothing
-    }
-    
-    // MARK: publics
-    
-    public func notification(identifier: String, userInfo: Any? = nil) {
-        notificationBlock?(self, identifier, userInfo)
+    public func updateCell() {
+        self.signalBlock?()
     }
 }

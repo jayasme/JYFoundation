@@ -42,22 +42,21 @@ extension UIView {
     }
     
     /// Find the view mathces the condition.
-    public func findSubView(where predicate: (UIView) -> Bool) -> UIView? {
-        if let view = self.subviews.first(where: predicate) {
-            return view
+    public func findSubViews(where predicate: (UIView) -> Bool) -> [UIView] {
+        var result: [UIView] = []
+        if (predicate(self)) {
+            result += self
         }
         for subView in self.subviews {
-            if let view = subView.findSubView(where: predicate) {
-                return view
-            }
+            result += subView.findSubViews(where: predicate)
         }
-        return nil
+        return result
     }
     
     /// Get the root view matches the condition.
     public func findRootView(where predicate: (UIView) -> Bool) -> UIView? {
         var current: UIView? = self.superview
-        var array: Array<UIView> = []
+        var array: [UIView] = []
         while(true) {
             if let c = current {
                 if predicate(c) {

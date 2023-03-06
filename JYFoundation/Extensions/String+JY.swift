@@ -47,7 +47,7 @@ extension String {
     
     public func substring(start: Int, length: Int? = nil) -> String {
         let startIndex = self.index(self.startIndex, offsetBy: start)
-        if let length = length {
+        if let length = length, start + length < self.count {
             let endIndex = self.index(startIndex, offsetBy: length)
             return String(self[startIndex..<endIndex])
         }

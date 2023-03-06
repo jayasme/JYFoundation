@@ -14,13 +14,13 @@ open class JYThemeImageView: UIImageView, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyTheme()
+            self.applyThemes()
         }
     }
     
     public var styleSheet: JYStyleSheet? {
         didSet {
-            self.applyTheme()
+            self.applyThemes()
         }
     }
     
@@ -33,7 +33,7 @@ open class JYThemeImageView: UIImageView, JYThemeful {
         }
     }
     
-    func applyTheme() {
+    func applyThemes() {
         self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
         self.image = self.getStyledImage(image: self.image)
     }

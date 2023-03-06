@@ -88,46 +88,10 @@ open class JYTableCellViewModel<T>: NSObject, ITableCellViewModel {
     // MARK: publics
     
     public func notification(identifier: String, userInfo: Any? = nil) {
-        notificationBlock?(self, identifier, userInfo)
-    }
-}
-
-
-open class JYSimpleTableCellViewModel: NSObject, ITableCellViewModel {
-    public weak var cell: JYTableViewCell? = nil
-    
-    public var signalBlock: (()->())? = nil
-    public var notificationBlock: ((ITableCellViewModel, String, Any?) -> Void)? = nil
-    
-    // MARK: Overrides
-    
-    open func height() -> CGFloat {
-        return 0
+        self.notificationBlock?(self, identifier, userInfo)
     }
     
-    open func isDraggable() -> Bool {
-        return false
-    }
-        
-    open func shouldHighlight() -> Bool {
-        return true
-    }
-    
-    open func cellType() -> JYTableViewCell.Type {
-        return JYTableViewCell.self
-    }
-
-    open func actionButtons() -> [JYTableViewCellAction]? {
-        return nil
-    }
-
-    open func didSelect() {
-        // do nothing
-    }
-    
-    // MARK: publics
-    
-    public func notification(identifier: String, userInfo: Any? = nil) {
-        notificationBlock?(self, identifier, userInfo)
+    public func updateCell() {
+        self.signalBlock?()
     }
 }

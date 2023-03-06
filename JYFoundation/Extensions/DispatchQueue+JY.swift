@@ -11,7 +11,6 @@ import PromiseKit
 
 extension DispatchQueue {
 
-    @discardableResult
     public func delay(time: TimeInterval) -> Guarantee<Void> {
         return Guarantee<Void> { seal in
             let time = DispatchTime.now() + .milliseconds(Int(time * 1000))

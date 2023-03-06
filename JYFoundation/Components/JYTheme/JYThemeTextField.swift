@@ -13,17 +13,17 @@ open class JYThemeTextField: UITextField, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyTheme()
+            self.applyThemes()
         }
     }
     
     public var styleSheet: JYStyleSheet? {
         didSet {
-            self.applyTheme()
+            self.applyThemes()
         }
     }
     
-    open func applyTheme() {
+    open func applyThemes() {
         self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
         self.textColor = self.styleSheet?.foregroundColor?.style(by: self.themes).first ?? .clear
         self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor

@@ -35,12 +35,24 @@ extension Array {
     public func emptyToNil() -> Self? {
         return self.count > 0 ? self : nil
     }
+    
+    public func exclude(where predicate: (Element) -> Bool) -> [Element] {
+        return self.filter{ !predicate($0) }
+    }
 }
 
 extension Array where Element: Equatable {
     
     public func contains(of element: Element) -> Bool {
         return self.contains(where: { $0 == element })
+    }
+    
+    public func exclude(of element: Element) -> [Element] {
+        return self.filter { $0 != element }
+    }
+    
+    public func exclude(in element: [Element]) -> [Element] {
+        return self.filter { !element.contains(of: $0) }
     }
 }
 
