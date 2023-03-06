@@ -17,6 +17,8 @@ import UIKit
     func shouldHighlight() -> Bool
     func didSelect()
     
+    var signalBlock: (()->())? { get set }
+    var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? { get set }
     var cell: JYCollectionViewCell? { get set }
 }
 
@@ -36,8 +38,8 @@ open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
         self.updateModel(model)
     }
     
-    internal var signalBlock: (()->())? = nil
-    internal var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? = nil
+    public var signalBlock: (()->())? = nil
+    public var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? = nil
     
     open func size() -> CGSize {
         return .zero
