@@ -23,12 +23,13 @@ public protocol JYTableViewDynamicalDataSource: JYTableViewDataSource {
 }
 
 @objc public protocol JYTableViewDraggingDelegate {
-    @objc optional func draggingBegan(_ tableView: JYTableView, viewModel: ITableCellViewModel, draggingView: UIView, point: CGPoint)
-    @objc optional func draggingMoved(_ tableView: JYTableView, viewModel: ITableCellViewModel, draggingView: UIView, point: CGPoint)
-    @objc optional func draggingSorted(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, fromIndex: Int, toIndex: Int)
-    @objc optional func draggingEnded(_ tableView: JYTableView)
-    @objc optional func draggingShouldBeginRemoving(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel) -> Bool
-    @objc optional func draggingDidEndRemoving(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, fromIndex: Int)
+    @objc optional func draggingDidBegin(_ tableView: JYTableView, viewModel: ITableCellViewModel, draggingView: UIView, point: CGPoint)
+    @objc optional func draggingDidMove(_ tableView: JYTableView, viewModel: ITableCellViewModel, draggingView: UIView, fromIndex: Int, point: CGPoint)
+    @objc optional func draggingShouldPlace(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, fromIndex: Int, atIndex: Int) -> Bool
+    @objc optional func draggingWillEnd(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, fromIndex: Int, toIndex: Int)
+    @objc optional func draggingDidEnd(_ tableView: JYTableView)
+    @objc optional func draggingShouldRemove(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel) -> Bool
+    @objc optional func draggingDidRemove(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, fromIndex: Int)
 }
 
 @objc public protocol JYTableViewDelegate: UIScrollViewDelegate {
@@ -609,7 +610,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
                 return
             }
             let cellViewModel = self.cellViewModels[index]
-            guard cellViewModel.isDraggable(), let cell = cellViewModel.cell else {
+            guard cellViewModel.isDraggable(draggingCellViewModel: nil), let cell = cellViewModel.cell else {
                 return
             }
             
@@ -624,7 +625,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             draggingView.frame = cell.frame
             var center = cell.center
             if (!self.isDraggingRemove &&
-                self.jyDraggingDelegate?.draggingShouldBeginRemoving?(self, draggingViewModel: cellViewModel) == true
+                self.jyDraggingDelegate?.draggingShouldRemove?(self, draggingViewModel: cellViewModel) == true
             ) {
                 self.isDraggingRemove = true
                 center.x = point.x
@@ -632,7 +633,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             center.y = point.y
             self.reloadData()
             
-            self.jyDraggingDelegate?.draggingBegan?(self, viewModel: cellViewModel, draggingView: draggingView, point: center)
+            self.jyDraggingDelegate?.draggingDidBegin?(self, viewModel: cellViewModel, draggingView: draggingView, point: center)
             
             self.startDraggingIndex = index
             self.isScrollEnabled = false
@@ -670,13 +671,14 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             self.draggingAutoScrollDirection = getAutoScrollDirection()
             self.startOrStopAutoScroll()
             
-            self.jyDraggingDelegate?.draggingMoved?(self, viewModel: draggingViewModel, draggingView: draggingView, point: point)
+            self.jyDraggingDelegate?.draggingDidMove?(self, viewModel: draggingViewModel, draggingView: draggingView, fromIndex: draggingIndex, point: point)
             
             guard let firstVisibleViewModel = self.visibleCellViewModels.first,
                   let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForRow(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
                   index != draggingIndex,
-                  self.cellViewModels[index].isDraggable()
+                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
+                  self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
             else {
                 return
             }
@@ -704,7 +706,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             }
             
             if (self.isDraggingRemove && self.isDraggingRemoving) {
-                self.jyDraggingDelegate?.draggingDidEndRemoving?(
+                self.jyDraggingDelegate?.draggingDidRemove?(
                     self,
                     draggingViewModel: draggingViewModel,
                     fromIndex: startDraggingIndex
@@ -731,7 +733,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
                         self.draggingAutoScrollDirection = nil
                         self.startOrStopAutoScroll()
                         self.isScrollEnabled = true
-                        self.jyDraggingDelegate?.draggingEnded?(self)
+                        self.jyDraggingDelegate?.draggingDidEnd?(self)
                     }
                 )
                 
@@ -739,7 +741,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
                 let index = self.indexPathForRow(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
                 let cell = self.cellForRow(at: IndexPath(item: draggingIndex, section: 0)) {
                 
-                self.jyDraggingDelegate?.draggingSorted?(
+                self.jyDraggingDelegate?.draggingWillEnd?(
                     self,
                     draggingViewModel: draggingViewModel,
                     fromIndex: startDraggingIndex,
@@ -767,7 +769,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
                         self.draggingAutoScrollDirection = nil
                         self.startOrStopAutoScroll()
                         self.isScrollEnabled = true
-                        self.jyDraggingDelegate?.draggingEnded?(self)
+                        self.jyDraggingDelegate?.draggingDidEnd?(self)
                     }
                 )
             }
@@ -775,7 +777,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     }
     
     private func getAutoScrollDirection() -> AutoScrollDirection? {
-        guard let draggingView = self.draggingView else {
+        guard self.bounds.size.height < self.contentOffset.y, let draggingView = self.draggingView else {
             return nil
         }
 
@@ -802,6 +804,12 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     }
     
     @objc private func handleAutoScroll() {
+        guard let draggingAutoScrollDirection = self.draggingAutoScrollDirection,
+              let draggingView = self.draggingView,
+              let draggingIndex = self.draggingIndex else {
+            return
+        }
+        
         let scrollSpeed = self.draggingAutoScrollSpeed.rawValue
         if let draggingAutoScrollDirection = self.draggingAutoScrollDirection, let draggingView = self.draggingView {
             if (draggingAutoScrollDirection == .up && self.contentOffset.y > 0) {
@@ -819,7 +827,8 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
                   let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForRow(at: draggingView.center)?.item,
                   index != draggingIndex,
-                  self.cellViewModels[index].isDraggable()
+                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
+                  self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
             else {
                 return
             }

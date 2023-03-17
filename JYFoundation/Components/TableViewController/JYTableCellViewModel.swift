@@ -26,7 +26,7 @@ public class JYTableViewCellAction: NSObject {
     func notification(identifier: String, userInfo: Any?)
     func cellType() -> JYTableViewCell.Type
     func height() -> CGFloat
-    func isDraggable() -> Bool
+    func isDraggable(draggingCellViewModel: ITableCellViewModel?) -> Bool
     func shouldHighlight() -> Bool
     func actionButtons() -> [JYTableViewCellAction]?
     func didSelect()
@@ -61,7 +61,8 @@ open class JYTableCellViewModel<T>: NSObject, ITableCellViewModel {
         return 0
     }
     
-    open func isDraggable() -> Bool {
+    /// Indicates wheter the cell view model is reacted to dragging, if draggingCellViewModel is nil means current cell view model is dragging cell view model.
+    open func isDraggable(draggingCellViewModel: ITableCellViewModel?) -> Bool {
         return false
     }
         

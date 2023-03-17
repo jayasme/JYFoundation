@@ -17,6 +17,16 @@ public protocol JYCollectionViewStaticDataSource: JYCollectionViewDataSource {
     func retrieveData(_ collectionView: JYCollectionView) -> [ICollectionCellViewModel]
 }
 
+@objc public protocol JYCollectionViewDraggingDelegate {
+    @objc optional func draggingDidBegin(_ collectionView: JYCollectionView, viewModel: ICollectionCellViewModel, draggingView: UIView, point: CGPoint)
+    @objc optional func draggingDidMove(_ collectionView: JYCollectionView, viewModel: ICollectionCellViewModel, draggingView: UIView, fromIndex: Int, point: CGPoint)
+    @objc optional func draggingShouldPlace(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int, atIndex: Int) -> Bool
+    @objc optional func draggingWillEnd(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int, toIndex: Int)
+    @objc optional func draggingDidEnd(_ collectionView: JYCollectionView)
+    @objc optional func draggingShouldRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel) -> Bool
+    @objc optional func draggingDidRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int)
+}
+
 public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource {
     func retrieveData(_ collectionView: JYCollectionView, index: Int, itemsPerPage: Int) -> Promise<([ICollectionCellViewModel], Bool)>
     func spinnerCellViewModel(_ collectionView: JYCollectionView) -> ICollectionCellViewModel?
@@ -87,6 +97,8 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     public weak var jyDelegate: JYCollectionViewDelegate? = nil
     
+    public weak var jyDraggingDelegate: JYCollectionViewDraggingDelegate? = nil
+    
     // MARK: RefreshControl
     
     private func checkRefreshControl() {
@@ -131,6 +143,8 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     private func commonInitializer() {
         dataSource = self
         delegate = self
+        
+        self.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "DraggingPlaceholder")
     }
     
     // MARK: Privates
@@ -422,6 +436,19 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         }
     }
     
+    public func moveCellViewModel(for viewModel: ICollectionCellViewModel, to index: Int) {
+        guard let fromIndex = self.index(of: viewModel) else {
+            return
+        }
+        
+        self.moveItem(at: IndexPath(row: fromIndex, section: 0), to: IndexPath(row: index, section: 0))
+        self._viewModels.remove(at: fromIndex)
+        self._viewModels.insert(viewModel, at: index)
+    }
+    
+    public var visibleCellViewModels: [ICollectionCellViewModel] {
+        return self.visibleCells.compactMap { ($0 as? JYCollectionViewCell)?.viewModel }
+    }
     
     // MARK: UICollectionViewDataSource
     
@@ -439,6 +466,12 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         }
         
         let viewModel = _viewModels[indexPath.item]
+        guard viewModel !== self.draggingViewModel else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DraggingPlaceholder", for: indexPath)
+            cell.frame = CGRect(origin: .zero, size: viewModel.size())
+            cell.backgroundColor = .clear
+            return cell
+        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: viewModel.cellType().defaultIdentifier(), for: indexPath) as! JYCollectionViewCell
         cell.updateViewModel(viewModel: viewModel)
         jyDataSource?.prepare?(viewModel, for: cell)
@@ -542,6 +575,303 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         jyDelegate?.scrollViewDidScroll?(scrollView)
+    }
+    
+    // MARK: Dragging
+    
+    public var draggingAutoScrollInsets: UIEdgeInsets = .init(top: 40, left: 0, bottom: 40, right: 0)
+    public var draggingRemoveEdgeInsets: UIEdgeInsets = .init(top: 0, left: 40, bottom: 0, right: 40)
+    
+    public enum DraggingAutoScrollSpeed: CGFloat {
+        case low = 4
+        case medium = 6
+        case high = 8
+    }
+    
+    private enum AutoScrollDirection {
+        case up
+        case down
+    }
+    
+    public var draggingAutoScrollSpeed: DraggingAutoScrollSpeed = .medium
+    
+    public var draggingEnabled: Bool = false {
+        didSet {
+            if (self.draggingEnabled) {
+                guard self.longPressGesture == nil else {
+                    return
+                }
+                let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
+                self.addGestureRecognizer(gesture)
+                self.longPressGesture = gesture
+            } else {
+                if self.longPressGesture != nil {
+                    self.removeGestureRecognizer(self.longPressGesture!)
+                }
+                self.longPressGesture = nil
+            }
+        }
+    }
+    
+    private var longPressGesture: UILongPressGestureRecognizer?
+    private var draggingView: UIView?
+    private var draggingViewModel: ICollectionCellViewModel?
+    private var draggingIndex: Int?
+    private var startDraggingIndex: Int?
+    private var draggingScrolling: Bool = false
+    private var draggingAutoScrollDirection: AutoScrollDirection? = nil
+    private var draggingDisplayLink: CADisplayLink? = nil
+    
+    private var isDraggingRemove: Bool = false
+    private var isDraggingRemoving: Bool = false
+    
+    public override var isDragging: Bool {
+        get {
+            return self.draggingViewModel != nil
+        }
+    }
+    
+    @objc private func handleLongPress(gesture: UILongPressGestureRecognizer) {
+        guard gesture.numberOfTouches == 1 else {
+            return
+        }
+        
+        let point = gesture.location(in: self)
+        // let translate = gesture
+        
+        if (gesture.state == .began) {
+            
+            guard let index = self.indexPathForItem(at: point)?.item else {
+                return
+            }
+            let cellViewModel = self.cellViewModels[index]
+            guard cellViewModel.isDraggable(draggingCellViewModel: nil), let cell = cellViewModel.cell else {
+                return
+            }
+            
+            self.draggingView = cell.snapshotView(afterScreenUpdates: false)
+            guard let draggingView = self.draggingView else {
+                return
+            }
+            
+            self.addSubview(draggingView)
+            self.draggingIndex = index
+            self.draggingViewModel = cellViewModel
+            draggingView.frame = cell.frame
+            var center = cell.center
+            if (!self.isDraggingRemove &&
+                self.jyDraggingDelegate?.draggingShouldRemove?(self, draggingViewModel: cellViewModel) == true
+            ) {
+                self.isDraggingRemove = true
+                center.x = point.x
+            }
+            center.y = point.y
+            self.reloadData()
+            
+            self.jyDraggingDelegate?.draggingDidBegin?(self, viewModel: cellViewModel, draggingView: draggingView, point: center)
+            
+            self.startDraggingIndex = index
+            self.isScrollEnabled = false
+            
+        } else if (gesture.state == .changed) {
+            
+            guard let draggingView = self.draggingView,
+                  let draggingIndex = self.draggingIndex,
+                  let draggingViewModel = self.draggingViewModel
+            else {
+                return
+            }
+            
+            var center = draggingView.center
+            center.y = point.y
+            if (self.isDraggingRemove) {
+                center.x = point.x
+            }
+            draggingView.center = center
+            
+            if (self.isDraggingRemove && !self.isDraggingRemoving &&
+                (point.x <= self.draggingRemoveEdgeInsets.left || point.x >= self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
+                
+                self.isDraggingRemoving = true
+                self.deleteCellViewModels([draggingViewModel], with: true).done { }
+            }
+            
+            if (self.isDraggingRemove && self.isDraggingRemoving &&
+                (point.x > self.draggingRemoveEdgeInsets.left && point.x < self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
+                
+                self.isDraggingRemoving = false
+                self.insertCellViewModels([draggingViewModel], at: draggingIndex, with: true).done { }
+            }
+            
+            self.draggingAutoScrollDirection = getAutoScrollDirection()
+            self.startOrStopAutoScroll()
+            
+            self.jyDraggingDelegate?.draggingDidMove?(self, viewModel: draggingViewModel, draggingView: draggingView, fromIndex: draggingIndex, point: point)
+            
+            guard let firstVisibleViewModel = self.visibleCellViewModels.first,
+                  let firstVisibleIndex = self.index(of: firstVisibleViewModel),
+                  let index = self.indexPathForItem(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
+                  index != draggingIndex,
+                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
+                  self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
+            else {
+                return
+            }
+            
+            print("asdsad")
+            
+            // dragging view would never been gone top out of the collectionview
+            let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
+            self.moveCellViewModel(for: draggingViewModel, to: toIndex)
+            self.draggingIndex = toIndex
+            
+        } else if (gesture.state == .ended || gesture.state == .cancelled) {
+            
+            guard let draggingView = self.draggingView,
+                  let draggingViewModel = self.draggingViewModel,
+                  let draggingIndex = self.draggingIndex,
+                  let startDraggingIndex = self.startDraggingIndex
+            else {
+                self.reloadData()
+                self.draggingView?.removeFromSuperview()
+                self.draggingView = nil
+                self.draggingIndex = nil
+                self.draggingAutoScrollDirection = nil
+                self.startOrStopAutoScroll()
+                self.isScrollEnabled = true
+                return
+            }
+            
+            if (self.isDraggingRemove && self.isDraggingRemoving) {
+                self.jyDraggingDelegate?.draggingDidRemove?(
+                    self,
+                    draggingViewModel: draggingViewModel,
+                    fromIndex: startDraggingIndex
+                )
+                
+                self.isDraggingRemove = false
+                self.isDraggingRemoving = false
+
+                UIView.animate(
+                    withDuration: 0.3,
+                    delay: 0,
+                    options: .beginFromCurrentState,
+                    animations: {
+                        draggingView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                    },
+                    completion: { [weak self] flag in
+                        guard let self = self else {
+                            return
+                        }
+                        self.reloadData()
+                        self.draggingView?.removeFromSuperview()
+                        self.draggingView = nil
+                        self.draggingIndex = nil
+                        self.draggingAutoScrollDirection = nil
+                        self.startOrStopAutoScroll()
+                        self.isScrollEnabled = true
+                        self.jyDraggingDelegate?.draggingDidEnd?(self)
+                    }
+                )
+                
+            } else if
+                let index = self.indexPathForItem(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
+                let cell = self.cellForItem(at: IndexPath(item: draggingIndex, section: 0)) {
+                
+                self.jyDraggingDelegate?.draggingWillEnd?(
+                    self,
+                    draggingViewModel: draggingViewModel,
+                    fromIndex: startDraggingIndex,
+                    toIndex: index
+                )
+                
+                self.draggingViewModel = nil
+                
+                UIView.animate(
+                    withDuration: 0.3,
+                    delay: 0,
+                    options: .beginFromCurrentState,
+                    animations: {
+                        draggingView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                        draggingView.frame = cell.frame
+                    },
+                    completion: { [weak self] flag in
+                        guard flag, let self = self else {
+                            return
+                        }
+                        self.reloadData()
+                        self.draggingView?.removeFromSuperview()
+                        self.draggingView = nil
+                        self.draggingIndex = nil
+                        self.draggingAutoScrollDirection = nil
+                        self.startOrStopAutoScroll()
+                        self.isScrollEnabled = true
+                        self.jyDraggingDelegate?.draggingDidEnd?(self)
+                    }
+                )
+            }
+        }
+    }
+    
+    private func getAutoScrollDirection() -> AutoScrollDirection? {
+        guard self.bounds.size.height < self.contentOffset.y, let draggingView = self.draggingView else {
+            return nil
+        }
+
+        let minY = draggingView.frame.minY
+        let maxY = draggingView.frame.maxY
+        if (minY < self.contentOffset.y + 40) {
+            return .up
+        }
+        if (maxY > self.bounds.size.height + self.contentOffset.y - 40) {
+            return .down
+        }
+        return nil
+    }
+    
+    private func startOrStopAutoScroll() {
+        if (self.draggingAutoScrollDirection != nil && self.draggingDisplayLink == nil) {
+            self.draggingDisplayLink = CADisplayLink(target: self, selector: #selector(handleAutoScroll))
+            self.draggingDisplayLink?.add(to: RunLoop.main, forMode: .common)
+        } else if (self.draggingAutoScrollDirection == nil && self.draggingDisplayLink != nil) {
+            self.draggingDisplayLink?.remove(from: RunLoop.main, forMode: .common)
+            self.draggingDisplayLink?.invalidate()
+            self.draggingDisplayLink = nil
+        }
+    }
+    
+    @objc private func handleAutoScroll() {
+        guard let draggingAutoScrollDirection = self.draggingAutoScrollDirection,
+              let draggingView = self.draggingView,
+              let draggingIndex = self.draggingIndex else {
+            return
+        }
+        let scrollSpeed = self.draggingAutoScrollSpeed.rawValue
+        if (draggingAutoScrollDirection == .up && self.contentOffset.y > 0) {
+            // scroll to up
+            self.contentOffset = CGPoint(x: 0, y: self.contentOffset.y - scrollSpeed)
+            draggingView.center = CGPoint(x: draggingView.center.x, y: draggingView.center.y - scrollSpeed)
+        } else if (draggingAutoScrollDirection == .down && self.contentOffset.y + self.bounds.height < self.contentSize.height) {
+            // scroll to down
+            self.contentOffset = CGPoint(x: 0, y: self.contentOffset.y + scrollSpeed)
+            draggingView.center = CGPoint(x: draggingView.center.x, y: draggingView.center.y + scrollSpeed)
+        }
+        
+        guard let draggingViewModel = self.draggingViewModel,
+              let firstVisibleViewModel = self.visibleCellViewModels.first,
+              let firstVisibleIndex = self.index(of: firstVisibleViewModel),
+              let index = self.indexPathForItem(at: draggingView.center)?.item,
+              index != draggingIndex,
+              self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
+              self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
+        else {
+            return
+        }
+        
+        // dragging view would never been gone top out of the tableview
+        let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
+        self.moveCellViewModel(for: draggingViewModel, to: toIndex)
+        self.draggingIndex = toIndex
     }
     
     // MARK: JYThemeful

@@ -15,6 +15,7 @@ import UIKit
     func cellType() -> JYCollectionViewCell.Type
     func size() -> CGSize
     func shouldHighlight() -> Bool
+    func isDraggable(draggingCellViewModel: ICollectionCellViewModel?) -> Bool
     func didSelect()
     
     var signalBlock: (()->())? { get set }
@@ -43,6 +44,11 @@ open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
     
     open func size() -> CGSize {
         return .zero
+    }
+    
+    /// Indicates wheter the cell view model is reacted to dragging, if draggingCellViewModel is nil means current cell view model is dragging cell view model.
+    open func isDraggable(draggingCellViewModel: ICollectionCellViewModel?) -> Bool {
+        return false
     }
     
     open func shouldHighlight() -> Bool {

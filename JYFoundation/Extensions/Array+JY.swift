@@ -39,6 +39,35 @@ extension Array {
     public func exclude(where predicate: (Element) -> Bool) -> [Element] {
         return self.filter{ !predicate($0) }
     }
+    
+    public func firstIndex(where predicate: (Element) -> Bool, from index: Int) -> Int? {
+        for i in index..<self.count {
+            if (predicate(self[i])) {
+                return i
+            }
+        }
+        return nil
+    }
+    
+    public func lastIndex(where predicate: (Element) -> Bool, from index: Int) -> Int? {
+        for i in 0...index {
+            if (predicate(self[index - i])) {
+                return index - i
+            }
+        }
+        return nil
+    }
+    
+    func unique<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
+        var result: [Element] = []
+        for ele in self {
+            let key = filter(ele)
+            if !result.map({ filter($0) }).contains(key) {
+                result.append(ele)
+            }
+        }
+        return result
+    }
 }
 
 extension Array where Element: Equatable {
@@ -53,6 +82,10 @@ extension Array where Element: Equatable {
     
     public func exclude(in element: [Element]) -> [Element] {
         return self.filter { !element.contains(of: $0) }
+    }
+    
+    public func unique() -> [Element] {
+        return self.unique { $0 }
     }
 }
 
