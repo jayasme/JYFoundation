@@ -67,6 +67,10 @@ extension String {
         return result.hexString()
     }
     
+    public func firstIndex(in characters: [Character]) -> String.Index? {
+        return self.firstIndex(where: { characters.contains($0) })
+    }
+    
     // operator overrides
     
     public static func + (left: String, right: Int) -> String {
@@ -94,3 +98,9 @@ extension String {
     }
 }
 
+extension String.SubSequence {
+    
+    public func firstIndex(in characters: [Character]) -> String.Index? {
+        return self.firstIndex(where: { characters.contains($0) })
+    }
+}

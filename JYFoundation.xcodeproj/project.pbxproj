@@ -64,6 +64,7 @@
 		1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */; };
 		A48F362C2E5897A8AEABE449 /* Pods_JYFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80028785702266DA96BD35CE /* Pods_JYFoundation.framework */; };
 		B92AA2BE29BE0D7B00911352 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92AA2BD29BE0D7B00911352 /* CGRect.swift */; };
+		B9379F7829C6C00F00A1517B /* JYStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9379F7729C6C00F00A1517B /* JYStack.swift */; };
 		B93DC43727A58E6F002C6390 /* Int+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93DC43627A58E6F002C6390 /* Int+JY.swift */; };
 		B93DC43927A58F76002C6390 /* CGFloat+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93DC43827A58F76002C6390 /* CGFloat+JY.swift */; };
 		B93DC43B27A58F7E002C6390 /* Double+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93DC43A27A58F7E002C6390 /* Double+JY.swift */; };
@@ -152,6 +153,7 @@
 		661DCF28AEFD74E30B85CBE1 /* Pods-JYFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.release.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		80028785702266DA96BD35CE /* Pods_JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B92AA2BD29BE0D7B00911352 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
+		B9379F7729C6C00F00A1517B /* JYStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYStack.swift; sourceTree = "<group>"; };
 		B93DC43627A58E6F002C6390 /* Int+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+JY.swift"; sourceTree = "<group>"; };
 		B93DC43827A58F76002C6390 /* CGFloat+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+JY.swift"; sourceTree = "<group>"; };
 		B93DC43A27A58F7E002C6390 /* Double+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+JY.swift"; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				1D389221208B01890005C175 /* JYError.swift */,
+				B9379F7729C6C00F00A1517B /* JYStack.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9836199297E7C5700F26960 /* JYThemeTextView.swift in Sources */,
+				B9379F7829C6C00F00A1517B /* JYStack.swift in Sources */,
 				B969A8AC27E8B09600F8980B /* JYConfigManager.swift in Sources */,
 				1D389211208AF9B40005C175 /* String+Regex.swift in Sources */,
 				B967BA0D277EA85100926B9C /* JYBlurView.swift in Sources */,

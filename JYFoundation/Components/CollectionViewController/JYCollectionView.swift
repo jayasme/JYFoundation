@@ -20,7 +20,8 @@ public protocol JYCollectionViewStaticDataSource: JYCollectionViewDataSource {
 @objc public protocol JYCollectionViewDraggingDelegate {
     @objc optional func draggingDidBegin(_ collectionView: JYCollectionView, viewModel: ICollectionCellViewModel, draggingView: UIView, point: CGPoint)
     @objc optional func draggingDidMove(_ collectionView: JYCollectionView, viewModel: ICollectionCellViewModel, draggingView: UIView, fromIndex: Int, point: CGPoint)
-    @objc optional func draggingShouldPlace(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int, atIndex: Int) -> Bool
+    @objc optional func draggingShouldPlace(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, prevIndex: Int, atIndex: Int) -> Bool
+    @objc optional func draggingDidPlace(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, prevIndex: Int, atIndex: Int)
     @objc optional func draggingWillEnd(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int, toIndex: Int)
     @objc optional func draggingDidEnd(_ collectionView: JYCollectionView)
     @objc optional func draggingShouldRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel) -> Bool
@@ -33,8 +34,8 @@ public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource 
 }
 
 @objc public protocol JYCollectionViewDelegate: UIScrollViewDelegate {
-    @objc optional func collectionView(_ collectionView: JYCollectionView, willRetrieveDataWith index: Int)
-    @objc optional func collectionView(_ collectionView: JYCollectionView, didRetrieve data: [ICollectionCellViewModel], with index: Int)
+    @objc optional func collectionView(_ collectionView: JYCollectionView, willRetrieveDataAt index: NSNumber?)
+    @objc optional func collectionView(_ collectionView: JYCollectionView, didRetrieve data: [ICollectionCellViewModel], at index: NSNumber?)
     @objc optional func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: ICollectionCellViewModel)
     @objc optional func collectionView(_ collectionView: JYCollectionView, didNotification cellViewModel: ICollectionCellViewModel, identifier: String, userInfo: Any?)
 }
@@ -189,7 +190,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     @discardableResult
     private func retrieveDataPromise() -> Guarantee<[ICollectionCellViewModel]> {
-        jyDelegate?.collectionView?(self, willRetrieveDataWith: -1)
+        jyDelegate?.collectionView?(self, willRetrieveDataAt: nil)
         return Guarantee<[ICollectionCellViewModel]> { seal in
             JYCollectionView.collectionViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
@@ -206,41 +207,42 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         
         // load more
         status = .loading
+        jyDelegate?.collectionView?(self, willRetrieveDataAt: NSNumber(value: pageIndex))
         retrieveData(index: pageIndex, itemsPerPage: itemsPerPage)
             .ensure { [weak self] in
-                guard let strongSelf = self else { return }
+                guard let self = self else { return }
                 
                 // refreshing by 'pull to refresh' needs clear the capapity delayedly.
-                if strongSelf._refreshControl?.isRefreshing == true {
-                    strongSelf._refreshControl?.endRefreshing()
-                    strongSelf._viewModels.removeAll()
+                if self._refreshControl?.isRefreshing == true {
+                    self._refreshControl?.endRefreshing()
+                    self._viewModels.removeAll()
                 }
             }.done { [weak self] (cellViewModels, exhausted) -> Void in
-                guard let strongSelf = self else { return }
+                guard let self = self else { return }
                 
                 if exhausted {
-                    strongSelf.status = .exhausted
+                    self.status = .exhausted
                 } else {
-                    strongSelf.pageIndex += 1
-                    strongSelf.status = .loaded
+                    self.pageIndex += 1
+                    self.status = .loaded
                 }
                 
-                cellViewModels.forEach{ strongSelf.checkRegistred(viewModel: $0) }
+                cellViewModels.forEach{ self.checkRegistred(viewModel: $0) }
                 
-                if strongSelf.paginationDirection == .up {
-                    cellViewModels.reversed().forEach{ strongSelf._viewModels.insert($0, at: 0) }
-                } else if strongSelf.paginationDirection == .down {
-                    strongSelf._viewModels.append(contentsOf: cellViewModels)
+                if self.paginationDirection == .up {
+                    cellViewModels.reversed().forEach{ self._viewModels.insert($0, at: 0) }
+                } else if self.paginationDirection == .down {
+                    self._viewModels.append(contentsOf: cellViewModels)
                 }
-                strongSelf.jyDelegate?.collectionView?(strongSelf, didRetrieve: cellViewModels, with: strongSelf.pageIndex)
+                self.jyDelegate?.collectionView?(self, didRetrieve: cellViewModels, at: NSNumber(value: self.pageIndex))
             }.ensure { [weak self] in
-                guard let strongSelf = self else { return }
+                guard let self = self else { return }
                 
-                strongSelf.reloadViewModels(clearPreviousData: false)
+                self.reloadViewModels(clearPreviousData: false)
             }.catch { [weak self] _ in
-                guard let strongSelf = self else { return }
+                guard let self = self else { return }
 
-                strongSelf.status = .failure
+                self.status = .failure
         }
     }
     
@@ -258,6 +260,30 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         _refreshControl?.endRefreshing()
     }
     
+    public func reloadViewModels(clearPreviousData: Bool = true) {
+        if type == .dynamical {
+            self._viewModels.removeAll()
+            self.reloadData()
+        } else if type == .static {
+            jyDelegate?.collectionView?(self, willRetrieveDataAt: nil)
+            guard let newViewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self) else {
+                return
+            }
+            if clearPreviousData {
+                self._viewModels.removeAll()
+            }
+            
+            for viewModel in newViewModels {
+                self.checkRegistred(viewModel: viewModel)
+                self._viewModels.append(viewModel)
+            }
+            self.reloadData()
+            self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
+        } else {
+            fatalError("unknown")
+        }
+    }
+    
     @discardableResult
     public func reloadViewModels(clearPreviousData: Bool, animated: Bool = false) -> Guarantee<Void> {
         if type == .dynamical {
@@ -271,32 +297,33 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         } else if type == .static {
             return retrieveDataPromise()
             .then { [weak self] newViewModels -> Guarantee<Void> in
-                guard let strongSelf = self else {
+                guard let self = self else {
                     return Guarantee.value(())
                 }
                 
                 if clearPreviousData {
-                    strongSelf._viewModels.removeAll()
+                    self._viewModels.removeAll()
                 }
                 
                 for viewModel in newViewModels {
-                    strongSelf.checkRegistred(viewModel: viewModel)
-                    strongSelf._viewModels.append(viewModel)
+                    self.checkRegistred(viewModel: viewModel)
+                    self._viewModels.append(viewModel)
                 }
                 
                 if (animated) {
-                    UIView.transition(with: strongSelf,
-                                      duration: 0.1,
-                                      options: .transitionCrossDissolve,
-                                      animations: {
-                                        strongSelf.reloadData()
-                                      }
+                    UIView.transition(
+                        with: self,
+                        duration: 0.1,
+                        options: .transitionCrossDissolve,
+                        animations: {
+                            self.reloadData()
+                        }
                     )
                     // UIView.transition is not reliable, so using the delay function to simulate the finish completion.
                     return DispatchQueue.main.delay(time: 0.1)
                 }
-                strongSelf.reloadData()
-                strongSelf.jyDelegate?.collectionView?(strongSelf, didRetrieve: newViewModels, with: -1)
+                self.reloadData()
+                self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
                 return Guarantee.value(())
             }
         } else {
@@ -712,17 +739,19 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                   let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForItem(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
                   index != draggingIndex,
-                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
-                  self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
+                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel)
             else {
                 return
             }
             
-            print("asdsad")
-            
             // dragging view would never been gone top out of the collectionview
             let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
+            guard self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex) != false else {
+                return
+            }
+            
             self.moveCellViewModel(for: draggingViewModel, to: toIndex)
+            self.jyDraggingDelegate?.draggingDidPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex)
             self.draggingIndex = toIndex
             
         } else if (gesture.state == .ended || gesture.state == .cancelled) {
@@ -862,15 +891,19 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
               let firstVisibleIndex = self.index(of: firstVisibleViewModel),
               let index = self.indexPathForItem(at: draggingView.center)?.item,
               index != draggingIndex,
-              self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
-              self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
+              self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel)
         else {
             return
         }
         
         // dragging view would never been gone top out of the tableview
         let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
+        guard self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex) != false else {
+            return
+        }
+        
         self.moveCellViewModel(for: draggingViewModel, to: toIndex)
+        self.jyDraggingDelegate?.draggingDidPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex)
         self.draggingIndex = toIndex
     }
     

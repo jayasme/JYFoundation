@@ -25,7 +25,8 @@ public protocol JYTableViewDynamicalDataSource: JYTableViewDataSource {
 @objc public protocol JYTableViewDraggingDelegate {
     @objc optional func draggingDidBegin(_ tableView: JYTableView, viewModel: ITableCellViewModel, draggingView: UIView, point: CGPoint)
     @objc optional func draggingDidMove(_ tableView: JYTableView, viewModel: ITableCellViewModel, draggingView: UIView, fromIndex: Int, point: CGPoint)
-    @objc optional func draggingShouldPlace(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, fromIndex: Int, atIndex: Int) -> Bool
+    @objc optional func draggingShouldPlace(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, prevIndex: Int, atIndex: Int) -> Bool
+    @objc optional func draggingDidPlace(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, prevIndex: Int, atIndex: Int)
     @objc optional func draggingWillEnd(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel, fromIndex: Int, toIndex: Int)
     @objc optional func draggingDidEnd(_ tableView: JYTableView)
     @objc optional func draggingShouldRemove(_ tableView: JYTableView, draggingViewModel: ITableCellViewModel) -> Bool
@@ -33,8 +34,8 @@ public protocol JYTableViewDynamicalDataSource: JYTableViewDataSource {
 }
 
 @objc public protocol JYTableViewDelegate: UIScrollViewDelegate {
-    @objc optional func tableView(_ tableView: JYTableView, willRetrieveDataWith index: Int)
-    @objc optional func tableView(_ tableView: JYTableView, didRetrieve data: [ITableCellViewModel], with index: Int)
+    @objc optional func tableView(_ tableView: JYTableView, willRetrieveDataAt index: NSNumber?)
+    @objc optional func tableView(_ tableView: JYTableView, didRetrieve data: [ITableCellViewModel], at index: NSNumber?)
     @objc optional func tableView(_ tableView: JYTableView, didSelect cellViewModel: ITableCellViewModel)
     @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: ITableCellViewModel, with identifier: String, userInfo: Any?)
     @objc optional func tableView(_ tableView: JYTableView, didTapActionButton cellViewModel: ITableCellViewModel, with key: String, userInfo: Any?)
@@ -188,9 +189,8 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         }
     }
     
-    @discardableResult
     private func retrieveDataPromise() -> Guarantee<[ITableCellViewModel]> {
-        jyDelegate?.tableView?(self, willRetrieveDataWith: -1)
+        jyDelegate?.tableView?(self, willRetrieveDataAt: nil)
         return Guarantee<[ITableCellViewModel]> { seal in
             JYTableView.tableViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
@@ -207,59 +207,59 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         
         // load more
         status = .loading
-        jyDelegate?.tableView?(self, willRetrieveDataWith: pageIndex)
+        jyDelegate?.tableView?(self, willRetrieveDataAt: NSNumber(value: pageIndex))
         retrieveData(index: pageIndex, itemsPerPage: itemsPerPage)
         .ensure { [weak self] in
-            guard let strongSelf = self else { return }
+            guard let self = self else { return }
             
             // remove the spinner cell
-            if let dataSource = strongSelf.jyDataSource as? JYTableViewDynamicalDataSource,
-               let spinnerCellViewModel = dataSource.spinnerCellViewModel(strongSelf),
-               strongSelf._viewModels.last === spinnerCellViewModel {
-                strongSelf._viewModels.removeLast()
+            if let dataSource = self.jyDataSource as? JYTableViewDynamicalDataSource,
+               let spinnerCellViewModel = dataSource.spinnerCellViewModel(self),
+               self._viewModels.last === spinnerCellViewModel {
+                self._viewModels.removeLast()
             }
 
             // refreshing by 'pull to refresh' needs clear the capapity delayedly.
-            if strongSelf._refreshControl?.isRefreshing == true {
-                strongSelf._refreshControl?.endRefreshing()
-                strongSelf._viewModels.removeAll()
+            if self._refreshControl?.isRefreshing == true {
+                self._refreshControl?.endRefreshing()
+                self._viewModels.removeAll()
             }
         }.done { [weak self] (cellViewModels, exhausted) -> Void in
-            guard let strongSelf = self else { return }
+            guard let self = self else { return }
             
             if exhausted {
-                strongSelf.status = .exhausted
+                self.status = .exhausted
             } else {
-                strongSelf.pageIndex += 1
-                strongSelf.status = .loaded
+                self.pageIndex += 1
+                self.status = .loaded
             }
             
-            cellViewModels.forEach{ strongSelf.checkRegistred(viewModel: $0) }
+            cellViewModels.forEach{ self.checkRegistred(viewModel: $0) }
             
-            if strongSelf.paginationDirection == .up {
-                cellViewModels.reversed().forEach{ strongSelf._viewModels.insert($0, at: 0) }
+            if self.paginationDirection == .up {
+                cellViewModels.reversed().forEach{ self._viewModels.insert($0, at: 0) }
                 // Add spinner
-                if strongSelf.status == .loaded,
-                   let dataSource = strongSelf.jyDataSource as? JYTableViewDynamicalDataSource,
-                   let spinnerViewModel = dataSource.spinnerCellViewModel(strongSelf) {
-                   strongSelf._viewModels.insert(spinnerViewModel, at: 0)
+                if self.status == .loaded,
+                   let dataSource = self.jyDataSource as? JYTableViewDynamicalDataSource,
+                   let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
+                    self._viewModels.insert(spinnerViewModel, at: 0)
                 }
-            } else if strongSelf.paginationDirection == .down {
-                strongSelf._viewModels.append(contentsOf: cellViewModels)
+            } else if self.paginationDirection == .down {
+                self._viewModels.append(contentsOf: cellViewModels)
                 // Add spinner
-                if strongSelf.status == .loaded,
-                   let dataSource = strongSelf.jyDataSource as? JYTableViewDynamicalDataSource,
-                   let spinnerViewModel = dataSource.spinnerCellViewModel(strongSelf) {
-                    strongSelf._viewModels.append(spinnerViewModel)
+                if self.status == .loaded,
+                   let dataSource = self.jyDataSource as? JYTableViewDynamicalDataSource,
+                   let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
+                    self._viewModels.append(spinnerViewModel)
                 }
             }
-            strongSelf.jyDelegate?.tableView?(strongSelf, didRetrieve: cellViewModels, with: strongSelf.pageIndex)
+            self.jyDelegate?.tableView?(self, didRetrieve: cellViewModels, at: NSNumber(value: self.pageIndex))
             
-            strongSelf.reloadViewModels(clearPreviousData: false)
+            self.reloadViewModels(clearPreviousData: false)
         }.catch { [weak self] _ in
-            guard let strongSelf = self else { return }
+            guard let self = self else { return }
             
-            strongSelf.status = .failure
+            self.status = .failure
         }
     }
     
@@ -281,8 +281,32 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         _refreshControl?.endRefreshing()
     }
     
+    public func reloadViewModels(clearPreviousData: Bool = true) {
+        if type == .dynamical {
+            self._viewModels.removeAll()
+            self.reloadData()
+        } else if type == .static {
+            jyDelegate?.tableView?(self, willRetrieveDataAt: nil)
+            guard let newViewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else {
+                return
+            }
+            if clearPreviousData {
+                self._viewModels.removeAll()
+            }
+            
+            for viewModel in newViewModels {
+                self.checkRegistred(viewModel: viewModel)
+                self._viewModels.append(viewModel)
+            }
+            self.reloadData()
+            self.jyDelegate?.tableView?(self, didRetrieve: newViewModels, at: nil)
+        } else {
+            fatalError("unknown")
+        }
+    }
+    
     @discardableResult
-    public func reloadViewModels(clearPreviousData: Bool) -> Guarantee<Void> {
+    public func reloadViewModelsAsync(clearPreviousData: Bool = true) -> Guarantee<Void> {
         if type == .dynamical {
             if clearPreviousData {
                 _viewModels.removeAll()
@@ -294,20 +318,20 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         } else if type == .static {
             return retrieveDataPromise()
             .map { [weak self] newViewModels -> Void in
-                guard let strongSelf = self else{
+                guard let self = self else{
                     return
                 }
                 
                 if clearPreviousData {
-                    strongSelf._viewModels.removeAll()
+                    self._viewModels.removeAll()
                 }
                 
                 for viewModel in newViewModels {
-                    strongSelf.checkRegistred(viewModel: viewModel)
-                    strongSelf._viewModels.append(viewModel)
+                    self.checkRegistred(viewModel: viewModel)
+                    self._viewModels.append(viewModel)
                 }
-                strongSelf.reloadData()
-                strongSelf.jyDelegate?.tableView?(strongSelf, didRetrieve: newViewModels, with: -1)
+                self.reloadData()
+                self.jyDelegate?.tableView?(self, didRetrieve: newViewModels, at: -1)
                 
                 return ()
             }
@@ -315,7 +339,6 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             fatalError("unknown")
         }
     }
-    
     
     public func scrollToCellViewModel(_ cellViewModel: ITableCellViewModel, at position: UITableView.ScrollPosition, animated: Bool) {
         if let index = self.index(of: cellViewModel) {
@@ -506,11 +529,11 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         let cellViewModel = _viewModels[indexPath.item]
         return cellViewModel.actionButtons()?.map({ (action) -> UITableViewRowAction in
             return UITableViewRowAction(style: action.style, title: action.title, handler: {[weak self]  _, _  in
-                guard let strongSelf = self else {
+                guard let self = self else {
                     return
                 }
                 
-                strongSelf.jyDelegate?.tableView?(strongSelf, didTapActionButton: cellViewModel, with: action.key, userInfo: action.userInfo)
+                self.jyDelegate?.tableView?(self, didTapActionButton: cellViewModel, with: action.key, userInfo: action.userInfo)
             })
         }) ?? []
     }
@@ -677,15 +700,19 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
                   let firstVisibleIndex = self.index(of: firstVisibleViewModel),
                   let index = self.indexPathForRow(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
                   index != draggingIndex,
-                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
-                  self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
+                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel)
             else {
                 return
             }
             
             // dragging view would never been gone top out of the tableview
             let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
+            guard self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex) != false else {
+                return
+            }
+            
             self.moveCellViewModel(for: draggingViewModel, to: toIndex)
+            self.jyDraggingDelegate?.draggingDidPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex)
             self.draggingIndex = toIndex
             
         } else if (gesture.state == .ended || gesture.state == .cancelled) {
@@ -811,33 +838,35 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         }
         
         let scrollSpeed = self.draggingAutoScrollSpeed.rawValue
-        if let draggingAutoScrollDirection = self.draggingAutoScrollDirection, let draggingView = self.draggingView {
-            if (draggingAutoScrollDirection == .up && self.contentOffset.y > 0) {
-                // scroll to up
-                self.contentOffset = CGPoint(x: 0, y: self.contentOffset.y - scrollSpeed)
-                draggingView.center = CGPoint(x: draggingView.center.x, y: draggingView.center.y - scrollSpeed)
-            } else if (draggingAutoScrollDirection == .down && self.contentOffset.y + self.bounds.height < self.contentSize.height) {
-                // scroll to down
-                self.contentOffset = CGPoint(x: 0, y: self.contentOffset.y + scrollSpeed)
-                draggingView.center = CGPoint(x: draggingView.center.x, y: draggingView.center.y + scrollSpeed)
-            }
-            
-            guard let draggingViewModel = self.draggingViewModel,
-                  let firstVisibleViewModel = self.visibleCellViewModels.first,
-                  let firstVisibleIndex = self.index(of: firstVisibleViewModel),
-                  let index = self.indexPathForRow(at: draggingView.center)?.item,
-                  index != draggingIndex,
-                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel),
-                  self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, fromIndex: draggingIndex, atIndex: index) != false
-            else {
-                return
-            }
-            
-            // dragging view would never been gone top out of the tableview
-            let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
-            self.moveCellViewModel(for: draggingViewModel, to: toIndex)
-            self.draggingIndex = toIndex
+        if (draggingAutoScrollDirection == .up && self.contentOffset.y > 0) {
+            // scroll to up
+            self.contentOffset = CGPoint(x: 0, y: self.contentOffset.y - scrollSpeed)
+            draggingView.center = CGPoint(x: draggingView.center.x, y: draggingView.center.y - scrollSpeed)
+        } else if (draggingAutoScrollDirection == .down && self.contentOffset.y + self.bounds.height < self.contentSize.height) {
+            // scroll to down
+            self.contentOffset = CGPoint(x: 0, y: self.contentOffset.y + scrollSpeed)
+            draggingView.center = CGPoint(x: draggingView.center.x, y: draggingView.center.y + scrollSpeed)
         }
+        
+        guard let draggingViewModel = self.draggingViewModel,
+              let firstVisibleViewModel = self.visibleCellViewModels.first,
+              let firstVisibleIndex = self.index(of: firstVisibleViewModel),
+              let index = self.indexPathForRow(at: draggingView.center)?.item,
+              index != draggingIndex,
+              self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel)
+        else {
+            return
+        }
+        
+        // dragging view would never been gone top out of the tableview
+        let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
+        guard self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex) != false else {
+            return
+        }
+        
+        self.moveCellViewModel(for: draggingViewModel, to: toIndex)
+        self.jyDraggingDelegate?.draggingDidPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex)
+        self.draggingIndex = toIndex
     }
     
     // MARK: JYThemeful
