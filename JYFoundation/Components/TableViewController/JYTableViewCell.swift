@@ -2,7 +2,7 @@ import UIKit
 
 open class JYTableViewCell : UITableViewCell, JYThemeful {
     
-    private(set) open var viewModel: ITableCellViewModel! {
+    private(set) open weak var viewModel: ITableCellViewModel! {
         didSet {
             // update signalBlock
             viewModel.signalBlock = {[weak self] () -> Void in

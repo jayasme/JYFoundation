@@ -10,7 +10,7 @@ import UIKit
 
 open class JYCollectionViewCell : UICollectionViewCell, JYThemeful {
     
-    private(set) open var viewModel: ICollectionCellViewModel! {
+    private(set) open weak var viewModel: ICollectionCellViewModel! {
         didSet {
             // update signalBlock
             viewModel.signalBlock = {[weak self] () -> Void in
