@@ -20,7 +20,7 @@ import UIKit
     
     var signalBlock: (()->())? { get set }
     var notificationBlock: ((ICollectionCellViewModel, String, Any?) -> Void)? { get set }
-    var cell: JYCollectionViewCell? { get set }
+    weak var cell: JYCollectionViewCell? { get set }
 }
 
 open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
@@ -37,6 +37,11 @@ open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
         self.model = model
         super.init()
         self.updateModel(model)
+    }
+    
+    deinit {
+        self.signalBlock = nil
+        self.notificationBlock = nil
     }
     
     public var signalBlock: (()->())? = nil

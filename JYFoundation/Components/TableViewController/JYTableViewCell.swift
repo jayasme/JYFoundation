@@ -5,7 +5,9 @@ open class JYTableViewCell : UITableViewCell, JYThemeful {
     private(set) open var viewModel: ITableCellViewModel! {
         didSet {
             // update signalBlock
-            viewModel.signalBlock = signal
+            viewModel.signalBlock = {[weak self] () -> Void in
+                self?.signal()
+            }
             viewModel.cell = self
         }
     }

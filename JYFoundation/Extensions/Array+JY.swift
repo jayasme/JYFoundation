@@ -58,7 +58,7 @@ extension Array {
         return nil
     }
     
-    func unique<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
+    public func unique<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
         var result: [Element] = []
         for ele in self {
             let key = filter(ele)
@@ -67,6 +67,14 @@ extension Array {
             }
         }
         return result
+    }
+    
+    public subscript(range: PartialRangeFrom<Int>) -> [Element] {
+        return Array<Element>(self[range.lowerBound..<self.count])
+    }
+    
+    public subscript(range: PartialRangeUpTo<Int>) -> [Element] {
+        return Array<Element>(self[0...range.upperBound])
     }
 }
 

@@ -36,6 +36,8 @@ public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource 
 @objc public protocol JYCollectionViewDelegate: UIScrollViewDelegate {
     @objc optional func collectionView(_ collectionView: JYCollectionView, willRetrieveDataAt index: NSNumber?)
     @objc optional func collectionView(_ collectionView: JYCollectionView, didRetrieve data: [ICollectionCellViewModel], at index: NSNumber?)
+    @objc optional func collectionView(_ collectionView: JYCollectionView, willDataChange data: [ICollectionCellViewModel])
+    @objc optional func collectionView(_ collectionView: JYCollectionView, didDataChange data: [ICollectionCellViewModel])
     @objc optional func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: ICollectionCellViewModel)
     @objc optional func collectionView(_ collectionView: JYCollectionView, didNotification cellViewModel: ICollectionCellViewModel, identifier: String, userInfo: Any?)
 }
@@ -51,7 +53,14 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     private var _registeredCellTypes : [JYCollectionViewCell.Type] = []
     
-    private var _viewModels : [ICollectionCellViewModel] = []
+    private var _viewModels : [ICollectionCellViewModel] = [] {
+        willSet {
+            self.jyDelegate?.collectionView?(self, willDataChange: newValue)
+        }
+        didSet {
+            self.jyDelegate?.collectionView?(self, didDataChange: self._viewModels)
+        }
+    }
     
     private var _refreshControl: UIRefreshControl?
     
@@ -133,19 +142,25 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     override public init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
-        commonInitializer()
+        commonInit()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        commonInitializer()
+        commonInit()
     }
     
-    private func commonInitializer() {
+    private func commonInit() {
         dataSource = self
         delegate = self
         
         self.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "DraggingPlaceholder")
+    }
+    
+    deinit {
+        self.removeRefreshControl()
+        self._viewModels.removeAll()
+        self._registeredCellTypes.removeAll()
     }
     
     // MARK: Privates
@@ -191,10 +206,10 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     @discardableResult
     private func retrieveDataPromise() -> Guarantee<[ICollectionCellViewModel]> {
         jyDelegate?.collectionView?(self, willRetrieveDataAt: nil)
-        return Guarantee<[ICollectionCellViewModel]> { seal in
+        return Guarantee<[ICollectionCellViewModel]> {[weak self] seal in
             JYCollectionView.collectionViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
-                guard let viewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self) else { return }
+                guard let self = self, let viewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self) else { return }
                 DispatchQueue.main.sync {
                     seal(viewModels)
                 }
@@ -264,11 +279,9 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         if type == .dynamical {
             self._viewModels.removeAll()
             self.reloadData()
-        } else if type == .static {
+        } else if type == .static, let dataSource = self.jyDataSource as? JYCollectionViewStaticDataSource {
             jyDelegate?.collectionView?(self, willRetrieveDataAt: nil)
-            guard let newViewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self) else {
-                return
-            }
+            let newViewModels = dataSource.retrieveData(self)
             if clearPreviousData {
                 self._viewModels.removeAll()
             }
@@ -279,8 +292,6 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             }
             self.reloadData()
             self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
-        } else {
-            fatalError("unknown")
         }
     }
     
@@ -290,8 +301,8 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             if clearPreviousData {
                 _viewModels.removeAll()
             }
-            return Guarantee<Void> { seal in
-                reloadData()
+            return Guarantee<Void> {[weak self] seal in
+                self?.reloadData()
                 seal(())
             }
         } else if type == .static {
@@ -326,22 +337,25 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
                 return Guarantee.value(())
             }
-        } else {
-            fatalError("unknown")
         }
+        
+        return Guarantee<Void>.value(())
     }
     
     
-    public func scrollToCellViewModel(_ cellViewModel: ICollectionCellViewModel, at position: UICollectionView.ScrollPosition, animated: Bool) {
-        if let index = self.index(of: cellViewModel) {
-            scrollToItem(at: IndexPath(item: index, section: 0), at: position, animated: animated)
+    public func scrollTo(cellViewModel: ICollectionCellViewModel, at position: UICollectionView.ScrollPosition, animated: Bool) {
+        guard let index = self.index(of: cellViewModel) else {
+            return
         }
+        self.scrollToItem(at: IndexPath(item: index, section: 0), at: position, animated: animated)
+    }
+    
+    public func scrollTo(offset: CGPoint, animated: Bool) {
+        self.setContentOffset(offset, animated: animated)
     }
     
     public func scrollToBottom(animated: Bool) {
-        if let lastCellViewModel = _viewModels.last {
-            scrollToCellViewModel(lastCellViewModel, at: .bottom, animated: animated)
-        }
+        self.scrollTo(offset: CGPoint(x: self.contentOffset.x, y: self.contentSize.height - self.bounds.height), animated: animated)
     }
     
     public func cellViewModel(of index: Int) -> ICollectionCellViewModel? {
@@ -502,7 +516,9 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: viewModel.cellType().defaultIdentifier(), for: indexPath) as! JYCollectionViewCell
         cell.updateViewModel(viewModel: viewModel)
         jyDataSource?.prepare?(viewModel, for: cell)
-        viewModel.notificationBlock = notification
+        viewModel.notificationBlock = {[weak self] (cellViewModel: ICollectionCellViewModel, identifier: String, userInfo: Any?) -> Void in
+            self?.notification(cellViewModel: cellViewModel, identifier: identifier, userInfo: userInfo)
+        }
         cell.themes = self.themes
         return cell
     }

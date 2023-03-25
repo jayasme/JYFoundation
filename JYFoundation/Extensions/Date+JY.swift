@@ -21,13 +21,15 @@ extension Date {
     }
     
     public static func now(includesTime: Bool = true) -> Date {
+        return Date(timeIntervalSinceNow: 0)
+    }
+    
+    public static func today() -> Date {
         let now = Date(timeIntervalSinceNow: 0)
-        if (!includesTime) {
-            let calendar = Calendar(identifier: .iso8601)
-            let components = calendar.dateComponents([.year, .month, .day], from: now)
-            if let newNow = calendar.date(from: components) {
-                return newNow
-            }
+        let calendar = Calendar(identifier: .iso8601)
+        let components = calendar.dateComponents([.year, .month, .day], from: now)
+        if let newNow = calendar.date(from: components) {
+            return newNow
         }
         return now
     }

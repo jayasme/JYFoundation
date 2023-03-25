@@ -33,7 +33,7 @@ public class JYTableViewCellAction: NSObject {
     
     var signalBlock: (()->())? { get set }
     var notificationBlock: ((ITableCellViewModel, String, Any?) -> Void)? { get set }
-    var cell: JYTableViewCell? { get set }
+    weak var cell: JYTableViewCell? { get set }
 }
 
 open class JYTableCellViewModel<T>: NSObject, ITableCellViewModel {
@@ -50,6 +50,11 @@ open class JYTableCellViewModel<T>: NSObject, ITableCellViewModel {
         self.model = model
         super.init()
         self.updateModel(model)
+    }
+    
+    deinit {
+        self.signalBlock = nil
+        self.notificationBlock = nil
     }
     
     public var signalBlock: (()->())? = nil

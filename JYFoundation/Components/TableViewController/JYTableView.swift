@@ -36,6 +36,8 @@ public protocol JYTableViewDynamicalDataSource: JYTableViewDataSource {
 @objc public protocol JYTableViewDelegate: UIScrollViewDelegate {
     @objc optional func tableView(_ tableView: JYTableView, willRetrieveDataAt index: NSNumber?)
     @objc optional func tableView(_ tableView: JYTableView, didRetrieve data: [ITableCellViewModel], at index: NSNumber?)
+    @objc optional func tableView(_ tableView: JYTableView, willDataChange data: [ITableCellViewModel])
+    @objc optional func tableView(_ tableView: JYTableView, didDataChange data: [ITableCellViewModel])
     @objc optional func tableView(_ tableView: JYTableView, didSelect cellViewModel: ITableCellViewModel)
     @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: ITableCellViewModel, with identifier: String, userInfo: Any?)
     @objc optional func tableView(_ tableView: JYTableView, didTapActionButton cellViewModel: ITableCellViewModel, with key: String, userInfo: Any?)
@@ -52,7 +54,14 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     
     private var _registeredCellTypes : [JYTableViewCell.Type] = []
     
-    private var _viewModels : [ITableCellViewModel] = []
+    private var _viewModels : [ITableCellViewModel] = [] {
+        willSet {
+            self.jyDelegate?.tableView?(self, willDataChange: newValue)
+        }
+        didSet {
+            self.jyDelegate?.tableView?(self, didDataChange: self._viewModels)
+        }
+    }
     
     private var _refreshControl: UIRefreshControl?
     
@@ -72,29 +81,28 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         }
     }
     private(set) var status : JYViewStatus = .initialLoad
-  
+    
     public var type: JYViewDataSourceType {
-      get {
-        if self.jyDataSource is JYTableViewStaticDataSource {
-          return JYViewDataSourceType.static
+        get {
+            if self.jyDataSource is JYTableViewStaticDataSource {
+                return JYViewDataSourceType.static
+            }
+            if self.jyDataSource is JYTableViewDynamicalDataSource {
+                return JYViewDataSourceType.dynamical
+            }
+            return JYViewDataSourceType.unknwon
         }
-        if self.jyDataSource is JYTableViewDynamicalDataSource {
-          return JYViewDataSourceType.dynamical
-        }
-        return JYViewDataSourceType.unknwon
-      }
     }
     
     public weak var jyDataSource: JYTableViewDataSource? = nil {
         didSet {
-          if let dataSource = self.jyDelegate as? JYTableViewDynamicalDataSource, let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
-            self._viewModels.append(spinnerViewModel)
-          } else if self.jyDataSource is JYTableViewStaticDataSource {
-            status = .fixed
-            reloadViewModels(clearPreviousData: true)
-          }
-            
-          checkRefreshControl()
+            if let dataSource = self.jyDelegate as? JYTableViewDynamicalDataSource, let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
+                self._viewModels.append(spinnerViewModel)
+            } else if self.jyDataSource is JYTableViewStaticDataSource {
+                status = .fixed
+                reloadViewModels()
+            }
+            checkRefreshControl()
         }
     }
     
@@ -135,24 +143,30 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     
     override public init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        commonInitializer()
+        commonInit()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        commonInitializer()
+        commonInit()
     }
     
-    private func commonInitializer() {
+    private func commonInit() {
         dataSource = self
         delegate = self
+    }
+    
+    deinit {
+        self.removeRefreshControl()
+        self._viewModels.removeAll()
+        self._registeredCellTypes.removeAll()
     }
     
     // MARK: Privates
     
     private func checkRegistred(viewModel: ITableCellViewModel) {
         let cellType = viewModel.cellType()
-        if _registeredCellTypes.firstIndex(where: { $0 == cellType }) == nil {
+        if !_registeredCellTypes.contains(where: { $0 == cellType }) {
             _registeredCellTypes.append(cellType)
             if let nib = cellType.defaultNib() {
                 register(nib, forCellReuseIdentifier: cellType.defaultIdentifier())
@@ -191,10 +205,10 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     
     private func retrieveDataPromise() -> Guarantee<[ITableCellViewModel]> {
         jyDelegate?.tableView?(self, willRetrieveDataAt: nil)
-        return Guarantee<[ITableCellViewModel]> { seal in
+        return Guarantee<[ITableCellViewModel]> {[weak self] seal in
             JYTableView.tableViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
-                guard let viewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else { return }
+                guard let self = self, let viewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else { return }
                 DispatchQueue.main.async {
                     seal(viewModels)
                 }
@@ -285,23 +299,20 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         if type == .dynamical {
             self._viewModels.removeAll()
             self.reloadData()
-        } else if type == .static {
+        } else if type == .static, let dataSource = self.jyDataSource as? JYTableViewStaticDataSource {
             jyDelegate?.tableView?(self, willRetrieveDataAt: nil)
-            guard let newViewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else {
-                return
-            }
+            let newViewModels = dataSource.retrieveData(self)
             if clearPreviousData {
                 self._viewModels.removeAll()
             }
             
             for viewModel in newViewModels {
                 self.checkRegistred(viewModel: viewModel)
-                self._viewModels.append(viewModel)
             }
+            self._viewModels.append(contentsOf: newViewModels)
+            
             self.reloadData()
             self.jyDelegate?.tableView?(self, didRetrieve: newViewModels, at: nil)
-        } else {
-            fatalError("unknown")
         }
     }
     
@@ -311,8 +322,8 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             if clearPreviousData {
                 _viewModels.removeAll()
             }
-            return Guarantee<Void> { seal in
-                reloadData()
+            return Guarantee<Void> {[weak self] seal in
+                self?.reloadData()
                 seal(())
             }
         } else if type == .static {
@@ -335,9 +346,8 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
                 
                 return ()
             }
-        } else {
-            fatalError("unknown")
         }
+        return Guarantee<Void>.value(())
     }
     
     public func scrollToCellViewModel(_ cellViewModel: ITableCellViewModel, at position: UITableView.ScrollPosition, animated: Bool) {
@@ -497,7 +507,9 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellType().defaultIdentifier(), for: indexPath) as! JYTableViewCell
         cell.updateViewModel(viewModel: viewModel)
         jyDataSource?.prepare?(viewModel, for: cell)
-        viewModel.notificationBlock = notification
+        viewModel.notificationBlock = {[weak self] (cellViewModel: ITableCellViewModel, identifier: String, userInfo: Any?) -> Void in
+            self?.notification(cellViewModel: cellViewModel, identifier: identifier, userInfo: userInfo)
+        }
         cell.themes = self.themes
         return cell
     }

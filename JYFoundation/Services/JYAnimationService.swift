@@ -155,6 +155,9 @@ public class JYAnimationService: NSObject, CAAnimationDelegate {
 extension CAMediaTimingFunction {
     // to watch easing graphics, visit: https://easings.net/
     
+    // linear
+    public static let linear: CAMediaTimingFunction = CAMediaTimingFunction(name: .linear)
+    
     // ease sine
     public static let easeInSine: CAMediaTimingFunction = .init(controlPoints: 0.12, 0, 0.39, 0)
     public static let easeOutSine: CAMediaTimingFunction = .init(controlPoints: 0.61, 1, 0.88, 1)

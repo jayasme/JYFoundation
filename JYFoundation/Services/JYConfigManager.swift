@@ -26,7 +26,6 @@ public class JYConfigManager<T: JYConfig> {
     public init(path: URL, autoSave: Bool) {
         self.path = path
         self.autoSave = autoSave
-        let decoder = JSONDecoder()
         guard let data = try? Data(contentsOf: path),
               let configItems = try! JSONSerialization.jsonObject(with: data) as? JYConfig.ConfigItems
         else {

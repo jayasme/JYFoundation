@@ -13,7 +13,9 @@ open class JYCollectionViewCell : UICollectionViewCell, JYThemeful {
     private(set) open var viewModel: ICollectionCellViewModel! {
         didSet {
             // update signalBlock
-            viewModel.signalBlock = signal
+            viewModel.signalBlock = {[weak self] () -> Void in
+                self?.signal()
+            }
             viewModel.cell = self
         }
     }
