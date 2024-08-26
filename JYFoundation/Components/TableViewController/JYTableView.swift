@@ -39,7 +39,7 @@ public protocol JYTableViewDynamicalDataSource: JYTableViewDataSource {
     @objc optional func tableView(_ tableView: JYTableView, willDataChange data: [ITableCellViewModel])
     @objc optional func tableView(_ tableView: JYTableView, didDataChange data: [ITableCellViewModel])
     @objc optional func tableView(_ tableView: JYTableView, didSelect cellViewModel: ITableCellViewModel)
-    @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: ITableCellViewModel, with identifier: String, userInfo: Any?)
+    @objc optional func tableView(_ tableView: JYTableView, didNotification cellViewModel: ITableCellViewModel, with action: String, userInfo: Any?)
     @objc optional func tableView(_ tableView: JYTableView, didTapActionButton cellViewModel: ITableCellViewModel, with key: String, userInfo: Any?)
 }
 
@@ -277,8 +277,8 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         }
     }
     
-    private func notification(cellViewModel: ITableCellViewModel, identifier: String, userInfo: Any?) {
-        jyDelegate?.tableView?(self, didNotification: cellViewModel, with: identifier, userInfo: userInfo)
+    private func notification(cellViewModel: ITableCellViewModel, action: String, userInfo: Any?) {
+        jyDelegate?.tableView?(self, didNotification: cellViewModel, with: action, userInfo: userInfo)
     }
     
     // MARK: Publics
@@ -507,8 +507,8 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellType().defaultIdentifier(), for: indexPath) as! JYTableViewCell
         cell.updateViewModel(viewModel: viewModel)
         jyDataSource?.prepare?(viewModel, for: cell)
-        viewModel.notificationBlock = {[weak self] (cellViewModel: ITableCellViewModel, identifier: String, userInfo: Any?) -> Void in
-            self?.notification(cellViewModel: cellViewModel, identifier: identifier, userInfo: userInfo)
+        viewModel.notificationBlock = {[weak self] (cellViewModel: ITableCellViewModel, action: String, userInfo: Any?) -> Void in
+            self?.notification(cellViewModel: cellViewModel, action: action, userInfo: userInfo)
         }
         cell.themes = self.themes
         return cell

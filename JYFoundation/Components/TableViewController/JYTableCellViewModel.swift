@@ -23,7 +23,7 @@ public class JYTableViewCellAction: NSObject {
 }
 
 @objc public protocol ITableCellViewModel: AnyObject {
-    func notification(identifier: String, userInfo: Any?)
+    func notification(action: String, userInfo: Any?)
     func cellType() -> JYTableViewCell.Type
     func height() -> CGFloat
     func isDraggable(draggingCellViewModel: ITableCellViewModel?) -> Bool
@@ -93,8 +93,8 @@ open class JYTableCellViewModel<T>: NSObject, ITableCellViewModel {
     
     // MARK: publics
     
-    public func notification(identifier: String, userInfo: Any? = nil) {
-        self.notificationBlock?(self, identifier, userInfo)
+    public func notification(action: String, userInfo: Any? = nil) {
+        self.notificationBlock?(self, action, userInfo)
     }
     
     public func updateCell() {

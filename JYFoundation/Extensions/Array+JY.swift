@@ -89,6 +89,13 @@ extension Array {
         return Array<Element>(self[0...range.upperBound])
     }
     
+    public subscript(safe index: Int) -> Element? {
+        guard index >= 0 && index < self.count else {
+            return nil
+        }
+        return self[index]
+    }
+    
     public subscript(safe range: Range<Index>) -> ArraySlice<Element> {
         if range.endIndex > endIndex {
             if range.startIndex >= endIndex {return []}

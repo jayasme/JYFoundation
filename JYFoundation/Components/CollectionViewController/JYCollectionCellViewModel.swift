@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 @objc public protocol ICollectionCellViewModel: AnyObject {
-    func notification(identifier: String, userInfo: Any?)
+    func notification(action: String, userInfo: Any?)
     func updateCell()
     func cellType() -> JYCollectionViewCell.Type
     func size() -> CGSize
@@ -73,9 +73,8 @@ open class JYCollectionCellViewModel<T>: NSObject, ICollectionCellViewModel {
     }
     
     // MARK: publics
-    
-    public func notification(identifier: String, userInfo: Any? = nil) {
-        notificationBlock?(self, identifier, userInfo)
+    public func notification(action: String, userInfo: Any? = nil) {
+        notificationBlock?(self, action, userInfo)
     }
     
     public func updateCell() {

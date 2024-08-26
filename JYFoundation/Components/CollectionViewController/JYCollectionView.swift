@@ -40,7 +40,7 @@ public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource 
     @objc optional func collectionView(_ collectionView: JYCollectionView, willDataChange data: [ICollectionCellViewModel])
     @objc optional func collectionView(_ collectionView: JYCollectionView, didDataChange data: [ICollectionCellViewModel])
     @objc optional func collectionView(_ collectionView: JYCollectionView, didSelect cellViewModel: ICollectionCellViewModel)
-    @objc optional func collectionView(_ collectionView: JYCollectionView, didNotification cellViewModel: ICollectionCellViewModel, identifier: String, userInfo: Any?)
+    @objc optional func collectionView(_ collectionView: JYCollectionView, didNotification cellViewModel: ICollectionCellViewModel, action: String, userInfo: Any?)
 }
 
 public enum JYCollectionViewPaginationDirection: Int {
@@ -262,8 +262,8 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         }
     }
     
-    private func notification(cellViewModel: ICollectionCellViewModel, identifier: String, userInfo: Any?) {
-        jyDelegate?.collectionView?(self, didNotification: cellViewModel, identifier: identifier, userInfo: userInfo)
+    private func notification(cellViewModel: ICollectionCellViewModel, action: String, userInfo: Any?) {
+        jyDelegate?.collectionView?(self, didNotification: cellViewModel, action: action, userInfo: userInfo)
     }
     
     // MARK: Publics
@@ -517,8 +517,8 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: viewModel.cellType().defaultIdentifier(), for: indexPath) as! JYCollectionViewCell
         cell.updateViewModel(viewModel: viewModel)
         jyDataSource?.prepare?(viewModel, for: cell)
-        viewModel.notificationBlock = {[weak self] (cellViewModel: ICollectionCellViewModel, identifier: String, userInfo: Any?) -> Void in
-            self?.notification(cellViewModel: cellViewModel, identifier: identifier, userInfo: userInfo)
+        viewModel.notificationBlock = {[weak self] (cellViewModel: ICollectionCellViewModel, action: String, userInfo: Any?) -> Void in
+            self?.notification(cellViewModel: cellViewModel, action: identifier, userInfo: userInfo)
         }
         cell.themes = self.themes
         return cell
