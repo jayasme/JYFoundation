@@ -92,7 +92,9 @@ public class JYThemeStyle<T> {
 
     internal var styles: [(themes: [JYTheme], style: T)] = []
     
-    public init() { }
+    public init(styles: [(themes: [JYTheme], style: T)] = []) {
+        self.styles = styles
+    }
     
     public func addStyle(for themes: [JYTheme], style: T) {
         styles.append((themes: themes, style: style))

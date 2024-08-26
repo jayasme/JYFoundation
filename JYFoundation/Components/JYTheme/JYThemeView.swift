@@ -23,9 +23,30 @@ open class JYThemeView: UIView, JYThemeful {
         }
     }
     
+    public var overridedBackgroundColor: UIColor? {
+        didSet {
+            self.applyThemes()
+        }
+    }
+    
+    public var overrideBorderColor: UIColor? {
+        didSet {
+            self.applyThemes()
+        }
+    }
+    
     open func applyThemes() {
-        self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
-        self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
+        if let overridedBackgroundColor = self.overridedBackgroundColor {
+            self.backgroundColor = overridedBackgroundColor
+        } else {
+            self.backgroundColor = self.styleSheet?.backgroundColor?.style(by: self.themes).first ?? .clear
+        }
+        
+        if let overrideBorderColor = self.overrideBorderColor {
+            self.layer.borderColor = overrideBorderColor.cgColor
+        } else {
+            self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
+        }
     }
     
     func passthroughThemes() {

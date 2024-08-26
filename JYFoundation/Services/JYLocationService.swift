@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreLocation
-import PromiseKit
 import UIKit
 
 extension Notification.Name {
@@ -82,7 +81,7 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    public static let shared: JYLocationService! = JYLocationService()
+    public static let shared: JYLocationService = JYLocationService()
     
     private var manager: CLLocationManager = CLLocationManager()
     
@@ -133,37 +132,35 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    private var requestAuthCallback: (() -> Void)? = nil
+    private var permissionContinuation: CheckedContinuation<AuthState, Never>?
     
-    @discardableResult
-    public func requestAuth(requestType: RequestType) -> Promise<AuthState> {
+    public func requestAuth(requestType: RequestType) async -> AuthState {
         let authStatus = self.authState
         guard authStatus == .notDetermined else {
-            return Promise<AuthState>.value(authStatus)
+            return authStatus
         }
  
-        return Promise<AuthState> {[weak self] seal in
+        let status = await withCheckedContinuation{[weak self] continuation in
             guard let self = self else {
                 return
             }
-            self.requestAuthCallback = {[weak self] in
-                guard let self = self else {
-                    return
+            
+            DispatchQueue.main.async {
+                if (requestType == .always) {
+                    self.manager.requestAlwaysAuthorization()
+                } else {
+                    self.manager.requestWhenInUseAuthorization()
                 }
-                seal.fulfill(self.authState)
-                self.requestAuthCallback = nil
-            }
-            if (requestType == .always) {
-                self.manager.requestAlwaysAuthorization()
-            }
-            if (requestType == .whenInUse) {
-                self.manager.requestWhenInUseAuthorization()
+                self.permissionContinuation = continuation
             }
         }
+        
+        return status
     }
     
+    // MARK: CLLocationManagerDelegate
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        self.requestAuthCallback?()
+        self.permissionContinuation?.resume(returning: self.authState)
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
@@ -190,44 +187,43 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     }
     
     private var errorAttemps: Int = 0
-    private var addressPromise: Promise<Void>? = nil
+    private var refreshAddressTask: Task<(),Never>?
     
     @discardableResult
-    func refreshAddress() -> Promise<Void> {
+    func refreshAddress() {
+        self.refreshAddressTask?.cancel()
+        
         guard let addressService = self.addressService,
               let location = self.location
         else {
-            return Promise<Void>.value(())
+            return
         }
 
-        return firstly {
-            addressService.getAddressByLocation(location: location)
-        }.done {[weak self] address in
-            guard let self = self else {
-                return
-            }
-            self.errorAttemps = 0
-            self.address = address
-            NotificationCenter.default.post(
-                name: NSNotification.Name.JYAddressUpdate,
-                object: nil,
-                userInfo: [
-                    "address": address,
-                    "location": location
-                ]
-            )
-        }.recover {[weak self] error -> Promise<Void> in
-            guard let self = self,
-                  location.longtitude == self.location?.longtitude && location.latitude == self.location?.latitude
-            else {
-                return Promise.value(())
-            }
-            self.errorAttemps += 1
-            let time = addressService.getRefreshDelay(errorAttemps: self.errorAttemps, error: error)
-            return firstly {
-                after(seconds: time)
-            }.then {
-                self.refreshAddress()
+        self.refreshAddressTask = Task {
+            do {
+                self.address = try await addressService.getAddressByLocation(location: location)
+                self.errorAttemps = 0
+                NotificationCenter.default.post(
+                    name: NSNotification.Name.JYAddressUpdate,
+                    object: nil,
+                    userInfo: [
+                        "address": address,
+                        "location": location
+                    ]
+                )
+            } catch let error {
+                guard
+                    location.longtitude == self.location?.longtitude &&
+                        location.latitude == self.location?.latitude else {
+                    return
+                }
+                
+                self.errorAttemps += 1
+                let time = addressService.getRefreshDelay(errorAttemps: self.errorAttemps, error: error)
+                try? await Task.sleep(nanoseconds: UInt64(time) * 1_000_000_000)
+                if !Task.isCancelled {
+                    self.refreshAddress()
+                }
             }
         }
     }
@@ -237,7 +233,7 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         public init() { }
         
         @discardableResult
-        open func getAddressByLocation(location: JYLocationService.Location) -> Promise<JYLocationService.Address> {
+        open func getAddressByLocation(location: JYLocationService.Location) async throws -> JYLocationService.Address? {
             fatalError("Needs to be implemented")
         }
         

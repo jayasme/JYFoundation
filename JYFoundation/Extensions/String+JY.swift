@@ -44,16 +44,7 @@ extension String {
         
         return String(data: data, encoding: .utf8)
     }
-    
-    public func substring(start: Int, length: Int? = nil) -> String {
-        let startIndex = self.index(self.startIndex, offsetBy: start)
-        if let length = length, start + length < self.count {
-            let endIndex = self.index(startIndex, offsetBy: length)
-            return String(self[startIndex..<endIndex])
-        }
-        return String(self[startIndex...])
-    }
-    
+
     public func sha1() -> String {
         guard let sourceData = data(using: .utf8) else {
             return ""
@@ -71,7 +62,7 @@ extension String {
         return self.firstIndex(where: { characters.contains($0) })
     }
     
-    // operator overrides
+    // MARK: operator overrides
     
     public static func + (left: String, right: Int) -> String {
         return left + String(right)
@@ -95,6 +86,38 @@ extension String {
     
     public static func += (left: inout String, right: Double) {
         left += String(format: "%lf", right)
+    }
+    
+    // MARK: String Operations
+    public func substring(start: Int, length: Int? = nil) -> String {
+        let startIndex = self.index(self.startIndex, offsetBy: start)
+        if let length = length, start + length < self.count {
+            let endIndex = self.index(startIndex, offsetBy: length)
+            return String(self[startIndex..<endIndex])
+        }
+        return String(self[startIndex...])
+    }
+    
+    public func moveForward(index: inout String.Index, offset: Int) -> Int {
+        let distance = self.distance(from: index, to: self.endIndex)
+        if (distance >= offset) {
+            index = self.index(index, offsetBy: offset)
+            return offset
+        } else {
+            index = self.index(index, offsetBy: distance)
+            return distance
+        }
+    }
+    
+    public func moveBackward(index: inout String.Index, offset: Int) -> Int {
+        let distance = self.distance(from: self.startIndex, to: index)
+        if (distance >= offset) {
+            index = self.index(index, offsetBy: -offset)
+            return offset
+        } else {
+            index = self.index(index, offsetBy: -distance)
+            return distance
+        }
     }
 }
 

@@ -16,6 +16,18 @@ extension Array {
         return result
     }
     
+    public static func + (left: Array, right: Element) -> Array {
+        var result: Array = left
+        result.append(right)
+        return result
+    }
+    
+    public static func + (left: Element, right: Array) -> Array {
+        var result: Array = right
+        result.insert(left, at: 0)
+        return result
+    }
+    
     public static func += (left: inout Array, right: Element) {
         left.append(right)
     }
@@ -75,6 +87,16 @@ extension Array {
     
     public subscript(range: PartialRangeUpTo<Int>) -> [Element] {
         return Array<Element>(self[0...range.upperBound])
+    }
+    
+    public subscript(safe range: Range<Index>) -> ArraySlice<Element> {
+        if range.endIndex > endIndex {
+            if range.startIndex >= endIndex {return []}
+            else {return self[range.startIndex..<endIndex]}
+        }
+        else {
+            return self[range]
+        }
     }
 }
 

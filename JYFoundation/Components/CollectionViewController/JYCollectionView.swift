@@ -26,6 +26,7 @@ public protocol JYCollectionViewStaticDataSource: JYCollectionViewDataSource {
     @objc optional func draggingDidEnd(_ collectionView: JYCollectionView)
     @objc optional func draggingShouldRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel) -> Bool
     @objc optional func draggingDidRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int)
+    @objc optional func presentDraggingView(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int) -> UIView?
 }
 
 public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource {
@@ -509,7 +510,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         let viewModel = _viewModels[indexPath.item]
         guard viewModel !== self.draggingViewModel else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DraggingPlaceholder", for: indexPath)
-            cell.frame = CGRect(origin: .zero, size: viewModel.size())
+//            cell.frame = CGRect(origin: .zero, size: viewModel.size())
             cell.backgroundColor = .clear
             return cell
         }
@@ -622,7 +623,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     // MARK: Dragging
     
-    public var draggingAutoScrollInsets: UIEdgeInsets = .init(top: 40, left: 0, bottom: 40, right: 0)
+    public var draggingAutoScrollInsets: UIEdgeInsets = .init(top: 40, left: 40, bottom: 40, right: 40)
     public var draggingRemoveEdgeInsets: UIEdgeInsets = .init(top: 0, left: 40, bottom: 0, right: 40)
     
     public enum DraggingAutoScrollSpeed: CGFloat {
@@ -634,6 +635,8 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     private enum AutoScrollDirection {
         case up
         case down
+        case left
+        case right
     }
     
     public var draggingAutoScrollSpeed: DraggingAutoScrollSpeed = .medium
@@ -664,6 +667,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     private var draggingScrolling: Bool = false
     private var draggingAutoScrollDirection: AutoScrollDirection? = nil
     private var draggingDisplayLink: CADisplayLink? = nil
+    private var draggingCenterOffset: CGPoint = .zero
     
     private var isDraggingRemove: Bool = false
     private var isDraggingRemoving: Bool = false
@@ -692,7 +696,12 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 return
             }
             
-            self.draggingView = cell.snapshotView(afterScreenUpdates: false)
+            if let draggingView = self.jyDraggingDelegate?.presentDraggingView?(self, draggingViewModel: cellViewModel, fromIndex: index) {
+                self.draggingView = draggingView
+            } else {
+                self.draggingView = cell.snapshotView(afterScreenUpdates: false)
+            }
+            
             guard let draggingView = self.draggingView else {
                 return
             }
@@ -702,12 +711,13 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             self.draggingViewModel = cellViewModel
             draggingView.frame = cell.frame
             var center = cell.center
+            self.draggingCenterOffset = center - point
             if (!self.isDraggingRemove &&
                 self.jyDraggingDelegate?.draggingShouldRemove?(self, draggingViewModel: cellViewModel) == true
             ) {
                 self.isDraggingRemove = true
-                center.x = point.x
             }
+            center.x = point.x
             center.y = point.y
             self.reloadData()
             
@@ -726,11 +736,9 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             }
             
             var center = draggingView.center
+            center.x = point.x
             center.y = point.y
-            if (self.isDraggingRemove) {
-                center.x = point.x
-            }
-            draggingView.center = center
+            draggingView.center = center + self.draggingCenterOffset
             
             if (self.isDraggingRemove && !self.isDraggingRemoving &&
                 (point.x <= self.draggingRemoveEdgeInsets.left || point.x >= self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
@@ -751,17 +759,14 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             
             self.jyDraggingDelegate?.draggingDidMove?(self, viewModel: draggingViewModel, draggingView: draggingView, fromIndex: draggingIndex, point: point)
             
-            guard let firstVisibleViewModel = self.visibleCellViewModels.first,
-                  let firstVisibleIndex = self.index(of: firstVisibleViewModel),
-                  let index = self.indexPathForItem(at: CGPoint(x: center.x.clamp(range: 0...self.bounds.width - 1), y: center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
-                  index != draggingIndex,
-                  self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel)
+            guard let toIndex = self.indexPathForItem(at: point)?.item,
+                  toIndex != draggingIndex,
+                  self.cellViewModels[toIndex].isDraggable(draggingCellViewModel: draggingViewModel)
             else {
                 return
             }
             
             // dragging view would never been gone top out of the collectionview
-            let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
             guard self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex) != false else {
                 return
             }
@@ -820,14 +825,14 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 )
                 
             } else if
-                let index = self.indexPathForItem(at: CGPoint(x: draggingView.center.x.clamp(range: 0...self.bounds.width - 1), y: draggingView.center.y.clamp(range: 0...self.contentSize.height - 1)))?.item,
-                let cell = self.cellForItem(at: IndexPath(item: draggingIndex, section: 0)) {
+                let toIndex = self.draggingIndex,
+                let cell = self.cellForItem(at: IndexPath(item: toIndex, section: 0)) {
                 
                 self.jyDraggingDelegate?.draggingWillEnd?(
                     self,
                     draggingViewModel: draggingViewModel,
                     fromIndex: startDraggingIndex,
-                    toIndex: index
+                    toIndex: toIndex
                 )
                 
                 self.draggingViewModel = nil
@@ -859,17 +864,25 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     }
     
     private func getAutoScrollDirection() -> AutoScrollDirection? {
-        guard self.bounds.size.height < self.contentOffset.y, let draggingView = self.draggingView else {
+        guard let draggingView = self.draggingView else {
             return nil
         }
 
         let minY = draggingView.frame.minY
         let maxY = draggingView.frame.maxY
-        if (minY < self.contentOffset.y + 40) {
+        let minX = draggingView.frame.minX
+        let maxX = draggingView.frame.maxX
+        if (minY < self.contentOffset.y + self.draggingAutoScrollInsets.top) {
             return .up
         }
-        if (maxY > self.bounds.size.height + self.contentOffset.y - 40) {
+        if (maxY > self.bounds.size.height + self.contentOffset.y - self.draggingAutoScrollInsets.bottom) {
             return .down
+        }
+        if (minX < self.contentOffset.x + self.draggingAutoScrollInsets.left) {
+            return .left
+        }
+        if (maxX > self.bounds.size.width + self.contentOffset.x - self.draggingAutoScrollInsets.right) {
+            return .right
         }
         return nil
     }
@@ -900,11 +913,17 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             // scroll to down
             self.contentOffset = CGPoint(x: 0, y: self.contentOffset.y + scrollSpeed)
             draggingView.center = CGPoint(x: draggingView.center.x, y: draggingView.center.y + scrollSpeed)
+        } else if (draggingAutoScrollDirection == .left && self.contentOffset.x > 0) {
+            // scroll to left
+            self.contentOffset = CGPoint(x: self.contentOffset.x - scrollSpeed, y: 0)
+            draggingView.center = CGPoint(x: draggingView.center.x - scrollSpeed, y: draggingView.center.y)
+        } else if (draggingAutoScrollDirection == .right && self.contentOffset.x + self.bounds.width < self.contentSize.width) {
+            // scroll to right
+            self.contentOffset = CGPoint(x: self.contentOffset.x + scrollSpeed, y: 0)
+            draggingView.center = CGPoint(x: draggingView.center.x + scrollSpeed, y: draggingView.center.y)
         }
         
         guard let draggingViewModel = self.draggingViewModel,
-              let firstVisibleViewModel = self.visibleCellViewModels.first,
-              let firstVisibleIndex = self.index(of: firstVisibleViewModel),
               let index = self.indexPathForItem(at: draggingView.center)?.item,
               index != draggingIndex,
               self.cellViewModels[index].isDraggable(draggingCellViewModel: draggingViewModel)
@@ -912,15 +931,14 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             return
         }
         
-        // dragging view would never been gone top out of the tableview
-        let toIndex = self.contentOffset.y > 0 ? max(index, firstVisibleIndex + 1) : index
-        guard self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex) != false else {
+        // dragging view would never been gone top out of the collectionview
+        guard self.jyDraggingDelegate?.draggingShouldPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: index) != false else {
             return
         }
         
-        self.moveCellViewModel(for: draggingViewModel, to: toIndex)
-        self.jyDraggingDelegate?.draggingDidPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: toIndex)
-        self.draggingIndex = toIndex
+        self.moveCellViewModel(for: draggingViewModel, to: index)
+        self.jyDraggingDelegate?.draggingDidPlace?(self, draggingViewModel: draggingViewModel, prevIndex: draggingIndex, atIndex: index)
+        self.draggingIndex = index
     }
     
     // MARK: JYThemeful
