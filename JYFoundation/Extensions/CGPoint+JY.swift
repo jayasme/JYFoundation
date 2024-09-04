@@ -30,4 +30,9 @@ extension CGPoint {
     public static func -= (left: inout CGPoint, right: CGPoint) {
         left = CGPoint(x: left.x - right.x, y: left.y - right.y)
     }
+    
+    public func distance(to otherPoint: CGPoint) -> CGFloat {
+        let diff = self - otherPoint
+        return sqrt(pow(diff.x, 2) + pow(diff.y, 2))
+    }
 }

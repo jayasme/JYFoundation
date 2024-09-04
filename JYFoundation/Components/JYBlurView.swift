@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class JYBlurView: UIVisualEffectView {
+open class JYBlurView: UIVisualEffectView {
   
     private var aniamtor: UIViewPropertyAnimator!
     

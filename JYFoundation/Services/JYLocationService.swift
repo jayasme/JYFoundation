@@ -49,6 +49,38 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         public var subLocality: String
         public var address: String
         public var postalCode: String?
+        
+        public enum Precise {
+            case iso2
+            case prov
+            case city
+            case subLocality
+            case all
+        }
+        
+        public func isEquals(to other: Address, precise: Precise = .all) -> Bool {
+            if (precise == .iso2) {
+                return self.iso2 == other.iso2
+            }
+            if (precise == .prov) {
+                return self.iso2 == other.iso2 && self.prov == other.prov
+            }
+            if (precise == .city) {
+                return self.iso2 == other.iso2 && self.prov == other.prov && self.city == other.city
+            }
+            if (precise == .subLocality) {
+                return self.iso2 == other.iso2 &&
+                        self.prov == other.prov &&
+                        self.city == other.prov &&
+                        self.subLocality == other.subLocality
+            }
+            return self.iso2 == other.iso2 &&
+                    self.prov == other.prov &&
+                    self.city == other.prov &&
+                    self.subLocality == other.subLocality &&
+                    self.address == other.address &&
+                    self.postalCode == other.postalCode
+        }
     }
     
     public struct Location {
@@ -64,10 +96,32 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
             self.longtitude = longtitude
             self.latitude = latitude
         }
+        
+        public func distance(to other: Location) ->CGFloat {
+            let deltaLat = other.latitude - self.latitude
+            let deltaLon = other.longtitude - self.longtitude
+            let distance = sqrt(deltaLat * deltaLat + deltaLon * deltaLon)
+            let scaleFactor = 111000.0
+            let distanceInMeters = distance * scaleFactor
+            
+            return distanceInMeters
+        }
     }
     
+    /// Minimum distance for triggering address refresh(unit: meter).
+    public var minimumAddressDistanceChange: CGFloat = 5
+    
+    private var lastLocation: Location?
     public private(set) var location: Location? = nil {
         didSet {
+            if let location = self.location,
+               let lastLocation = self.lastLocation,
+               location.distance(to: lastLocation) < self.minimumAddressDistanceChange {
+                self.lastLocation = location
+                return
+            }
+            
+            self.lastLocation = location
             self.refreshAddress()
         }
     }
@@ -186,23 +240,27 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         )
     }
     
-    private var errorAttemps: Int = 0
+    private var errorAttempts: Int = 0
     private var refreshAddressTask: Task<(),Never>?
     
-    @discardableResult
     func refreshAddress() {
-        self.refreshAddressTask?.cancel()
-        
         guard let addressService = self.addressService,
               let location = self.location
         else {
             return
         }
+        
+        self.refreshAddressTask?.cancel()
 
         self.refreshAddressTask = Task {
             do {
-                self.address = try await addressService.getAddressByLocation(location: location)
-                self.errorAttemps = 0
+                print("Current Address: \(self.address)")
+                guard let address = try await addressService.getAddressByLocation(location: location),
+                      self.address == nil || !address.isEquals(to: self.address!) else {
+                    return
+                }
+                self.address = address
+                self.errorAttempts = 0
                 NotificationCenter.default.post(
                     name: NSNotification.Name.JYAddressUpdate,
                     object: nil,
@@ -211,6 +269,7 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
                         "location": location
                     ]
                 )
+                self.refreshAddressTask = nil
             } catch let error {
                 guard
                     location.longtitude == self.location?.longtitude &&
@@ -218,12 +277,11 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
                     return
                 }
                 
-                self.errorAttemps += 1
-                let time = addressService.getRefreshDelay(errorAttemps: self.errorAttemps, error: error)
+                self.errorAttempts += 1
+                let time = addressService.getRefreshDelay(errorAttemps: self.errorAttempts, error: error)
                 try? await Task.sleep(nanoseconds: UInt64(time) * 1_000_000_000)
-                if !Task.isCancelled {
-                    self.refreshAddress()
-                }
+                self.refreshAddressTask = nil
+                self.refreshAddress()
             }
         }
     }

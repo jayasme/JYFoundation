@@ -22,7 +22,7 @@ public protocol JYCollectionViewStaticDataSource: JYCollectionViewDataSource {
     @objc optional func draggingDidMove(_ collectionView: JYCollectionView, viewModel: ICollectionCellViewModel, draggingView: UIView, fromIndex: Int, point: CGPoint)
     @objc optional func draggingShouldPlace(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, prevIndex: Int, atIndex: Int) -> Bool
     @objc optional func draggingDidPlace(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, prevIndex: Int, atIndex: Int)
-    @objc optional func draggingWillEnd(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int, toIndex: Int)
+    @objc optional func draggingShouldEnd(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int, toIndex: Int) -> Bool
     @objc optional func draggingDidEnd(_ collectionView: JYCollectionView)
     @objc optional func draggingShouldRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel) -> Bool
     @objc optional func draggingDidRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int)
@@ -48,7 +48,7 @@ public enum JYCollectionViewPaginationDirection: Int {
     case down = 2
 }
 
-open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, JYThemeful {
+open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate, JYThemeful {
     
     internal static var collectionViewLayoutQueue: DispatchQueue = DispatchQueue(label: "JYCollectionViewLayout")
     
@@ -97,10 +97,10 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     public weak var jyDataSource: JYCollectionViewDataSource? = nil {
         didSet {
             if let dataSource = self.jyDataSource as? JYCollectionViewDynamicalDataSource, let spinnerViewModel = dataSource.spinnerCellViewModel(self) {
-              self._viewModels.append(spinnerViewModel)
+                self._viewModels.append(spinnerViewModel)
             } else if self.jyDataSource is JYCollectionViewStaticDataSource {
-              status = .fixed
-              reloadViewModels(clearPreviousData: true)
+                status = .fixed
+                reloadViewModels(clearPreviousData: true)
             }
             self.checkRefreshControl()
         }
@@ -257,9 +257,9 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 self.reloadViewModels(clearPreviousData: false)
             }.catch { [weak self] _ in
                 guard let self = self else { return }
-
+                
                 self.status = .failure
-        }
+            }
     }
     
     private func notification(cellViewModel: ICollectionCellViewModel, action: String, userInfo: Any?) {
@@ -308,36 +308,36 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             }
         } else if type == .static {
             return retrieveDataPromise()
-            .then { [weak self] newViewModels -> Guarantee<Void> in
-                guard let self = self else {
+                .then { [weak self] newViewModels -> Guarantee<Void> in
+                    guard let self = self else {
+                        return Guarantee.value(())
+                    }
+                    
+                    if clearPreviousData {
+                        self._viewModels.removeAll()
+                    }
+                    
+                    for viewModel in newViewModels {
+                        self.checkRegistred(viewModel: viewModel)
+                        self._viewModels.append(viewModel)
+                    }
+                    
+                    if (animated) {
+                        UIView.transition(
+                            with: self,
+                            duration: 0.1,
+                            options: .transitionCrossDissolve,
+                            animations: {
+                                self.reloadData()
+                            }
+                        )
+                        // UIView.transition is not reliable, so using the delay function to simulate the finish completion.
+                        return DispatchQueue.main.delay(time: 0.1)
+                    }
+                    self.reloadData()
+                    self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
                     return Guarantee.value(())
                 }
-                
-                if clearPreviousData {
-                    self._viewModels.removeAll()
-                }
-                
-                for viewModel in newViewModels {
-                    self.checkRegistred(viewModel: viewModel)
-                    self._viewModels.append(viewModel)
-                }
-                
-                if (animated) {
-                    UIView.transition(
-                        with: self,
-                        duration: 0.1,
-                        options: .transitionCrossDissolve,
-                        animations: {
-                            self.reloadData()
-                        }
-                    )
-                    // UIView.transition is not reliable, so using the delay function to simulate the finish completion.
-                    return DispatchQueue.main.delay(time: 0.1)
-                }
-                self.reloadData()
-                self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
-                return Guarantee.value(())
-            }
         }
         
         return Guarantee<Void>.value(())
@@ -510,7 +510,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         let viewModel = _viewModels[indexPath.item]
         guard viewModel !== self.draggingViewModel else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DraggingPlaceholder", for: indexPath)
-//            cell.frame = CGRect(origin: .zero, size: viewModel.size())
+            //            cell.frame = CGRect(origin: .zero, size: viewModel.size())
             cell.backgroundColor = .clear
             return cell
         }
@@ -518,21 +518,21 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         cell.updateViewModel(viewModel: viewModel)
         jyDataSource?.prepare?(viewModel, for: cell)
         viewModel.notificationBlock = {[weak self] (cellViewModel: ICollectionCellViewModel, action: String, userInfo: Any?) -> Void in
-            self?.notification(cellViewModel: cellViewModel, action: identifier, userInfo: userInfo)
+            self?.notification(cellViewModel: cellViewModel, action: action, userInfo: userInfo)
         }
         cell.themes = self.themes
         return cell
     }
     
-//    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        if (type == .dynamical && kind == UICollectionView.elementKindSectionFooter && status != .exhausted && status != .failure) {
-//            if (_viewModels.count > 0) {
-//                return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionOvalSpinnerView.defaultIdentifier(), for: indexPath)
-//            }
-//            return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionCircinalSpinnerView.defaultIdentifier(), for: indexPath)
-//        }
-//        return UICollectionReusableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-//    }
+    //    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    //        if (type == .dynamical && kind == UICollectionView.elementKindSectionFooter && status != .exhausted && status != .failure) {
+    //            if (_viewModels.count > 0) {
+    //                return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionOvalSpinnerView.defaultIdentifier(), for: indexPath)
+    //            }
+    //            return self.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: CollectionCircinalSpinnerView.defaultIdentifier(), for: indexPath)
+    //        }
+    //        return UICollectionReusableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    //    }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if (type == .dynamical && status != .exhausted && status != .failure) {
@@ -559,28 +559,28 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         }
     }
     
-//    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if let cell = cell as? JYCollectionViewCell {
-//            cell.willDisappear()
-//        }
-//    }
-//
-//    public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-//
-//        if (type == .dynamical) {
-//            if let view = view as? CollectionOvalSpinnerView {
-//                view.willDisplay()
-//            } else if let view = view as? CollectionCircinalSpinnerView {
-//                view.willDisplay()
-//            }
-//            loadNext()
-//        }
-//    }
+    //    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    //        if let cell = cell as? JYCollectionViewCell {
+    //            cell.willDisappear()
+    //        }
+    //    }
+    //
+    //    public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+    //
+    //        if (type == .dynamical) {
+    //            if let view = view as? CollectionOvalSpinnerView {
+    //                view.willDisplay()
+    //            } else if let view = view as? CollectionCircinalSpinnerView {
+    //                view.willDisplay()
+    //            }
+    //            loadNext()
+    //        }
+    //    }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
         
         if let cell = view as? JYCollectionViewCell {
-          cell.willDisappear()
+            cell.willDisappear()
         }
     }
     
@@ -599,7 +599,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         guard indexPath.item < _viewModels.count else {
             return CGSize(width: 0, height: 0)
         }
-
+        
         return _viewModels[indexPath.item].size()
     }
     
@@ -619,6 +619,11 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         jyDelegate?.scrollViewDidScroll?(scrollView)
+    }
+    
+    // MARK: UIGestureRecognizerDelegate
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     // MARK: Dragging
@@ -641,6 +646,12 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     public var draggingAutoScrollSpeed: DraggingAutoScrollSpeed = .medium
     
+    public var minimumDraggingPressDuration: TimeInterval = 1 {
+        didSet {
+            self.longPressGesture?.minimumPressDuration = self.minimumDraggingPressDuration
+        }
+    }
+    
     public var draggingEnabled: Bool = false {
         didSet {
             if (self.draggingEnabled) {
@@ -648,7 +659,9 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                     return
                 }
                 let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
+                gesture.minimumPressDuration = self.minimumDraggingPressDuration
                 self.addGestureRecognizer(gesture)
+                gesture.delegate = self
                 self.longPressGesture = gesture
             } else {
                 if self.longPressGesture != nil {
@@ -659,18 +672,22 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         }
     }
     
+    public var minimumDraggingDistance: CGFloat = 0
+    
     private var longPressGesture: UILongPressGestureRecognizer?
-    private var draggingView: UIView?
-    private var draggingViewModel: ICollectionCellViewModel?
+    private(set) public var draggingView: UIView?
+    private(set) public var draggingViewModel: ICollectionCellViewModel?
     private var draggingIndex: Int?
     private var startDraggingIndex: Int?
     private var draggingScrolling: Bool = false
     private var draggingAutoScrollDirection: AutoScrollDirection? = nil
     private var draggingDisplayLink: CADisplayLink? = nil
     private var draggingCenterOffset: CGPoint = .zero
-    
+    private var draggingStartPosition: CGPoint?
+    private var draggingDidStartMoving: Bool = false
     private var isDraggingRemove: Bool = false
     private var isDraggingRemoving: Bool = false
+    private var holdDraggingEnd: Bool = false
     
     public override var isDragging: Bool {
         get {
@@ -679,7 +696,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     }
     
     @objc private func handleLongPress(gesture: UILongPressGestureRecognizer) {
-        guard gesture.numberOfTouches == 1 else {
+        guard gesture.numberOfTouches == 1 && !self.holdDraggingEnd else {
             return
         }
         
@@ -719,6 +736,8 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             }
             center.x = point.x
             center.y = point.y
+            self.draggingStartPosition = point
+            self.draggingDidStartMoving = false
             self.reloadData()
             
             self.jyDraggingDelegate?.draggingDidBegin?(self, viewModel: cellViewModel, draggingView: draggingView, point: center)
@@ -734,11 +753,19 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
             else {
                 return
             }
+
+            // must exceed the minimumDraggingDistance
+            guard let draggingStartPosition = self.draggingStartPosition,
+                  (self.draggingDidStartMoving || point.distance(to: draggingStartPosition) >= self.minimumDraggingDistance)
+            else {
+                return
+            }
             
             var center = draggingView.center
             center.x = point.x
             center.y = point.y
             draggingView.center = center + self.draggingCenterOffset
+            self.draggingDidStartMoving = true
             
             if (self.isDraggingRemove && !self.isDraggingRemoving &&
                 (point.x <= self.draggingRemoveEdgeInsets.left || point.x >= self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
@@ -801,7 +828,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 
                 self.isDraggingRemove = false
                 self.isDraggingRemoving = false
-
+                
                 UIView.animate(
                     withDuration: 0.3,
                     delay: 0,
@@ -821,45 +848,66 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                         self.startOrStopAutoScroll()
                         self.isScrollEnabled = true
                         self.jyDraggingDelegate?.draggingDidEnd?(self)
+                        self.draggingStartPosition = nil
                     }
                 )
                 
-            } else if
-                let toIndex = self.draggingIndex,
-                let cell = self.cellForItem(at: IndexPath(item: toIndex, section: 0)) {
+            } else if let toIndex = self.draggingIndex {
                 
-                self.jyDraggingDelegate?.draggingWillEnd?(
+                guard self.jyDraggingDelegate?.draggingShouldEnd?(
                     self,
                     draggingViewModel: draggingViewModel,
                     fromIndex: startDraggingIndex,
                     toIndex: toIndex
-                )
+                ) != false else {
+                    self.holdDraggingEnd = true
+                    return
+                }
                 
-                self.draggingViewModel = nil
-                
-                UIView.animate(
-                    withDuration: 0.3,
-                    delay: 0,
-                    options: .beginFromCurrentState,
-                    animations: {
-                        draggingView.transform = CGAffineTransform(scaleX: 1, y: 1)
-                        draggingView.frame = cell.frame
-                    },
-                    completion: { [weak self] flag in
-                        guard flag, let self = self else {
-                            return
-                        }
-                        self.reloadData()
-                        self.draggingView?.removeFromSuperview()
-                        self.draggingView = nil
-                        self.draggingIndex = nil
-                        self.draggingAutoScrollDirection = nil
-                        self.startOrStopAutoScroll()
-                        self.isScrollEnabled = true
-                        self.jyDraggingDelegate?.draggingDidEnd?(self)
-                    }
-                )
+                Task {
+                    await self.endDragging()
+                }
             }
+        }
+    }
+    
+    public func endDragging() async {
+        guard let draggingView = self.draggingView,
+              let toIndex = self.draggingIndex,
+              let cell = self.cellForItem(at: IndexPath(item: toIndex, section: 0))
+        else {
+            return
+        }
+        
+        self.draggingViewModel = nil
+        self.holdDraggingEnd = false
+
+        return await withCheckedContinuation { continuation in
+            UIView.animate(
+                withDuration: 0.3,
+                delay: 0,
+                options: .beginFromCurrentState,
+                animations: {
+                    draggingView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                    draggingView.frame = cell.frame
+                },
+                completion: { [weak self] flag in
+                    guard flag, let self = self else {
+                        continuation.resume()
+                        return
+                    }
+                    self.reloadData()
+                    self.draggingView?.removeFromSuperview()
+                    self.draggingView = nil
+                    self.draggingIndex = nil
+                    self.draggingAutoScrollDirection = nil
+                    self.startOrStopAutoScroll()
+                    self.isScrollEnabled = true
+                    self.jyDraggingDelegate?.draggingDidEnd?(self)
+                    self.draggingStartPosition = nil
+                    continuation.resume()
+                }
+            )
         }
     }
     

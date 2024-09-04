@@ -65,4 +65,28 @@ open class JYThemeView: UIView, JYThemeful {
         }
         view.themes = self.themes
     }
+    
+    override open func insertSubview(_ view: UIView, at index: Int) {
+        super.insertSubview(view, at: index)
+        guard let view = view as? JYThemeful else {
+            return
+        }
+        view.themes = self.themes
+    }
+    
+    override open func insertSubview(_ view: UIView, aboveSubview siblingSubview: UIView) {
+        super.insertSubview(view, aboveSubview: siblingSubview)
+        guard let view = view as? JYThemeful else {
+            return
+        }
+        view.themes = self.themes
+    }
+    
+    override open func insertSubview(_ view: UIView, belowSubview siblingSubview: UIView) {
+        super.insertSubview(view, belowSubview: siblingSubview)
+        guard let view = view as? JYThemeful else {
+            return
+        }
+        view.themes = self.themes
+    }
 }
