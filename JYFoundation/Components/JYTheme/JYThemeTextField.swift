@@ -13,7 +13,10 @@ open class JYThemeTextField: UITextField, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyThemes()
+            // check if themes are the changed
+            if (self.themes != oldValue) {
+                self.applyThemes()
+            }
         }
     }
     
@@ -47,6 +50,29 @@ open class JYThemeTextField: UITextField, JYThemeful {
         }
     }
     
+    public override var placeholder: String? {
+        didSet {
+            if let placeholder = self.placeholder {
+                let placeholderAttributedText = NSAttributedString(
+                    string: placeholder,
+                    attributes: [
+                        .font: self.font,
+                        .foregroundColor: self.textColor?.withAlphaComponent(0.5)
+                    ])
+                super.attributedPlaceholder = placeholderAttributedText
+            }
+        }
+    }
+    
+    open override var attributedPlaceholder: NSAttributedString? {
+        set {
+            fatalError("attributedPlaceholder can not be set directly, set placeholder instead.")
+        }
+        get {
+            return super.attributedPlaceholder
+        }
+    }
+    
     open func applyThemes() {
         if let overridedBackgroundColor = self.overridedBackgroundColor {
             self.backgroundColor = overridedBackgroundColor
@@ -64,6 +90,16 @@ open class JYThemeTextField: UITextField, JYThemeful {
             self.font = overrideFont
         } else {
             self.font = self.styleSheet?.font?.style(by: self.themes).first
+        }
+        
+        if let placeholder = self.placeholder {
+            let placeholderAttributedText = NSAttributedString(
+                string: placeholder,
+                attributes: [
+                    .font: self.font,
+                    .foregroundColor: self.textColor?.withAlphaComponent(0.5)
+                ])
+            super.attributedPlaceholder = placeholderAttributedText
         }
         
         if let overrideBorderColor = self.overrideBorderColor {

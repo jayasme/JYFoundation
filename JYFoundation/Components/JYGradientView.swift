@@ -42,8 +42,12 @@ public class JYGradientView: UIView {
             switch(gradient) {
             case .linear(let startPoint, let endPoint, let gradients):
                 do {
-                    let layer = LinearGradientLayer(gradients: gradients, startPoint: startPoint, endPoint: endPoint)
-                    layer.bounds = self.bounds
+                    let layer = CAGradientLayer()
+                    layer.startPoint = startPoint
+                    layer.endPoint = endPoint
+                    layer.colors = gradients.map { $0.color.cgColor }
+                    layer.locations = gradients.map { NSNumber(value: Float($0.location)) }
+                    layer.frame = self.bounds
                     self.layer.insertSublayer(layer, at: 0)
                     self.gradientLayer = layer
                     break
@@ -56,7 +60,7 @@ public class JYGradientView: UIView {
                                                     radiusY: radiusY,
                                                     rotation: rotation
                     )
-                    layer.bounds = self.bounds
+                    layer.frame = self.bounds
                     self.layer.insertSublayer(layer, at: 0)
                     self.gradientLayer = layer
                     break
@@ -65,12 +69,10 @@ public class JYGradientView: UIView {
         }
     }
     
-    public override func layoutSublayers(of layer: CALayer) {
-        guard let gradientLayer = self.gradientLayer else {
-            return
-        }
-
-        gradientLayer.frame = self.bounds
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.gradientLayer?.frame = self.bounds
     }
 }
 
@@ -114,6 +116,7 @@ private class LinearGradientLayer: CALayer {
                                         colors: colors,
                                         locations: locations)
         else {
+            ctx.restoreGState()
             return
         }
         
@@ -175,6 +178,7 @@ private class RadialGradientLayer: CALayer {
                                         colors: colors,
                                         locations: locations)
         else {
+            ctx.restoreGState()
             return
         }
         

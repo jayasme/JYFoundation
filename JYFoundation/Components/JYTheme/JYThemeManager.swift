@@ -112,3 +112,16 @@ public class JYThemeStyle<T> {
         }.map { $0.style }
     }
 }
+
+extension [JYTheme]: Equatable {
+    
+    public static func == (lhs: [JYTheme], rhs: [JYTheme]) -> Bool {
+        let lhss = lhs.reduce("") { partialResult, theme in
+            return partialResult + "|" + theme.name
+        }
+        let rhss = rhs.reduce("") { partialResult, theme in
+            return partialResult + "|" + theme.name
+        }
+        return lhss == rhss
+    }
+}

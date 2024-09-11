@@ -14,7 +14,10 @@ open class JYThemeImageView: UIImageView, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyThemes()
+            // check if themes are the changed
+            if (self.themes != oldValue) {
+                self.applyThemes()
+            }
         }
     }
     

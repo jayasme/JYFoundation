@@ -215,6 +215,7 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     // MARK: CLLocationManagerDelegate
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.permissionContinuation?.resume(returning: self.authState)
+        self.permissionContinuation = nil
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {

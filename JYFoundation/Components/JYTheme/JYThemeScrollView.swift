@@ -13,7 +13,10 @@ open class JYThemeScrollView: UIScrollView, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyThemes()
+            // check if themes are the changed
+            if (self.themes != oldValue) {
+                self.applyThemes()
+            }
             self.passthroughThemes()
         }
     }
@@ -50,7 +53,7 @@ open class JYThemeScrollView: UIScrollView, JYThemeful {
         }
     }
     
-    func passthroughThemes() {
+    open func passthroughThemes() {
         for subview in self.subviews {
             guard let subview = subview as? JYThemeful else {
                 continue

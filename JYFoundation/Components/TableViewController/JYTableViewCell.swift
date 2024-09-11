@@ -59,7 +59,10 @@ open class JYTableViewCell : UITableViewCell, JYThemeful {
     
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyThemes()
+            // check if themes are the changed
+            if (self.themes != oldValue) {
+                self.applyThemes()
+            }
             self.passthroughThemes()
         }
     }

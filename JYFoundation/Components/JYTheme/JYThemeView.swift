@@ -12,7 +12,10 @@ import UIKit
 open class JYThemeView: UIView, JYThemeful {
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyThemes()
+            // check if themes are the changed
+            if (self.themes != oldValue) {
+                self.applyThemes()
+            }
             self.passthroughThemes()
         }
     }
@@ -49,7 +52,7 @@ open class JYThemeView: UIView, JYThemeful {
         }
     }
     
-    func passthroughThemes() {
+    open func passthroughThemes() {
         for subview in self.subviews {
             guard let subview = subview as? JYThemeful else {
                 continue

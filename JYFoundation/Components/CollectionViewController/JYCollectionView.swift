@@ -993,7 +993,10 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     
     public var themes: [JYTheme] = [] {
         didSet {
-            self.applyThemes()
+            // check if themes are the changed
+            if (self.themes != oldValue) {
+                self.applyThemes()
+            }
             self.passthroughThemes()
         }
     }
@@ -1009,7 +1012,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         self.layer.borderColor = self.styleSheet?.borderColor?.style(by: self.themes).first?.cgColor ?? UIColor.clear.cgColor
     }
     
-    func passthroughThemes() {
+    open func passthroughThemes() {
         for cell in self.visibleCells {
             if let cell = cell as? JYThemeful {
                 cell.themes = self.themes
