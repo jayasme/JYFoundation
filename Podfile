@@ -9,10 +9,8 @@ workspace 'JYFoundation.xcworkspace'
 
 target 'JYFoundation' do
     
-    pod 'Alamofire', '~> 5.5'
-    pod 'PromiseKit/CorePromise', '~> 6.15'
-    pod 'SDWebImage', '~> 5.11'
-    pod 'HandyJSON', '5.0.4-beta'
+    pod 'PromiseKit/CorePromise', '~> 8.1.2'
+    pod 'SDWebImage', '~> 5.19.5'
     
 end
 

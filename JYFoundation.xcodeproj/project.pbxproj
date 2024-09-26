@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D00E4B220931D5900450247 /* JYHttpParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4B120931D5900450247 /* JYHttpParameter.swift */; };
-		1D00E4B420931E6100450247 /* JYHttpHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4B320931E6100450247 /* JYHttpHeader.swift */; };
-		1D00E4B620932A8700450247 /* JYHttpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4B520932A8700450247 /* JYHttpModel.swift */; };
 		1D00E4C12096B8FF00450247 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D00E4C02096B8FF00450247 /* Assets.xcassets */; };
 		1D00E4C72096BBB400450247 /* JYPaginationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4C42096BBB400450247 /* JYPaginationTableViewController.swift */; };
 		1D00E4C82096BBB400450247 /* JYTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D00E4C52096BBB400450247 /* JYTableViewController.swift */; };
@@ -55,13 +52,11 @@
 		1D389234208B02370005C175 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D389233208B02370005C175 /* CoreTelephony.framework */; };
 		1D389236208B02CE0005C175 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D389235208B02CE0005C175 /* QuartzCore.framework */; };
 		1D389238208B02DF0005C175 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D389237208B02DF0005C175 /* ImageIO.framework */; };
-		1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D38923A208B09650005C175 /* JYHttpClient.swift */; };
 		1D477775211C3A7F0068FCD0 /* Dictionary+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */; };
 		1D4D877B219987DB00D7B457 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8778219987DB00D7B457 /* README.md */; };
 		1D4D877C219987DB00D7B457 /* JYFoundation.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8779219987DB00D7B457 /* JYFoundation.podspec */; };
 		1D4D877D219987DB00D7B457 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D877A219987DB00D7B457 /* LICENSE */; };
 		1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */; };
-		1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */; };
 		A48F362C2E5897A8AEABE449 /* Pods_JYFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80028785702266DA96BD35CE /* Pods_JYFoundation.framework */; };
 		B92AA2BE29BE0D7B00911352 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92AA2BD29BE0D7B00911352 /* CGRect.swift */; };
 		B9379F7829C6C00F00A1517B /* JYStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9379F7729C6C00F00A1517B /* JYStack.swift */; };
@@ -91,9 +86,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1D00E4B120931D5900450247 /* JYHttpParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpParameter.swift; sourceTree = "<group>"; };
-		1D00E4B320931E6100450247 /* JYHttpHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpHeader.swift; sourceTree = "<group>"; };
-		1D00E4B520932A8700450247 /* JYHttpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHttpModel.swift; sourceTree = "<group>"; };
 		1D00E4C02096B8FF00450247 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D00E4C42096BBB400450247 /* JYPaginationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYPaginationTableViewController.swift; sourceTree = "<group>"; };
 		1D00E4C52096BBB400450247 /* JYTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYTableViewController.swift; sourceTree = "<group>"; };
@@ -140,7 +132,6 @@
 		1D389233208B02370005C175 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		1D389235208B02CE0005C175 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1D389237208B02DF0005C175 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		1D38923A208B09650005C175 /* JYHttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHttpClient.swift; sourceTree = "<group>"; };
 		1D477774211C3A7F0068FCD0 /* Dictionary+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JY.swift"; sourceTree = "<group>"; };
 		1D4D8778219987DB00D7B457 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1D4D8779219987DB00D7B457 /* JYFoundation.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JYFoundation.podspec; sourceTree = "<group>"; };
@@ -148,7 +139,6 @@
 		1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAuthService.swift; sourceTree = "<group>"; };
 		1D61E9E420849AA800525E3F /* JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D61E9E820849AA800525E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYPostBodyEncoder.swift; sourceTree = "<group>"; };
 		46287FB5C5FB4155D2FEAC6D /* Pods-JYFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.debug.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.debug.xcconfig"; sourceTree = "<group>"; };
 		661DCF28AEFD74E30B85CBE1 /* Pods-JYFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.release.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		80028785702266DA96BD35CE /* Pods_JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -277,18 +267,6 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
-		1D389239208B094E0005C175 /* JYNetworking */ = {
-			isa = PBXGroup;
-			children = (
-				1D38923A208B09650005C175 /* JYHttpClient.swift */,
-				1D00E4B120931D5900450247 /* JYHttpParameter.swift */,
-				1D00E4B320931E6100450247 /* JYHttpHeader.swift */,
-				1D00E4B520932A8700450247 /* JYHttpModel.swift */,
-				1DB376BC20982D9000AB8289 /* JYPostBodyEncoder.swift */,
-			);
-			path = JYNetworking;
-			sourceTree = "<group>";
-		};
 		1D389267208B53DB0005C175 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,7 +323,6 @@
 				1D8B85A92084B7DD003EDE8A /* JYAuthorizationServices */,
 				B969A8AB27E8B09600F8980B /* JYConfigManager.swift */,
 				B9A66FF828BD24EC00B360E1 /* JYLocationService.swift */,
-				1D389239208B094E0005C175 /* JYNetworking */,
 				B98361A1297ECDE900F26960 /* JYAnimationService.swift */,
 			);
 			path = Services;
@@ -537,7 +514,6 @@
 				B9836193297E79EC00F26960 /* JYThemeManager.swift in Sources */,
 				1D389210208AF9B40005C175 /* Sequence+JY.swift in Sources */,
 				1D389216208AF9B40005C175 /* DispatchQueue+JY.swift in Sources */,
-				1D00E4B220931D5900450247 /* JYHttpParameter.swift in Sources */,
 				B9836197297E7C2B00F26960 /* JYThemeful.swift in Sources */,
 				1D00E4ED2097018B00450247 /* JYCollectionViewController.swift in Sources */,
 				B9836195297E7C0800F26960 /* JYThemeLabel.swift in Sources */,
@@ -553,13 +529,10 @@
 				B93DC43727A58E6F002C6390 /* Int+JY.swift in Sources */,
 				B92AA2BE29BE0D7B00911352 /* CGRect.swift in Sources */,
 				1D38920D208AF9B40005C175 /* UIImage+JY.swift in Sources */,
-				1DB376BD20982D9000AB8289 /* JYPostBodyEncoder.swift in Sources */,
 				1D389213208AF9B40005C175 /* String+JY.swift in Sources */,
-				1D00E4B420931E6100450247 /* JYHttpHeader.swift in Sources */,
 				B994423D2993EBC400BE79A9 /* JYThemeScrollView.swift in Sources */,
 				B9E6B67F27B14A9100C47285 /* Comparable+JY.swift in Sources */,
 				1D00E4D32096BBE300450247 /* JYTableViewCell.swift in Sources */,
-				1D00E4B620932A8700450247 /* JYHttpModel.swift in Sources */,
 				1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */,
 				B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */,
 				B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */,
@@ -573,7 +546,6 @@
 				B969A8AE27F5C19A00F8980B /* CGPoint+JY.swift in Sources */,
 				1D00E4EB2096E8A400450247 /* JYCollectionCellViewModel.swift in Sources */,
 				1D3891F7208AF6370005C175 /* JYCameraAuthService.swift in Sources */,
-				1D38923B208B09650005C175 /* JYHttpClient.swift in Sources */,
 				1D3891F6208AF6370005C175 /* JYAuthServiceBase.swift in Sources */,
 				1D389219208AF9B40005C175 /* NSObject+JY.swift in Sources */,
 				B9BC001A298B6C1100D55AD2 /* JYThemeImageView.swift in Sources */,
