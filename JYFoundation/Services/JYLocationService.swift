@@ -19,13 +19,13 @@ extension Notification.Name {
 
 public class JYLocationService: NSObject, CLLocationManagerDelegate {
     
-    public enum AuthState: Int {
-        case notDetermined = 0
-        case restricted = 1
-        case denied = 2
-        case allowedAlways = 3
-        case allowedWhenInUse = 4
-        case unknow = 5
+    public enum AuthState: String {
+        case notDetermined = "notDetermined"
+        case restricted = "restricted"
+        case denied = "denied"
+        case allowedAlways = "allowedAlways"
+        case allowedWhenInUse = "allowedWhenInUse"
+        case unknown = "unknown"
     }
     
     public enum RequestType: Int {
@@ -181,7 +181,7 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
             case .authorized, .authorizedWhenInUse:
                 return .allowedWhenInUse
             @unknown default:
-                return .unknow
+                return .unknown
             }
         }
     }

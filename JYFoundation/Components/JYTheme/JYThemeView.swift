@@ -20,7 +20,7 @@ open class JYThemeView: UIView, JYThemeful {
         }
     }
     
-    public var styleSheet: JYStyleSheet? {
+    open var styleSheet: JYStyleSheet? {
         didSet {
             self.applyThemes()
         }

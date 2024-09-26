@@ -57,7 +57,11 @@ public class JYConfigManager<T: JYConfig> {
     
     // notification
     private func notifyConfigChange() {
-        NotificationCenter.default.post(name: Notification.Name.JYConfigChanged, object: ["config": self.config])
+        NotificationCenter.default.post(
+            name: Notification.Name.JYConfigChanged,
+            object: nil,
+            userInfo: ["config": self.config]
+        )
         try? self.saveIfNeeded()
     }
 }
@@ -90,7 +94,7 @@ open class JYConfig {
         self.configItems = items
     }
     
-    public func setValue(for key: String, value: any Codable) throws {
+    public func setValue(for key: String, value: (any Codable)?) throws {
         self.configItems[key] = value
     }
     

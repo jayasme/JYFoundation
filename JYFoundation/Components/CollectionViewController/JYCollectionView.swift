@@ -865,16 +865,15 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 }
                 
                 Task {
-                    await self.endDragging()
+                    await self.endDragging(animated: true)
                 }
             }
         }
     }
     
-    public func endDragging() async {
+    public func endDragging(animated: Bool) async {
         guard let draggingView = self.draggingView,
-              let toIndex = self.draggingIndex,
-              let cell = self.cellForItem(at: IndexPath(item: toIndex, section: 0))
+              let toIndex = self.draggingIndex
         else {
             return
         }
@@ -882,33 +881,46 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         self.draggingViewModel = nil
         self.holdDraggingEnd = false
 
-        return await withCheckedContinuation { continuation in
-            UIView.animate(
-                withDuration: 0.3,
-                delay: 0,
-                options: .beginFromCurrentState,
-                animations: {
-                    draggingView.transform = CGAffineTransform(scaleX: 1, y: 1)
-                    draggingView.frame = cell.frame
-                },
-                completion: { [weak self] flag in
-                    guard flag, let self = self else {
+        if animated, let cell = self.cellForItem(at: IndexPath(item: toIndex, section: 0)) {
+            return await withCheckedContinuation { continuation in
+                UIView.animate(
+                    withDuration: 0.3,
+                    delay: 0,
+                    options: .beginFromCurrentState,
+                    animations: {
+                        draggingView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                        draggingView.frame = cell.frame
+                    },
+                    completion: { [weak self] flag in
+                        guard flag, let self = self else {
+                            continuation.resume()
+                            return
+                        }
+                        self.reloadData()
+                        self.draggingView?.removeFromSuperview()
+                        self.draggingView = nil
+                        self.draggingIndex = nil
+                        self.draggingAutoScrollDirection = nil
+                        self.startOrStopAutoScroll()
+                        self.isScrollEnabled = true
+                        self.jyDraggingDelegate?.draggingDidEnd?(self)
+                        self.draggingStartPosition = nil
                         continuation.resume()
-                        return
                     }
-                    self.reloadData()
-                    self.draggingView?.removeFromSuperview()
-                    self.draggingView = nil
-                    self.draggingIndex = nil
-                    self.draggingAutoScrollDirection = nil
-                    self.startOrStopAutoScroll()
-                    self.isScrollEnabled = true
-                    self.jyDraggingDelegate?.draggingDidEnd?(self)
-                    self.draggingStartPosition = nil
-                    continuation.resume()
-                }
-            )
+                )
+            }
+        } else {
+            self.reloadData()
+            self.draggingView?.removeFromSuperview()
+            self.draggingView = nil
+            self.draggingIndex = nil
+            self.draggingAutoScrollDirection = nil
+            self.startOrStopAutoScroll()
+            self.isScrollEnabled = true
+            self.jyDraggingDelegate?.draggingDidEnd?(self)
+            self.draggingStartPosition = nil
         }
+        
     }
     
     private func getAutoScrollDirection() -> AutoScrollDirection? {
