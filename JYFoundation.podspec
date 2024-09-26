@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'JYFoundation'
-    s.version = '0.3.1'
+    s.version = '0.4.0'
     s.license = 'MIT'
     s.summary = 'A multi usages foundation library for iOS Swift.'
     s.homepage = 'https://github.com/jayasme/JYFoundation'
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
     s.source = { :git => "https://github.com/jayasme/JYFoundation.git", :tag => s.version }
     # s.documentation_url = ''
 
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '13.0'
 
     s.swift_version = "5.0"
 
