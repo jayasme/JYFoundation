@@ -1,5 +1,5 @@
 use_frameworks!
-platform :ios, '10.0'
+platform :ios, '13.0'
 
 workspace ‘JYFoundation’
 
@@ -9,8 +9,8 @@ workspace 'JYFoundation.xcworkspace'
 
 target 'JYFoundation' do
     
-    pod 'PromiseKit/CorePromise', '~> 8.1.2'
-    pod 'SDWebImage', '~> 5.19.5'
+    pod 'PromiseKit/CorePromise', '~> 8.2.0'
+    pod 'SDWebImage', '~> 5.20.0'
     
 end
 

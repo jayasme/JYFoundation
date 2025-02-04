@@ -11,7 +11,7 @@ import UIKit
 
 open class JYThemeLabel: UILabel, JYThemeful {
     
-    public var themes: [JYTheme] = [] {
+    open var themes: [JYTheme] = [] {
         didSet {
             // check if themes are the changed
             if (self.themes != oldValue) {
@@ -20,7 +20,7 @@ open class JYThemeLabel: UILabel, JYThemeful {
         }
     }
     
-    public var styleSheet: JYStyleSheet? {
+    open var styleSheet: JYStyleSheet? {
         didSet {
             self.applyThemes()
         }

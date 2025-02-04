@@ -92,22 +92,24 @@ public class JYThemeStyle<T> {
 
     internal var styles: [(themes: [JYTheme], style: T)] = []
     
-    public init(styles: [(themes: [JYTheme], style: T)] = []) {
-        self.styles = styles
-    }
+    public init() { }
     
     public func addStyle(for themes: [JYTheme], style: T) {
-        styles.append((themes: themes, style: style))
+        self.styles.append((themes: themes, style: style))
     }
 
-    public func removeTheme(by themes: [JYTheme]) {
-        styles.removeAll { tuple in
+    public func remove(themes: [JYTheme]) {
+        self.styles.removeAll { tuple in
             tuple.themes.allSatisfy{ themes.contains($0) }
         }
     }
     
+    public func removeAll() {
+        self.styles.removeAll()
+    }
+    
     public func style(by themes: [JYTheme]) -> [T] {
-        styles.filter { tuple in
+        self.styles.filter { tuple in
             tuple.themes.allSatisfy{ themes.contains($0) }
         }.map { $0.style }
     }

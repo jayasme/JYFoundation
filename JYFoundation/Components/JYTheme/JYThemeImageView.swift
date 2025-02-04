@@ -12,7 +12,7 @@ import UIKit
 
 open class JYThemeImageView: UIImageView, JYThemeful {
     
-    public var themes: [JYTheme] = [] {
+    open var themes: [JYTheme] = [] {
         didSet {
             // check if themes are the changed
             if (self.themes != oldValue) {
@@ -21,7 +21,7 @@ open class JYThemeImageView: UIImageView, JYThemeful {
         }
     }
     
-    public var styleSheet: JYStyleSheet? {
+    open var styleSheet: JYStyleSheet? {
         didSet {
             self.applyThemes()
         }
@@ -60,7 +60,7 @@ open class JYThemeImageView: UIImageView, JYThemeful {
         }
     }
     
-    func applyThemes() {
+    open func applyThemes() {
         if let overridedBackgroundColor = self.overridedBackgroundColor {
             self.backgroundColor = overridedBackgroundColor
         } else {

@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 
 open class JYThemeView: UIView, JYThemeful {
-    public var themes: [JYTheme] = [] {
+    
+    open var themes: [JYTheme] = [] {
         didSet {
             // check if themes are the changed
             if (self.themes != oldValue) {
