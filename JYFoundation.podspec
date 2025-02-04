@@ -13,10 +13,8 @@ Pod::Spec.new do |s|
 
     s.swift_version = "5.0"
 
-    s.dependency "Alamofire"
     s.dependency "PromiseKit/CorePromise"
     s.dependency "SDWebImage"
-    s.dependency "HandyJSON"
     
     s.source_files = 'JYFoundation/**/*.{h,m,swift}'
 
