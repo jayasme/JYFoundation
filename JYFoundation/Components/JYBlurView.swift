@@ -10,39 +10,51 @@ import Foundation
 import UIKit
 
 open class JYBlurView: UIVisualEffectView {
-  
-    private var aniamtor: UIViewPropertyAnimator!
     
-    public init(style: UIBlurEffect.Style) {
-        self.style = style
+    private var animator: UIViewPropertyAnimator?
+    
+    public init() {
         super.init(effect: nil)
-        self.aniamtor = UIViewPropertyAnimator(duration: 1, curve: .linear) {[unowned self] in
-            self.effect = UIBlurEffect(style: style)
-            self.translatesAutoresizingMaskIntoConstraints = false
-        }
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.updateEffect()
     }
     
     required public init?(coder: NSCoder) {
-        fatalError()
+        fatalError("init(coder:) has not been implemented")
     }
     
-    private func updateBlurRadius() {
-        self.aniamtor.fractionComplete = max(0, min(1, CGFloat(self.blurRadius) / 100.0))
+    deinit {
+        self.animator?.stopAnimation(true)
+        self.animator?.finishAnimation(at: .start)
     }
     
-    public var style: UIBlurEffect.Style {
+    private func updateEffect() {
+        self.effect = nil
+        self.animator?.stopAnimation(true)
+        self.animator?.finishAnimation(at: .start)
+        
+        guard let style = self.style else {
+            return
+        }
+        
+        let animator = UIViewPropertyAnimator(duration: 1, curve: .linear) { [weak self] in
+            guard let self = self else { return }
+            self.effect = UIBlurEffect(style: style)
+        }
+        
+        animator.fractionComplete = max(0, min(1, self.blurRadius / 100.0))
+        self.animator = animator
+    }
+    
+    public var style: UIBlurEffect.Style? {
         didSet {
-            self.aniamtor = UIViewPropertyAnimator(duration: 1, curve: .linear) {[unowned self] in
-                self.effect = UIBlurEffect(style: self.style)
-                self.translatesAutoresizingMaskIntoConstraints = false
-            }
-            self.updateBlurRadius()
+            self.updateEffect()
         }
     }
     
-    public var blurRadius: Int = 8 {
+    public var blurRadius: CGFloat = 0 {
         didSet {
-            self.updateBlurRadius()
+            self.animator?.fractionComplete = max(0, min(1, self.blurRadius / 100.0))
         }
     }
 }
