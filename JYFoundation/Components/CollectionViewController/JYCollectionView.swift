@@ -26,7 +26,7 @@ public protocol JYCollectionViewStaticDataSource: JYCollectionViewDataSource {
     @objc optional func draggingDidEnd(_ collectionView: JYCollectionView)
     @objc optional func draggingShouldRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel) -> Bool
     @objc optional func draggingDidRemove(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int)
-    @objc optional func presentDraggingView(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, fromIndex: Int) -> UIView?
+    @objc optional func presentDraggingView(_ collectionView: JYCollectionView, draggingViewModel: ICollectionCellViewModel, cell: JYCollectionViewCell, fromIndex: Int) -> UIView?
 }
 
 public protocol JYCollectionViewDynamicalDataSource: JYCollectionViewDataSource {
@@ -713,7 +713,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 return
             }
             
-            if let draggingView = self.jyDraggingDelegate?.presentDraggingView?(self, draggingViewModel: cellViewModel, fromIndex: index) {
+            if let draggingView = self.jyDraggingDelegate?.presentDraggingView?(self, draggingViewModel: cellViewModel, cell: cell, fromIndex: index) {
                 self.draggingView = draggingView
             } else {
                 self.draggingView = cell.snapshotView(afterScreenUpdates: false)
