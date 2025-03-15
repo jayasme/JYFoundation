@@ -385,96 +385,76 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         return _viewModels.firstIndex{ $0 === cellViewModel }
     }
     
-    public func appendCellViewModels(_ cellViewModels: [ICollectionCellViewModel], with animation: Bool) -> Guarantee<Void> {
+    public func appendCellViewModels(_ cellViewModels: [ICollectionCellViewModel]) -> Guarantee<Void> {
         guard  cellViewModels.count > 0 else {
             return Guarantee<Void>.value(())
         }
         
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
-        var indexPaths: [IndexPath] = []
-        for i in _viewModels.count..<_viewModels.count + cellViewModels.count {
-            indexPaths.append(IndexPath(row: i, section: 0))
-        }
-        _viewModels.append(contentsOf: cellViewModels)
-        
-        if animation {
-            return Guarantee<Void>{ seal in
-                performBatchUpdates({
-                    self.insertItems(at: indexPaths)
-                }, completion: { _ in
-                    seal(())
-                })
-            }
-        } else {
-            self.insertItems(at: indexPaths)
-            return Guarantee<Void>.value(())
+        return Guarantee<Void>{ seal in
+            performBatchUpdates({
+                var indexPaths: [IndexPath] = []
+                for i in _viewModels.count..<_viewModels.count + cellViewModels.count {
+                    indexPaths.append(IndexPath(row: i, section: 0))
+                }
+                _viewModels.append(contentsOf: cellViewModels)
+                
+                self.insertItems(at: indexPaths)
+            }, completion: { _ in
+                seal(())
+            })
         }
     }
     
-    public func insertCellViewModels(_ cellViewModels: [ICollectionCellViewModel], at position: Int, with animation: Bool) -> Guarantee<Void> {
-        guard  cellViewModels.count > 0 else {
+    public func insertCellViewModels(_ cellViewModels: [ICollectionCellViewModel], at position: Int) -> Guarantee<Void> {
+        guard cellViewModels.count > 0 else {
             return Guarantee<Void>.value(())
         }
         
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
-        var indexPaths: [IndexPath] = []
-        for i in 0..<cellViewModels.count {
-            indexPaths.append(IndexPath(row: i + position, section: 0))
-            _viewModels.insert(cellViewModels[i], at: i + position)
-        }
-        
-        if animation {
-            return Guarantee<Void>{ seal in
-                performBatchUpdates({
-                    self.insertItems(at: indexPaths)
-                }, completion: { _ in
-                    seal(())
-                })
-            }
-        } else {
-            self.insertItems(at: indexPaths)
-            return Guarantee<Void>.value(())
+        return Guarantee<Void>{ seal in
+            performBatchUpdates({
+                var indexPaths: [IndexPath] = []
+                for i in 0..<cellViewModels.count {
+                    indexPaths.append(IndexPath(row: i + position, section: 0))
+                    _viewModels.insert(cellViewModels[i], at: i + position)
+                }
+                
+                self.insertItems(at: indexPaths)
+                seal(())
+            }, completion: { _ in
+                seal(())
+            })
         }
     }
     
-    public func deleteCellViewModels(_ cellViewModels: [ICollectionCellViewModel], with animation: Bool) -> Guarantee<Void> {
+    public func deleteCellViewModels(_ cellViewModels: [ICollectionCellViewModel]) -> Guarantee<Void> {
         guard  cellViewModels.count > 0 else {
             return Guarantee<Void>.value(())
         }
         
-        let indexPaths: [IndexPath] = cellViewModels.compactMap({ (cellViewModel) -> IndexPath? in
-            if let index = self.index(of: cellViewModel) {
-                return IndexPath(row: index, section: 0)
-            } else {
-                return nil
-            }
-        }).sorted(by: { $0.row < $1.row })
-        
-        var offset = 0
-        indexPaths.forEach{
-            _viewModels.remove(at: $0.item + offset)
-            offset -= 1
-        }
-        
-        // For some glitches in iOS 8 so must call [collectionview reload]
-        guard #available(iOS 9.0, *) else {
-            reloadData()
-            return Guarantee<Void>.value(())
-        }
-        
-        if animation {
-            return Guarantee<Void>{ seal in
-                performBatchUpdates({
-                    self.deleteItems(at: indexPaths)
-                }, completion: { _ in
-                    seal(())
-                })
-            }
-        } else {
-            self.deleteItems(at: indexPaths)
-            return Guarantee<Void>.value(())
+        return Guarantee<Void>{ seal in
+            performBatchUpdates({
+                let indexPaths: [IndexPath] = cellViewModels.compactMap({ (cellViewModel) -> IndexPath? in
+                    if let index = self.index(of: cellViewModel) {
+                        return IndexPath(row: index, section: 0)
+                    } else {
+                        return nil
+                    }
+                }).sorted(by: { $0.row < $1.row })
+                
+                var offset = 0
+                indexPaths.forEach{
+                    _viewModels.remove(at: $0.item + offset)
+                    offset -= 1
+                }
+                
+                self.deleteItems(at: indexPaths)
+            }, completion: { _ in
+                seal(())
+            })
         }
     }
     
@@ -771,14 +751,14 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 (point.x <= self.draggingRemoveEdgeInsets.left || point.x >= self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
                 
                 self.isDraggingRemoving = true
-                self.deleteCellViewModels([draggingViewModel], with: true).done { }
+                self.deleteCellViewModels([draggingViewModel]).done { }
             }
             
             if (self.isDraggingRemove && self.isDraggingRemoving &&
                 (point.x > self.draggingRemoveEdgeInsets.left && point.x < self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
                 
                 self.isDraggingRemoving = false
-                self.insertCellViewModels([draggingViewModel], at: draggingIndex, with: true).done { }
+                self.insertCellViewModels([draggingViewModel], at: draggingIndex).done { }
             }
             
             self.draggingAutoScrollDirection = getAutoScrollDirection()
