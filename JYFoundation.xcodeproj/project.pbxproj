@@ -22,7 +22,7 @@
 		1D3891F5208AF6370005C175 /* JYAlbumAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F1208AF6360005C175 /* JYAlbumAuthService.swift */; };
 		1D3891F6208AF6370005C175 /* JYAuthServiceBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F2208AF6360005C175 /* JYAuthServiceBase.swift */; };
 		1D3891F7208AF6370005C175 /* JYCameraAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F3208AF6360005C175 /* JYCameraAuthService.swift */; };
-		1D3891F8208AF6370005C175 /* MicrophoneAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F4208AF6370005C175 /* MicrophoneAuthService.swift */; };
+		1D3891F8208AF6370005C175 /* JYMicrophoneAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891F4208AF6370005C175 /* JYMicrophoneAuthService.swift */; };
 		1D38920D208AF9B40005C175 /* UIImage+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891FA208AF9B30005C175 /* UIImage+JY.swift */; };
 		1D38920E208AF9B40005C175 /* UIFont+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891FB208AF9B30005C175 /* UIFont+JY.swift */; };
 		1D38920F208AF9B40005C175 /* UIImageView+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3891FC208AF9B30005C175 /* UIImageView+Promise.swift */; };
@@ -56,7 +56,6 @@
 		1D4D877B219987DB00D7B457 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8778219987DB00D7B457 /* README.md */; };
 		1D4D877C219987DB00D7B457 /* JYFoundation.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8779219987DB00D7B457 /* JYFoundation.podspec */; };
 		1D4D877D219987DB00D7B457 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D877A219987DB00D7B457 /* LICENSE */; };
-		1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */; };
 		A48F362C2E5897A8AEABE449 /* Pods_JYFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80028785702266DA96BD35CE /* Pods_JYFoundation.framework */; };
 		B92AA2BE29BE0D7B00911352 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92AA2BD29BE0D7B00911352 /* CGRect.swift */; };
 		B9379F7829C6C00F00A1517B /* JYStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9379F7729C6C00F00A1517B /* JYStack.swift */; };
@@ -102,7 +101,7 @@
 		1D3891F1208AF6360005C175 /* JYAlbumAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYAlbumAuthService.swift; sourceTree = "<group>"; };
 		1D3891F2208AF6360005C175 /* JYAuthServiceBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYAuthServiceBase.swift; sourceTree = "<group>"; };
 		1D3891F3208AF6360005C175 /* JYCameraAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYCameraAuthService.swift; sourceTree = "<group>"; };
-		1D3891F4208AF6370005C175 /* MicrophoneAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrophoneAuthService.swift; sourceTree = "<group>"; };
+		1D3891F4208AF6370005C175 /* JYMicrophoneAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYMicrophoneAuthService.swift; sourceTree = "<group>"; };
 		1D3891FA208AF9B30005C175 /* UIImage+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+JY.swift"; sourceTree = "<group>"; };
 		1D3891FB208AF9B30005C175 /* UIFont+JY.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+JY.swift"; sourceTree = "<group>"; };
 		1D3891FC208AF9B30005C175 /* UIImageView+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Promise.swift"; sourceTree = "<group>"; };
@@ -136,7 +135,6 @@
 		1D4D8778219987DB00D7B457 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1D4D8779219987DB00D7B457 /* JYFoundation.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JYFoundation.podspec; sourceTree = "<group>"; };
 		1D4D877A219987DB00D7B457 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAuthService.swift; sourceTree = "<group>"; };
 		1D61E9E420849AA800525E3F /* JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D61E9E820849AA800525E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		46287FB5C5FB4155D2FEAC6D /* Pods-JYFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.debug.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.debug.xcconfig"; sourceTree = "<group>"; };
@@ -334,8 +332,7 @@
 				1D3891F1208AF6360005C175 /* JYAlbumAuthService.swift */,
 				1D3891F2208AF6360005C175 /* JYAuthServiceBase.swift */,
 				1D3891F3208AF6360005C175 /* JYCameraAuthService.swift */,
-				1D3891F4208AF6370005C175 /* MicrophoneAuthService.swift */,
-				1D5F70C2211F08EC00E35D0A /* NotificationAuthService.swift */,
+				1D3891F4208AF6370005C175 /* JYMicrophoneAuthService.swift */,
 			);
 			path = JYAuthorizationServices;
 			sourceTree = "<group>";
@@ -502,7 +499,7 @@
 				1D00E4E92096CA1C00450247 /* ICellViewModel.swift in Sources */,
 				1D00E4C72096BBB400450247 /* JYPaginationTableViewController.swift in Sources */,
 				B93DC43B27A58F7E002C6390 /* Double+JY.swift in Sources */,
-				1D3891F8208AF6370005C175 /* MicrophoneAuthService.swift in Sources */,
+				1D3891F8208AF6370005C175 /* JYMicrophoneAuthService.swift in Sources */,
 				1D389215208AF9B40005C175 /* Date+JY.swift in Sources */,
 				1D389218208AF9B40005C175 /* Data+JY.swift in Sources */,
 				B983619B297E7C6900F26960 /* JYThemeTextField.swift in Sources */,
@@ -533,7 +530,6 @@
 				B994423D2993EBC400BE79A9 /* JYThemeScrollView.swift in Sources */,
 				B9E6B67F27B14A9100C47285 /* Comparable+JY.swift in Sources */,
 				1D00E4D32096BBE300450247 /* JYTableViewCell.swift in Sources */,
-				1D5F70C3211F08EC00E35D0A /* NotificationAuthService.swift in Sources */,
 				B9E6B67A27B0FCE800C47285 /* JYGestureView.swift in Sources */,
 				B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */,
 				1D3891F5208AF6370005C175 /* JYAlbumAuthService.swift in Sources */,

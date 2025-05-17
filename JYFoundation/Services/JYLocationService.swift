@@ -255,8 +255,7 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
 
         self.refreshAddressTask = Task {
             do {
-                print("Current Address: \(self.address)")
-                guard let address = try await addressService.getAddressByLocation(location: location),
+                guard let address = try await addressService.getAddress(by: location),
                       self.address == nil || !address.isEquals(to: self.address!) else {
                     return
                 }
@@ -271,6 +270,8 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
                     ]
                 )
                 self.refreshAddressTask = nil
+                
+                addressService.didGetAddress(location: location, address: address)
             } catch let error {
                 guard
                     location.longtitude == self.location?.longtitude &&
@@ -292,13 +293,15 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
         public init() { }
         
         @discardableResult
-        open func getAddressByLocation(location: JYLocationService.Location) async throws -> JYLocationService.Address? {
+        open func getAddress(by location: JYLocationService.Location) async throws -> JYLocationService.Address? {
             fatalError("Needs to be implemented")
         }
         
         open func getRefreshDelay(errorAttemps: Int, error: Error) -> TimeInterval {
             return min(errorAttemps * 5, 60)
         }
+        
+        open func didGetAddress(location: JYLocationService.Location, address: JYLocationService.Address) { }
     }
 
 }

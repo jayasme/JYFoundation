@@ -94,6 +94,10 @@ public class JYThemeStyle<T> {
     
     public init() { }
     
+    public func addStyle(for themes: JYTheme, style: T) {
+        self.styles.append((themes: [themes], style: style))
+    }
+    
     public func addStyle(for themes: [JYTheme], style: T) {
         self.styles.append((themes: themes, style: style))
     }

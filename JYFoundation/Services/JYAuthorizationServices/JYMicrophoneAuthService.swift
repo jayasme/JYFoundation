@@ -1,26 +1,26 @@
 //
-//  JYCameraAuthService.swift
+//  JYMicrophoneAuthService.swift
 //  JYFoundation
 //
-//  Created by Scott Rong on 2017/4/30.
+//  Created by Scott Rong on 2017/4/29.
 //  Copyright © 2018年 jayasme All rights reserved.
 //
 
 import UIKit
 import AVFoundation
 
-public class JYCameraAuthService: JYAuthServiceBase {
+public class JYMicrophoneAuthService: JYAuthServiceBase {
     
     public static var shared: JYCameraAuthService = JYCameraAuthService()
     
     public override var authState: JYAuthState {
-        let state = AVCaptureDevice.authorizationStatus(for: .video)
+        let state = AVCaptureDevice.authorizationStatus(for: .audio)
         return self.convertAuthState(state)
     }
     
     public override func requestAuth() async -> JYAuthState {
         return await withCheckedContinuation { continuation in
-            AVCaptureDevice.requestAccess(for: .video) { state in
+            AVCaptureDevice.requestAccess(for: .audio) { state in
                 let res = self.convertAuthState(state)
                 continuation.resume(
                     returning: res
