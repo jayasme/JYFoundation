@@ -205,14 +205,17 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     }
     
     @discardableResult
-    private func retrieveDataPromise() -> Guarantee<[ICollectionCellViewModel]> {
+    private func retrieveDataPromise() async -> [ICollectionCellViewModel] {
         jyDelegate?.collectionView?(self, willRetrieveDataAt: nil)
-        return Guarantee<[ICollectionCellViewModel]> {[weak self] seal in
+        return await withCheckedContinuation() {[weak self] continuation in
             JYCollectionView.collectionViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
-                guard let self = self, let viewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self) else { return }
-                DispatchQueue.main.sync {
-                    seal(viewModels)
+                guard let self = self,
+                      let viewModels = (self.jyDataSource as? JYCollectionViewStaticDataSource)?.retrieveData(self)
+                else { return }
+                
+                DispatchQueue.main.async {
+                    continuation.resume(returning: viewModels)
                 }
             }
         }
@@ -296,51 +299,40 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         }
     }
     
-    @discardableResult
-    public func reloadViewModels(clearPreviousData: Bool, animated: Bool = false) -> Guarantee<Void> {
+    public func reloadViewModels(clearPreviousData: Bool, animated: Bool = false) async -> Void {
         if type == .dynamical {
             if clearPreviousData {
                 _viewModels.removeAll()
             }
-            return Guarantee<Void> {[weak self] seal in
-                self?.reloadData()
-                seal(())
-            }
+            self.reloadData()
+            return
         } else if type == .static {
-            return retrieveDataPromise()
-                .then { [weak self] newViewModels -> Guarantee<Void> in
-                    guard let self = self else {
-                        return Guarantee.value(())
+            let newViewModels = await self.retrieveDataPromise()
+            
+            if clearPreviousData {
+                self._viewModels.removeAll()
+            }
+            
+            for viewModel in newViewModels {
+                self.checkRegistred(viewModel: viewModel)
+                self._viewModels.append(viewModel)
+            }
+            
+            if (animated) {
+                UIView.transition(
+                    with: self,
+                    duration: 0.1,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        self.reloadData()
                     }
-                    
-                    if clearPreviousData {
-                        self._viewModels.removeAll()
-                    }
-                    
-                    for viewModel in newViewModels {
-                        self.checkRegistred(viewModel: viewModel)
-                        self._viewModels.append(viewModel)
-                    }
-                    
-                    if (animated) {
-                        UIView.transition(
-                            with: self,
-                            duration: 0.1,
-                            options: .transitionCrossDissolve,
-                            animations: {
-                                self.reloadData()
-                            }
-                        )
-                        // UIView.transition is not reliable, so using the delay function to simulate the finish completion.
-                        return DispatchQueue.main.delay(time: 0.1)
-                    }
-                    self.reloadData()
-                    self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
-                    return Guarantee.value(())
-                }
+                )
+                // UIView.transition is not reliable, so using the delay function to simulate the finish completion.
+                await DispatchQueue.main.delay(time: 0.1)
+            }
+            self.reloadData()
+            self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
         }
-        
-        return Guarantee<Void>.value(())
     }
     
     
@@ -385,14 +377,14 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
         return _viewModels.firstIndex{ $0 === cellViewModel }
     }
     
-    public func appendCellViewModels(_ cellViewModels: [ICollectionCellViewModel]) -> Guarantee<Void> {
+    public func appendCellViewModels(_ cellViewModels: [ICollectionCellViewModel]) async -> Void {
         guard  cellViewModels.count > 0 else {
-            return Guarantee<Void>.value(())
+            return
         }
         
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
-        return Guarantee<Void>{ seal in
+        return await withCheckedContinuation() { continuation in
             performBatchUpdates({
                 var indexPaths: [IndexPath] = []
                 for i in _viewModels.count..<_viewModels.count + cellViewModels.count {
@@ -402,19 +394,19 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 
                 self.insertItems(at: indexPaths)
             }, completion: { _ in
-                seal(())
+                continuation.resume()
             })
         }
     }
     
-    public func insertCellViewModels(_ cellViewModels: [ICollectionCellViewModel], at position: Int) -> Guarantee<Void> {
+    public func insertCellViewModels(_ cellViewModels: [ICollectionCellViewModel], at position: Int) async -> Void {
         guard cellViewModels.count > 0 else {
-            return Guarantee<Void>.value(())
+            return
         }
         
         cellViewModels.forEach { checkRegistred(viewModel: $0) }
         
-        return Guarantee<Void>{ seal in
+        return await withCheckedContinuation() { continuation in
             performBatchUpdates({
                 var indexPaths: [IndexPath] = []
                 for i in 0..<cellViewModels.count {
@@ -423,19 +415,20 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 }
                 
                 self.insertItems(at: indexPaths)
-                seal(())
             }, completion: { _ in
-                seal(())
+                continuation.resume(
+                    
+                )
             })
         }
     }
     
-    public func deleteCellViewModels(_ cellViewModels: [ICollectionCellViewModel]) -> Guarantee<Void> {
+    public func deleteCellViewModels(_ cellViewModels: [ICollectionCellViewModel]) async -> Void {
         guard  cellViewModels.count > 0 else {
-            return Guarantee<Void>.value(())
+            return
         }
         
-        return Guarantee<Void>{ seal in
+        return await withCheckedContinuation() { continuation in
             performBatchUpdates({
                 let indexPaths: [IndexPath] = cellViewModels.compactMap({ (cellViewModel) -> IndexPath? in
                     if let index = self.index(of: cellViewModel) {
@@ -453,7 +446,7 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 
                 self.deleteItems(at: indexPaths)
             }, completion: { _ in
-                seal(())
+                continuation.resume()
             })
         }
     }
@@ -751,14 +744,14 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 (point.x <= self.draggingRemoveEdgeInsets.left || point.x >= self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
                 
                 self.isDraggingRemoving = true
-                self.deleteCellViewModels([draggingViewModel]).done { }
+                Task { await self.deleteCellViewModels([draggingViewModel]) }
             }
             
             if (self.isDraggingRemove && self.isDraggingRemoving &&
                 (point.x > self.draggingRemoveEdgeInsets.left && point.x < self.bounds.width - self.draggingRemoveEdgeInsets.right)) {
                 
                 self.isDraggingRemoving = false
-                self.insertCellViewModels([draggingViewModel], at: draggingIndex).done { }
+                Task { await self.insertCellViewModels([draggingViewModel], at: draggingIndex) }
             }
             
             self.draggingAutoScrollDirection = getAutoScrollDirection()

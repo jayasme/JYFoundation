@@ -203,14 +203,18 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         }
     }
     
-    private func retrieveDataPromise() -> Guarantee<[ITableCellViewModel]> {
+    private func retrieveDataPromise() async -> [ITableCellViewModel] {
         jyDelegate?.tableView?(self, willRetrieveDataAt: nil)
-        return Guarantee<[ITableCellViewModel]> {[weak self] seal in
+        return await withCheckedContinuation() { [weak self] continuation in
             JYTableView.tableViewLayoutQueue.async {
                 // call the retrieveData function asynchronized
-                guard let self = self, let viewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self) else { return }
+                guard
+                    let self = self,
+                    let viewModels = (self.jyDataSource as? JYTableViewStaticDataSource)?.retrieveData(self)
+                else { return }
+                
                 DispatchQueue.main.async {
-                    seal(viewModels)
+                    continuation.resume(returning: viewModels)
                 }
             }
         }
@@ -316,38 +320,26 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         }
     }
     
-    @discardableResult
-    public func reloadViewModelsAsync(clearPreviousData: Bool = true) -> Guarantee<Void> {
+    public func reloadViewModelsAsync(clearPreviousData: Bool = true) async -> Void {
         if type == .dynamical {
             if clearPreviousData {
                 _viewModels.removeAll()
             }
-            return Guarantee<Void> {[weak self] seal in
-                self?.reloadData()
-                seal(())
-            }
+            self.reloadData()
         } else if type == .static {
-            return retrieveDataPromise()
-            .map { [weak self] newViewModels -> Void in
-                guard let self = self else{
-                    return
-                }
-                
-                if clearPreviousData {
-                    self._viewModels.removeAll()
-                }
-                
-                for viewModel in newViewModels {
-                    self.checkRegistred(viewModel: viewModel)
-                    self._viewModels.append(viewModel)
-                }
-                self.reloadData()
-                self.jyDelegate?.tableView?(self, didRetrieve: newViewModels, at: -1)
-                
-                return ()
+            let newViewModels = await retrieveDataPromise()
+            
+            if clearPreviousData {
+                self._viewModels.removeAll()
             }
+            
+            for viewModel in newViewModels {
+                self.checkRegistred(viewModel: viewModel)
+                self._viewModels.append(viewModel)
+            }
+            self.reloadData()
+            self.jyDelegate?.tableView?(self, didRetrieve: newViewModels, at: -1)
         }
-        return Guarantee<Void>.value(())
     }
     
     public func scrollToCellViewModel(_ cellViewModel: ITableCellViewModel, at position: UITableView.ScrollPosition, animated: Bool) {

@@ -11,11 +11,11 @@ import PromiseKit
 
 extension DispatchQueue {
 
-    public func delay(time: TimeInterval) -> Guarantee<Void> {
-        return Guarantee<Void> { seal in
+    public func delay(time: TimeInterval) async -> Void {
+        return await withCheckedContinuation() { continuation in
             let time = DispatchTime.now() + .milliseconds(Int(time * 1000))
             self.asyncAfter(deadline: time, execute: {
-                seal(())
+                continuation.resume()
             })
         }
     }

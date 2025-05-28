@@ -21,19 +21,29 @@ public class JYMicrophoneAuthService: JYAuthServiceBase {
     public override func requestAuth() async -> JYAuthState {
         return await withCheckedContinuation { continuation in
             AVCaptureDevice.requestAccess(for: .audio) { state in
-                let res = self.convertAuthState(state)
                 continuation.resume(
-                    returning: res
+                    returning: state ? .allowed : .denined
                 )
             }
         }
     }
     
     func convertAuthState(_ state: Any) -> JYAuthState {
-        guard let state = state as? Bool else {
+        guard let state = state as? AVAuthorizationStatus else {
             fatalError()
         }
         
-        return state ? .allowed : .denined
+        switch (state) {
+        case .notDetermined:
+            return .notDetermined
+        case .restricted:
+            fallthrough
+        case .denied:
+            return .denined
+        case .authorized:
+            return .allowed
+        @unknown default:
+            fatalError()
+        }
     }
 }
