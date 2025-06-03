@@ -302,7 +302,9 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     public func reloadViewModels(clearPreviousData: Bool = true) {
         if type == .dynamical {
             self._viewModels.removeAll()
-            self.reloadData()
+            if (self.superview != nil) {
+                self.reloadData()
+            }
         } else if type == .static, let dataSource = self.jyDataSource as? JYTableViewStaticDataSource {
             jyDelegate?.tableView?(self, willRetrieveDataAt: nil)
             let newViewModels = dataSource.retrieveData(self)
@@ -315,7 +317,9 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             }
             self._viewModels.append(contentsOf: newViewModels)
             
-            self.reloadData()
+            if (self.superview != nil) {
+                self.reloadData()
+            }
             self.jyDelegate?.tableView?(self, didRetrieve: newViewModels, at: nil)
         }
     }

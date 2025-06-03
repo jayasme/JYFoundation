@@ -53,6 +53,22 @@ extension UIView {
         return result
     }
     
+    /// Get the super view matches the condition
+    public func findSuperView(where predicate: (UIView) -> Bool, includesSelf: Bool = false) -> UIView? {
+        var current: UIView? = includesSelf ? self : self.superview
+        while(true) {
+            if let c = current {
+                if predicate(c) {
+                    return c
+                }
+                current = c.superview
+            } else {
+                break
+            }
+        }
+        return nil
+    }
+    
     /// Get the root view matches the condition.
     public func findRootView(where predicate: (UIView) -> Bool) -> UIView? {
         var current: UIView? = self.superview

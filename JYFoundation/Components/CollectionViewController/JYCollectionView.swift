@@ -282,7 +282,9 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     public func reloadViewModels(clearPreviousData: Bool = true) {
         if type == .dynamical {
             self._viewModels.removeAll()
-            self.reloadData()
+            if (self.superview != nil) {
+                self.reloadData()
+            }
         } else if type == .static, let dataSource = self.jyDataSource as? JYCollectionViewStaticDataSource {
             jyDelegate?.collectionView?(self, willRetrieveDataAt: nil)
             let newViewModels = dataSource.retrieveData(self)
@@ -294,7 +296,9 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
                 self.checkRegistred(viewModel: viewModel)
                 self._viewModels.append(viewModel)
             }
-            self.reloadData()
+            if (self.superview != nil) {
+                self.reloadData()
+            }
             self.jyDelegate?.collectionView?(self, didRetrieve: newViewModels, at: nil)
         }
     }

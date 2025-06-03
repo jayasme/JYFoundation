@@ -119,4 +119,34 @@ extension CGFloat {
     public static func <= (left: CGFloat, right: Double) -> Bool {
         return Double(left) <= right
     }
+    
+    public func interpolate(inRange: [CGFloat], outRange: [CGFloat]) -> CGFloat? {
+        
+        if (inRange.count != outRange.count) {
+            return nil
+        }
+        
+        if (inRange.count == 0) {
+            return nil
+        }
+        
+        if (self <= inRange[0]) {
+            return outRange[0]
+        }
+        
+        if (self >= inRange[inRange.count - 1]) {
+            return outRange[outRange.count - 1]
+        }
+        
+        for i in 0..<inRange.count {
+            if (inRange[i] <= self && self <= inRange[i + 1]) {
+                let inRangeDiff = inRange[i + 1] - inRange[i]
+                let selfDiff = self - inRange[i]
+                let t = selfDiff / inRangeDiff
+                return outRange[i] * (1 - t) + outRange[i + 1] * t
+            }
+        }
+        
+        return nil
+    }
 }
