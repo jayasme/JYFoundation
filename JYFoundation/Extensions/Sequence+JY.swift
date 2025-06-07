@@ -10,11 +10,14 @@ import Foundation
 
 extension Sequence {
     
-    public func jy_reduce<T>(body: (_ currentElement: Self.Iterator.Element, _ currentValue: T) -> T, initalValue: T) -> T {
-        var finalValue: T = initalValue
-        self.forEach{ (element) in
-            finalValue = body(element, finalValue)
+    public func mapArray<T>(_ transform: (Element) throws -> [T]) rethrows -> [T] {
+        var result: [T] = []
+        
+        for element in self {
+            let it = try transform(element)
+            result += it
         }
-        return finalValue
+        
+        return result
     }
 }

@@ -467,6 +467,14 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
         self._viewModels.insert(viewModel, at: index)
     }
     
+    public func reloadCellViewModel(for viewModel: ITableCellViewModel, with animation: UITableView.RowAnimation) {
+        guard let index = self.index(of: viewModel) else {
+            return
+        }
+        
+        self.reloadRows(at: [IndexPath(item: index, section: 0)], with: animation)
+    }
+    
     public var visibleCellViewModels: [ITableCellViewModel] {
         return self.visibleCells.compactMap { ($0 as? JYTableViewCell)?.viewModel }
     }
