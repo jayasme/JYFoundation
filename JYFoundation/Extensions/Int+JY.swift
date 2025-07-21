@@ -10,13 +10,17 @@ import UIKit
 
 extension Int {
     
+    static var randomCount = 0
+    
     public static func random(range: ClosedRange<Int>) -> Int {
-        srand48(Int(Date.now.timeIntervalSince1970))
+        srand48(Int(Date().timeIntervalSince1970 + randomCount))
+        randomCount += 1
         return Int(drand48() * Double(range.upperBound - range.lowerBound + 1)) + range.lowerBound
     }
     
     public static func random(range: Range<Int>) -> Int {
-        srand48(Int(Date.now.timeIntervalSince1970))
+        srand48(Int(Date().timeIntervalSince1970 + randomCount))
+        randomCount += 1
         return Int(drand48() * Double(range.upperBound - range.lowerBound)) + range.lowerBound
     }
     

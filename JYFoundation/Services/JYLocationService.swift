@@ -15,6 +15,7 @@ extension Notification.Name {
     public static let JYHeadingUpdate = Notification.Name("JYHeadingUpdate")
     public static let JYLocationUpdate = Notification.Name("JYLocationUpdate")
     public static let JYAddressUpdate = Notification.Name("JYAddressUpdate")
+    public static let JYLocationAuthStateUpdate = Notification.Name("JYLocationAuthStateUpdate")
 }
 
 public class JYLocationService: NSObject, CLLocationManagerDelegate {
@@ -148,7 +149,20 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     deinit {
     }
     
+    public var autoStarting: Bool = false {
+        didSet {
+            guard self.autoStarting && !oldValue else {
+                return
+            }
+            self.start()
+        }
+    }
+    
     public func start() {
+        guard [.allowedWhenInUse, .allowedAlways].contains(self.authState) else {
+            return
+        }
+        
         self.manager.startUpdatingHeading()
         self.manager.startUpdatingLocation()
         self.isStarted = true
@@ -216,6 +230,10 @@ public class JYLocationService: NSObject, CLLocationManagerDelegate {
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.permissionContinuation?.resume(returning: self.authState)
         self.permissionContinuation = nil
+        NotificationCenter.default.post(name: .JYLocationAuthStateUpdate, object: nil, userInfo: ["authState": self.authState])
+        if self.autoStarting {
+            self.start()
+        }
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {

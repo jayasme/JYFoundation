@@ -39,11 +39,11 @@ open class JYTableViewCell : UITableViewCell, JYThemeful {
         self.viewModel = viewModel
     }
     
-    public func willDisappear() {
+    open func willDisappear() {
         isDisplayed = false
     }
     
-    public func willDisplay() {
+    open func willDisplay() {
         isDisplayed = true
     }
     

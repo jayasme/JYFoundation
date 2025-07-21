@@ -10,12 +10,12 @@ import Foundation
 import PromiseKit
 
 
-public enum JYAuthState: Int {
-    case notDetermined = 0
-    case allowed = 1
-    case allowedInUse = 2
-    case denined = 3
-    case limited = 4
+public enum JYAuthState: String {
+    case notDetermined = "notDetermined"
+    case allowed = "allowed"
+    case allowedInUse = "allowedInUse"
+    case denined = "denined"
+    case limited = "limited"
 }
 
 open class JYAuthServiceBase {

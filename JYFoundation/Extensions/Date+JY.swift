@@ -20,12 +20,14 @@ extension Date {
         self.init(timeIntervalSince1970: date.timeIntervalSince1970)
     }
     
-    public static var now: Date {
-        return Date(timeIntervalSinceNow: 0)
-    }
-    
     public static func today(calendar: Calendar = .init(identifier: .gregorian)) -> Date? {
-        let components = calendar.dateComponents([.year, .month, .day], from: .now)
+        var now: Date!
+        if #available(iOS 15, *) {
+            now = Date.now
+        } else {
+            now = Date()
+        }
+        let components = calendar.dateComponents([.year, .month, .day], from: now)
         if let today = calendar.date(from: components) {
             return today
         }

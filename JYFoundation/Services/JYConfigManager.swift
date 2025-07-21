@@ -55,6 +55,10 @@ public class JYConfigManager<T: JYConfig> {
         }
     }
     
+    public func clear() {
+        self.config.configItems = [:]
+    }
+    
     // notification
     private func notifyConfigChange() {
         NotificationCenter.default.post(

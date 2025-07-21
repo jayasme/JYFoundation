@@ -124,6 +124,10 @@ extension Array where Element: Equatable {
     public func unique() -> [Element] {
         return self.unique { $0 }
     }
+    
+    public func replace(of oldElement: Element, with newElement: Element) -> [Element] {
+        return self.map { $0 == oldElement ? newElement : $0 }
+    }
 }
 
 extension Array where Element: Hashable {
