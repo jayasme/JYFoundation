@@ -86,6 +86,29 @@ open class JYStyleSheet {
         }
         return keys
     }
+    
+    public static func combine(styleSheets: [JYStyleSheet]) -> JYStyleSheet? {
+        guard var current = styleSheets.first else {
+            return nil
+        }
+        
+        styleSheets[1...].forEach { styleSheet in
+            if let backgroundColor = styleSheet.backgroundColor {
+                current.backgroundColor = styleSheet.backgroundColor
+            }
+            if let foregroundColor = styleSheet.foregroundColor {
+                current.foregroundColor = styleSheet.foregroundColor
+            }
+            if let borderColor = styleSheet.borderColor {
+                current.borderColor = styleSheet.borderColor
+            }
+            if let font = styleSheet.font {
+                current.font = styleSheet.font
+            }
+        }
+        
+        return current
+    }
 }
 
 public class JYThemeStyle<T> {

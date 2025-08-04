@@ -57,6 +57,7 @@
 		1D4D877C219987DB00D7B457 /* JYFoundation.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D8779219987DB00D7B457 /* JYFoundation.podspec */; };
 		1D4D877D219987DB00D7B457 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1D4D877A219987DB00D7B457 /* LICENSE */; };
 		A48F362C2E5897A8AEABE449 /* Pods_JYFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80028785702266DA96BD35CE /* Pods_JYFoundation.framework */; };
+		B911DC7D2E40B077007E2277 /* JYThemeActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B911DC7C2E40B06E007E2277 /* JYThemeActivityIndicatorView.swift */; };
 		B92AA2BE29BE0D7B00911352 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92AA2BD29BE0D7B00911352 /* CGRect.swift */; };
 		B9379F7829C6C00F00A1517B /* JYStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9379F7729C6C00F00A1517B /* JYStack.swift */; };
 		B93DC43727A58E6F002C6390 /* Int+JY.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93DC43627A58E6F002C6390 /* Int+JY.swift */; };
@@ -140,6 +141,7 @@
 		46287FB5C5FB4155D2FEAC6D /* Pods-JYFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.debug.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.debug.xcconfig"; sourceTree = "<group>"; };
 		661DCF28AEFD74E30B85CBE1 /* Pods-JYFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JYFoundation.release.xcconfig"; path = "Target Support Files/Pods-JYFoundation/Pods-JYFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		80028785702266DA96BD35CE /* Pods_JYFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JYFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B911DC7C2E40B06E007E2277 /* JYThemeActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYThemeActivityIndicatorView.swift; sourceTree = "<group>"; };
 		B92AA2BD29BE0D7B00911352 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		B9379F7729C6C00F00A1517B /* JYStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYStack.swift; sourceTree = "<group>"; };
 		B93DC43627A58E6F002C6390 /* Int+JY.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+JY.swift"; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 		B983618F297E79B800F26960 /* JYTheme */ = {
 			isa = PBXGroup;
 			children = (
+				B911DC7C2E40B06E007E2277 /* JYThemeActivityIndicatorView.swift */,
 				B9836190297E79CE00F26960 /* JYThemeView.swift */,
 				B9836192297E79EC00F26960 /* JYThemeManager.swift */,
 				B9836194297E7C0800F26960 /* JYThemeLabel.swift */,
@@ -534,6 +537,7 @@
 				B98361A2297ECDE900F26960 /* JYAnimationService.swift in Sources */,
 				1D3891F5208AF6370005C175 /* JYAlbumAuthService.swift in Sources */,
 				B9DD4E5728419AF50086CBDA /* JYGradientView.swift in Sources */,
+				B911DC7D2E40B077007E2277 /* JYThemeActivityIndicatorView.swift in Sources */,
 				B9836191297E79CE00F26960 /* JYThemeView.swift in Sources */,
 				1D38921D208AF9B40005C175 /* TimeInterval+JY.swift in Sources */,
 				B93DC43927A58F76002C6390 /* CGFloat+JY.swift in Sources */,
