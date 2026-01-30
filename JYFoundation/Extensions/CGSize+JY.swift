@@ -20,5 +20,9 @@ extension CGSize {
         left.height += right.height
     }
     
-    
+    public func scaledToFit(maxSize: CGSize) -> CGSize {
+        guard width > 0, height > 0, maxSize.width > 0, maxSize.height > 0 else { return .zero }
+        let scale = min(maxSize.width / width, maxSize.height / height, 1.0)
+        return CGSize(width: width * scale, height: height * scale)
+    }
 }

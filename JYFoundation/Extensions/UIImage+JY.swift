@@ -22,7 +22,7 @@ extension UIImage {
         return image
     }
     
-    public func jy_resize(with maxSize: CGSize) -> UIImage {
+    public func jy_resize(with maxSize: CGSize, scale: CGFloat? = nil) -> UIImage {
         var newSize: CGSize
         if size.width > size.height {
             newSize = CGSize(width: maxSize.width, height: size.height / size.width * maxSize.height)
@@ -30,8 +30,13 @@ extension UIImage {
             newSize = CGSize(width: size.width / size.height * maxSize.width, height: maxSize.height)
         }
         
-        return UIGraphicsImageRenderer(size: newSize).image { _ in
-            self.draw(in: CGRect(origin: .zero, size: newSize))
+        let format = UIGraphicsImageRendererFormat.default()
+        if let scale = scale {
+            format.scale = scale
+        }
+        let renderer = UIGraphicsImageRenderer(size: newSize, format: format)
+        return renderer.image { _ in
+            self.draw(in: CGRect(origin: .zero, size: newSize ))
         }
     }
 }

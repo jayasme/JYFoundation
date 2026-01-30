@@ -22,5 +22,4 @@ extension CGRect {
     public static func - (left: CGRect, right: CGPoint) -> CGRect {
         return CGRect(x: left.minX - right.x, y: left.minY - right.y, width: left.width, height: left.height)
     }
-
 }
