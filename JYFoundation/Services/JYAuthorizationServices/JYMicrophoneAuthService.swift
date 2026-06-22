@@ -11,7 +11,7 @@ import AVFoundation
 
 public class JYMicrophoneAuthService: JYAuthServiceBase {
     
-    public static var shared: JYCameraAuthService = JYCameraAuthService()
+    public static var shared: JYMicrophoneAuthService = JYMicrophoneAuthService()
     
     public override var authState: JYAuthState {
         let state = AVCaptureDevice.authorizationStatus(for: .audio)

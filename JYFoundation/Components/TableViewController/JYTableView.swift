@@ -59,7 +59,7 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
             self.jyDelegate?.tableView?(self, willDataChange: newValue)
         }
         didSet {
-            self.jyDelegate?.tableView?(self, didDataChange: self._viewModels)
+            self.didDataChange(data: self._viewModels)
         }
     }
     
@@ -348,13 +348,13 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     
     public func scrollToCellViewModel(_ cellViewModel: ITableCellViewModel, at position: UITableView.ScrollPosition, animated: Bool) {
         if let index = self.index(of: cellViewModel) {
-            scrollToRow(at: IndexPath(item: index, section: 0), at: position, animated: animated)
+            self.scrollToRow(at: IndexPath(item: index, section: 0), at: position, animated: animated)
         }
     }
     
     public func scrollToBottom(animated: Bool) {
         if let lastCellViewModel = _viewModels.last {
-            scrollToCellViewModel(lastCellViewModel, at: .bottom, animated: animated)
+            self.scrollToCellViewModel(lastCellViewModel, at: .bottom, animated: animated)
         }
     }
     
@@ -579,6 +579,10 @@ open class JYTableView : UITableView, UITableViewDataSource, UITableViewDelegate
     
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         jyDelegate?.scrollViewDidScroll?(scrollView)
+    }
+    
+    open func didDataChange(data: [ITableCellViewModel]) {
+        jyDelegate?.tableView?(self, didDataChange: data)
     }
     
     // MARK: Dragging

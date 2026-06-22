@@ -352,7 +352,10 @@ open class JYCollectionView : UICollectionView, UICollectionViewDataSource, UICo
     }
     
     public func scrollToBottom(animated: Bool) {
-        self.scrollTo(offset: CGPoint(x: self.contentOffset.x, y: self.contentSize.height - self.bounds.height), animated: animated)
+        self.setContentOffset(
+            CGPoint(x: 0, y: max(self.contentSize.height + self.contentInset.bottom - self.bounds.height, 0)),
+            animated: animated
+        )
     }
     
     public func cellViewModel(of index: Int) -> ICollectionCellViewModel? {
